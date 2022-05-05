@@ -1,0 +1,8 @@
+# Inficon MPH IOC instance autosave file
+
+$$LOOP(INFICON)
+file inficon.archive
+{
+	{ IOC = "$$IOC_PV", BASE="$$BASE" }
+}
+$$ENDLOOP(INFICON)

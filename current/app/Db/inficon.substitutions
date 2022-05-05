@@ -1,0 +1,6 @@
+file inficon.template
+{
+    pattern
+    { DEV,      PORT,       CSCAN,     DSCAN    }
+    { $(DEV),   $(PORT),    $(CSCAN),  $(DSCAN) }
+
