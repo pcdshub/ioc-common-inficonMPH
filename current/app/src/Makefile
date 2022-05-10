@@ -13,10 +13,13 @@ PROD_IOC = inficon
 
 PROD_SYS_LIBS_DEFAULT += pcre
 
-# vat590.dbd will be created and installed
+# inficon.dbd will be created and installed
 DBD += inficon.dbd
 
-# vat590.dbd will be made up from these files:
+# json.hpp requires C++11
+#inficonMain_CXXFLAGS_Linux += -std=c++11
+
+# inficon.dbd will be made up from these files:
 inficon_DBD += base.dbd
 inficon_DBD += iocAdmin.dbd
 inficon_DBD += asSupport.dbd
@@ -32,6 +35,7 @@ inficon_SRCS_DEFAULT += inficonMain.cpp
 
 # Add locally compiled object code
 #inficon_SRCS += dbSubExample.c
+inficon_SRCS += inficonLib.c
 
 inficon_LIBS += devIocStats
 inficon_LIBS += autosave
