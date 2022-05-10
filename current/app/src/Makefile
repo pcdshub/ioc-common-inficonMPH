@@ -17,7 +17,7 @@ PROD_SYS_LIBS_DEFAULT += pcre
 DBD += inficon.dbd
 
 # json.hpp requires C++11
-#inficonMain_CXXFLAGS_Linux += -std=c++11
+inficonMain_CXXFLAGS_Linux += -std=c++11
 
 # inficon.dbd will be made up from these files:
 inficon_DBD += base.dbd
@@ -29,13 +29,17 @@ inficon_DBD += drvAsynIPPort.dbd
 inficon_DBD += drvAsynSerialPort.dbd
 inficon_DBD += caPutLog.dbd
 
+inficon_DBD += drvInficon.dbd
+INC         += drvInficon.h
+INC         += json.hpp
+inficon_SRCS += drvInficon.cpp
+
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 inficon_SRCS += inficon_registerRecordDeviceDriver.cpp
 inficon_SRCS_DEFAULT += inficonMain.cpp
 
 # Add locally compiled object code
 #inficon_SRCS += dbSubExample.c
-inficon_SRCS += inficonLib.c
 
 inficon_LIBS += devIocStats
 inficon_LIBS += autosave
