@@ -21,3 +21,8 @@
 using nlohmann::json;
 
 static const char *driverName = "INFICONMPH";
+
+int drvInficonRegister() {
+	return 0;
+}
+epicsExportRegistrar(drvInficonRegister);

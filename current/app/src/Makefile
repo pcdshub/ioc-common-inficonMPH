@@ -17,7 +17,7 @@ PROD_SYS_LIBS_DEFAULT += pcre
 DBD += inficon.dbd
 
 # json.hpp requires C++11
-inficonMain_CXXFLAGS_Linux += -std=c++11
+drvInficon_CXXFLAGS_Linux += -std=c++11
 
 # inficon.dbd will be made up from these files:
 inficon_DBD += base.dbd
