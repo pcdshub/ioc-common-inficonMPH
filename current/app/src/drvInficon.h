@@ -55,10 +55,10 @@ public:
 	bool m_debug;
 
 public:
-	drvInficon();
+	devInficon();
 
 	/* Make  sure to free everything */
-	~drvInficon();
+	~devInficon();
 
 public:
 	//crete instance of inficon device
