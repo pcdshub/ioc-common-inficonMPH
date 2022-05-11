@@ -77,7 +77,7 @@ devInficon* devInficon::Create(const char* portName, const char* hostInfo) {
 
 	if (status) {
 		util::Error("devInficon::Create(): Unable to configure drvAsynIPPort.");
-		return connected;
+		return NULL;
 	}
 
 	/* check connection */
