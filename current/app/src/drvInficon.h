@@ -16,7 +16,7 @@
 #include <epicsStdio.h>
 #include <epicsStdlib.h>
 #include <epicsAssert.h>
-#include <dbAccess.h>
+//#include <dbAccess.h>
 #include <devSup.h>
 #include <alarm.h>
 #include <epicsString.h>
