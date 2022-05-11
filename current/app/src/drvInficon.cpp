@@ -9,6 +9,7 @@
 
 /* EPICS includes */
 #include <epicsExport.h>
+#include <epicsPrint.h>
 #include <iocsh.h>
 
 /* Asyn includes */
@@ -60,7 +61,7 @@ devInficon::~devInficon() {
 devInficon* devInficon::Create(const char* portName, const char* hostInfo) {
 	if (!portName || !hostInfo)
 		return NULL;
-	
+
 	devInficon* pinficon = new devInficon();
 	
 	/* Free the previously allocated stuff */
@@ -76,7 +77,7 @@ devInficon* devInficon::Create(const char* portName, const char* hostInfo) {
 	int status = drvAsynIPPortConfigure(pinficon->m_portName, pinficon->m_hostInfo, 0, 0, 0); //I think for the HTTP port the noAutoConnect should be set to 1
 
 	if (status) {
-		util::Error("devInficon::Create(): Unable to configure drvAsynIPPort.");
+		epicsPrintf("devInficon::Create(): Unable to configure drvAsynIPPort.");
 		return NULL;
 	}
 
@@ -89,7 +90,7 @@ devInficon* devInficon::Create(const char* portName, const char* hostInfo) {
 	pasynManager->freeAsynUser(usr);
 
 	if (!connected) {
-		util::Error("devInficon::Create(): Error while connecting to device %s.", name);
+		epicsPrintf("devInficon::Create(): Error while connecting to device %s.", hostInfo);
 		return NULL;
 	}
 	
