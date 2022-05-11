@@ -50,8 +50,6 @@ devInficon::~devInficon() {
 		free(m_hostInfo);
 	if (m_portName)
 		free(m_portName);
-	if (m_name)
-		free(m_name);
 	
 	//pasynManager->disconnect(pasynUser);
     //pasynManager->freeAsynUser(pasynUser);

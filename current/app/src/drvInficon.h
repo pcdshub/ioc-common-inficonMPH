@@ -35,10 +35,8 @@
 #include <functional>
 #include <list>
 
-
 /* Forward declarations */
 class devInficon;
-
 
 class devInficon {
 private:
