@@ -24,14 +24,14 @@ inficon_DBD += base.dbd
 inficon_DBD += iocAdmin.dbd
 inficon_DBD += asSupport.dbd
 inficon_DBD += asyn.dbd
-inficon_DBD += stream.dbd
+#inficon_DBD += stream.dbd
 inficon_DBD += drvAsynIPPort.dbd
-inficon_DBD += drvAsynSerialPort.dbd
+#inficon_DBD += drvAsynSerialPort.dbd
 inficon_DBD += caPutLog.dbd
 
 inficon_DBD += drvInficon.dbd
-INC         += drvInficon.h
-INC         += json.hpp
+#INC         += drvInficon.h
+#INC         += json.hpp
 inficon_SRCS += drvInficon.cpp
 
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
@@ -44,7 +44,7 @@ inficon_SRCS_DEFAULT += inficonMain.cpp
 inficon_LIBS += devIocStats
 inficon_LIBS += autosave
 inficon_LIBS += asyn
-inficon_LIBS += stream
+#inficon_LIBS += stream
 inficon_LIBS += caPutLog
 inficon_LIBS += $(EPICS_BASE_IOC_LIBS)
 
