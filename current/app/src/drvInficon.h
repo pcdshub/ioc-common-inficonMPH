@@ -245,3 +245,4 @@ private:
 };
 
 #define NUM_PARAMS ((int)(&LAST_drvInficon_PARAM - &FIRST_drvInficon_PARAM + 1))
+#endif /* drvInficon_H */
