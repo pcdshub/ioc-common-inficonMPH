@@ -25,11 +25,6 @@ using nlohmann::json;
 
 static const char *driverName = "INFICON";
 
-struct inficonDrvUser_t {
-    inficonCommandType_t commandType;
-    int              len;
-};
-
 //==========================================================//
 // class drvInficon
 //		Holds useful vars for interacting with Inficon MPH RGA****
@@ -39,8 +34,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
    : asynPortDriver(portName,
                     1, /* maxAddr */
-                    asynInt32Mask | asynUInt32DigitalMask | asynInt64Mask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
-                    asynInt32Mask | asynUInt32DigitalMask | asynInt64Mask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
+                    asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
+                    asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
                     ASYN_CANBLOCK | ASYN_MULTIDEVICE, /* asynFlags */
                     1, /* Autoconnect */
                     0, /* Default priority */
@@ -52,9 +47,6 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     portName_(epicsStrDup(portName)),
     octetPortName_(NULL),
     isConnected_(false),
-    ioStatus_(asynSuccess),
-    commandType_(NULL),
-    drvUser_(NULL),
     data_(0),
     readOK_(0),
     writeOK_(0),
@@ -67,28 +59,79 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     int status;
 	int ipConfigureStatus;
     static const char *functionName = "drvInficon";
+    
+    //Communication parameters
+    createParam(INFICON_IP_STRING,              asynParamOctet,             &ip_); //what parameter type should be here if the readback value is string
+    createParam(INFICON_MAC_STRING,             asynParamOctet,             &mac_); //what parameter type should be here if the readback value is string
+    createParam(INFICON_ERROR_LOG_STRING,       asynParamOctet,             &errorLog_); //what parameter type should be here if the readback value is string
+    //General control parameters
+    createParam(INFICON_SET_EMI_STRING,         asynParamUInt32Digital,     &setEmi_);
+    createParam(INFICON_GET_EMI_STRING,         asynParamUInt32Digital,     &getEmi_);
+    createParam(INFICON_SET_EM_STRING,          asynParamUInt32Digital,     &setEm_);
+    createParam(INFICON_GET_EM_STRING,          asynParamUInt32Digital,     &getEm_);
+    createParam(INFICON_SET_RFGEN_STRING,       asynParamUInt32Digital,     &setRfGen_);
+    createParam(INFICON_GET_RFGEN_STRING,       asynParamUInt32Digital,     &getRfGen_);
+    createParam(INFICON_GET_FAN_STRING,         asynParamUInt32Digital,     &getFan_);
+    createParam(INFICON_SHUTDOWN_STRING,        asynParamUInt32Digital,     &shutdown_);
+    //Sensor info parameters
+    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);
+    createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);
+    createParam(INFICON_SENS_SN_STRING,            asynParamOctet,          &sensSn_);
+    //Status parameters
+    createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
+    createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
+    createParam(INFICON_HW_WARN_STRING,            asynParamUInt32Digital,  &hwWarn_);
+    createParam(INFICON_PWR_ON_TIME_STRING,        asynParamInt32,          &pwrOnTime_);
+    createParam(INFICON_EMI_ON_TIME_STRING,        asynParamInt32,          &emiOnTime_);
+    createParam(INFICON_EM_ON_TIME_STRING,         asynParamInt32,          &emOnTime_);
+    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamInt32,          &emiCmlOnTime_);
+    createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamInt32,          &emCmlOnTime_);
+    createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamInt32,          &emiPressTrip_);
+    //Diagnostic data parameters
+    createParam(INFICON_BOX_TEMP_STRING,           asynParamFloat64,        &boxTemp_);
+    createParam(INFICON_ANODE_POTENTIAL_STRING,    asynParamFloat64,        &anodePotential_);
+    createParam(INFICON_EMI_CURRENT_STRING,        asynParamFloat64,        &emiCurrent_);
+    createParam(INFICON_FOCUS_POTENTIAL_STRING,    asynParamFloat64,        &focusPotential_);
+    createParam(INFICON_ELECT_ENERGY_STRING,       asynParamFloat64,        &electEnergy_);
+    createParam(INFICON_FIL_POTENTIAL_STRING,      asynParamFloat64,        &filPotential_);
+    createParam(INFICON_FIL_CURRENT_STRING,        asynParamFloat64,        &filCurrent_);
+    createParam(INFICON_EM_POTENTIAL_STRING,       asynParamFloat64,        &emPotential_);
+    //Measurement parameters
+    createParam(INFICON_GET_PRESS_STRING,          asynParamFloat64,        &getPress_);
+    createParam(INFICON_GET_SCAN_STRING,           asynParamFloat32Array,   &getScan_);
+    //Scan info parameters
+    createParam(INFICON_FIRST_SCAN_STRING,         asynParamInt32,          &firstScan_);
+    createParam(INFICON_LAST_SCAN_STRING,          asynParamInt32,          &lastScan_);
+    createParam(INFICON_CURRENT_SCAN_STRING,       asynParamInt32,          &currentScan_);
+    createParam(INFICON_PPSCAN_STRING,             asynParamInt32,          &ppscan_);
+    createParam(INFICON_SCAN_STAT_STRING,          asynParamInt32,          &scanStat);
+    //Sensor detector parameters
+    createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamFloat64,        &emVoltageMax_);
+    createParam(INFICON_EM_VOLTAGE_MIN_STRING,     asynParamFloat64,        &emVoltageMin_);
+    //Sensor filter parameters
+    createParam(INFICON_DWELL_MAX_STRING,          asynParamFloat64,        &dwelMax_);
+    createParam(INFICON_DWELL_MIN_STRING,          asynParamFloat64,        &dwelMin_);
+    //Scan setup parameters
+    createParam(INFICON_SET_START_CH_STRING,       asynParamInt32,          &setStartCh_);
+    createParam(INFICON_GET_START_CH_STRING,       asynParamInt32,          &getStartCh_);
+    createParam(INFICON_SET_STOP_CH_STRING,        asynParamInt32,          &setStopCh_);
+    createParam(INFICON_GET_STOP_CH_STRING,        asynParamInt32,          &getStopCh_);
+    createParam(INFICON_SET_CH_MODE_STRING,        asynParamUInt32Digital,  &setChMode_);
+    createParam(INFICON_GET_CH_MODE_STRING,        asynParamUInt32Digital,  &getChMode_);
+    createParam(INFICON_SET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &setChPpamu_);
+    createParam(INFICON_GET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &getChPpamu_);
+    createParam(INFICON_SET_CH_DWELL_STRING,       asynParamFloat64,        &setChDwell_);
+    createParam(INFICON_GET_CH_DWELL_STRING,       asynParamFloat64,        &getChDwell_);
+    createParam(INFICON_SET_CH_START_MASS_STRING,  asynParamFloat64,        &setChStartMass_);
+    createParam(INFICON_GET_CH_START_MASS_STRING,  asynParamFloat64,        &getChStartMass_);
+    createParam(INFICON_SET_CH_STOP_MASS_STRING,   asynParamFloat64,        &setChStopMass_);
+    createParam(INFICON_GET_CH_STOP_MASS_STRING,   asynParamFloat64,        &getChStopMass_);
+    createParam(INFICON_SET_SCAN_COUNT_STRING,     asynParamInt32,          &setScanCount_);
+    createParam(INFICON_GET_SCAN_COUNT_STRING,     asynParamInt32,          &getScanCount_);
+    createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
+    createParam(INFICON_SCAN_STOP_STRING,          asynParamUInt32Digital,  &scanStop_);
 
-    createParam(MODBUS_DATA_STRING,                 asynParamInt32,       &P_Data);
-    createParam(MODBUS_READ_STRING,                 asynParamInt32,       &P_Read);
-    createParam(MODBUS_ENABLE_HISTOGRAM_STRING,     asynParamUInt32Digital, &P_EnableHistogram);
-    createParam(MODBUS_READ_HISTOGRAM_STRING,       asynParamInt32,       &P_ReadHistogram);
-    createParam(MODBUS_HISTOGRAM_BIN_TIME_STRING,   asynParamInt32,       &P_HistogramBinTime);
-    createParam(MODBUS_HISTOGRAM_TIME_AXIS_STRING,  asynParamInt32Array,  &P_HistogramTimeAxis);
-    createParam(MODBUS_POLL_DELAY_STRING,           asynParamFloat64,     &P_PollDelay);
-    createParam(MODBUS_READ_OK_STRING,              asynParamInt32,       &P_ReadOK);
-    createParam(MODBUS_WRITE_OK_STRING,             asynParamInt32,       &P_WriteOK);
-    createParam(MODBUS_IO_ERRORS_STRING,            asynParamInt32,       &P_IOErrors);
-    createParam(MODBUS_LAST_IO_TIME_STRING,         asynParamInt32,       &P_LastIOTime);
-    createParam(MODBUS_MAX_IO_TIME_STRING,          asynParamInt32,       &P_MaxIOTime);
 
-    setIntegerParam(P_ReadOK, 0);
-    setIntegerParam(P_WriteOK, 0);
-    setIntegerParam(P_IOErrors, 0);
-    setIntegerParam(P_LastIOTime, 0);
-    setIntegerParam(P_MaxIOTime, 0);
-	
-	
-	if (octetPortName_ == NULL) octetPortName_ = "";
     /* Create octet port name */
 	size_t prefixlen = strlen(PORT_PREFIX);
 	size_t len = strlen(portName_) + strlen(PORT_PREFIX) + 1;
@@ -110,11 +153,6 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     /*Allocate data memory, need to do some testing to define max length*/
     //data_ = (epicsUInt16 *) callocMustSucceed(modbusLength_, sizeof(epicsUInt16), functionName);
 
-    /* Allocate and initialize the default drvUser structure */
-    drvUser_ = (inficonDrvUser_t *) callocMustSucceed(1, sizeof(inficonDrvUser_t), functionName);
-    drvUser_->commandType = commandType_;
-    drvUser_->len = -1;
-
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
     if (status != asynSuccess) {
@@ -133,7 +171,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
         return;
      }
 
-    //epicsAtExit(modbusExitCallback, this);
+    //epicsAtExit(inficonExitCallback, this);
 
     initialized_ = true;
 }
@@ -151,13 +189,198 @@ drvInficon::~drvInficon() {
     //pasynUser = NULL;
 }
 
-asynStatus drvInficon::VerifyConnection() {
+/***********************/
+/* asynCommon routines */
+/***********************/
+
+/* Report  parameters */
+void drvInficon::report(FILE *fp, int details)
+{
+    fprintf(fp, "modbus port: %s\n", this->portName);
+    if (details) {
+        fprintf(fp, "    initialized:        %s\n", initialized_ ? "true" : "false");
+        fprintf(fp, "    asynOctet server:   %s\n", octetPortName_);
+        fprintf(fp, "    host info:          %s\n", hostInfo_);
+    }
+    asynPortDriver::report(fp, details);
+}
+
+asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
+{
+    *address = 0;
+    return asynSuccess;
+}
+
+/*
+**  asynUInt32D support
+*/
+asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value, epicsUInt32 mask)
+{
+    int function = pasynUser->reason;
+    static const char *functionName = "readUInt32D";
+
+    if (function == getEmi_) {
+        ;
+    }
+    else {
+        return asynPortDriver::readUInt32Digital(pasynUser, value, mask);
+    }
+}
+
+
+asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask)
+{
+    int function = pasynUser->reason;
+    epicsUInt16 data = value;
+    static const char *functionName = "writeUInt32D";
+
+    if (function == setEmi_) {
+        ;
+    }
+    else {
+        return asynPortDriver::writeUInt32Digital(pasynUser, value, mask);
+    }
+    return asynSuccess;
+}
+
+
+/*
+**  asynInt32 support
+*/
+
+asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
+{
+    int function = pasynUser->reason;
+    static const char *functionName = "readInt32";
+
+    *value = 0;
+
+    if (function == getStartCh_) {
+        ;
+    }
+    else {
+        return asynPortDriver::readInt32(pasynUser, value);
+    }
+}
+
+
+asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
+{
+    int function = pasynUser->reason;
+    epicsUInt16 buffer[4];
+    int bufferLen;
+    static const char *functionName = "writeInt32";
+
+    if (function == setStartCh_) {
+		;
+    }
+    else {
+        return asynPortDriver::writeInt32(pasynUser, value);
+    }
+    return asynSuccess;
+}
+
+
+/*
+**  asynFloat64 support
+*/
+asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
+{
+    int function = pasynUser->reason;
+    int bufferLen;
+    static const char *functionName = "readFloat64";
+
+    *value = 0;
+
+    if (function == boxTemp_) {
+        ;
+    }
+    else {
+        return asynPortDriver::readFloat64(pasynUser, value);
+    }
+
+    return asynSuccess;
+}
+
+
+asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
+{
+    int function = pasynUser->reason;
+    epicsUInt16 buffer[4];
+    int bufferLen;
+    static const char *functionName = "writeFloat64";
+
+
+    if (function == setChDwell_) {
+        ;
+    }
+    return asynSuccess;
+}
+
+
+
+/*
+**  asynFloat32Array support
+*/
+asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans, size_t *nactual)
+{
+    int function = pasynUser->reason;
+    int bufferLen;
+	size_t i;
+    static const char *functionName = "readFloat32Array";
+
+    *nactual = 0;
+
+    if (function == getScan_) {
+        ;
+    }
+	else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
+        return asynError;
+    }
+
+    *nactual = i;
+    return asynSuccess;
+}
+
+
+/*
+**  asynOctet support
+*/
+asynStatus drvInficon::readOctet(asynUser *pasynUser, char *data, size_t maxChars, size_t *nactual, int *eomReason)
+{
+    int function = pasynUser->reason;
+    static const char *functionName = "readOctet";
+
+    maxChars = getStringLen(pasynUser, maxChars);
+
+    *nactual = 0;
+
+    if (function == ip_) {
+        ;
+    }
+    else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
+        return asynError;
+    }
+
+    return asynSuccess;
+}
+
+/*
+**  User functions
+*/
+asynStatus drvInficon::verifyConnection() {
 	/* asynUsers should be pretty cheap to create */
 	asynUser* usr = pasynManager->createAsynUser(NULL, NULL);
 	usr->timeout = 0.5; /* 500ms timeout */
 
 	/* Try for connection */
-	pasynManager->connectDevice(usr, this->octetPortName_, 0);
+	pasynManager->connectDevice(usr, octetPortName_, 0);
 	int yn = 0;
 	pasynManager->isConnected(usr, &yn);
 	pasynManager->disconnect(usr);
@@ -165,49 +388,6 @@ asynStatus drvInficon::VerifyConnection() {
 	pasynManager->freeAsynUser(usr);
 
 	return (yn==1) ? asynSuccess : asynError;
-}
-
-drvInficon *drvInficon::Create(const char* portName, const char* hostInfo) {
-	if (!portName || !hostInfo)
-		return NULL;
-
-	devInficon *pinficon = new devInficon();
-	
-	/* Free the previously allocated stuff */
-	free(pinficon->portName_);
-	free(pinficon->hostInfo_);
-	free(pinficon->octetPortName_);
-	
-	/* Copy portName */
-	pinficon->portName_ = strdup(portName);
-	/* Copy hostInfo */
-	pinficon->hostInfo_ = strdup(hostInfo);
-	
-	/* Create octet port name */
-	size_t prefixlen = strlen(PORT_PREFIX);
-	size_t len = strlen(portName) + strlen(PORT_PREFIX) + 1;
-	pinficon->octetPortName_ = (char*)malloc(len);
-	memcpy(pinficon->octetPortName_, PORT_PREFIX, prefixlen);
-	memcpy(pinficon->octetPortName_ + prefixlen, portName, strlen(portName) + 1);
-	pinficon->octetPortName_[len - 1] = '\0';
-	
-    // drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect,noProcessEos)
-	int status = drvAsynIPPortConfigure(pinficon->octetPortName_, pinficon->hostInfo_, 0, 0, 0);//I think for the HTTP port the noAutoConnect should be set to 1
-
-	if (status) {
-		epicsPrintf("devInficon::Create(): Unable to configure drvAsynIPPort.");
-		return NULL;
-	}
-
-	/* check connection */
-	int connected = drvInficon::VerifyConnection();
-
-	if (!connected) {
-		epicsPrintf("devInficon::Create(): Error while connecting to device %s.", hostInfo);
-		return NULL;
-	}
-	
-	return pinficon;
 }
 
 extern "C" {

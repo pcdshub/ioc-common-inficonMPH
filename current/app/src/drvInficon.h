@@ -43,22 +43,6 @@ class drvInficon;
  * Drivers must return a value in pasynUser->reason that is unique
  * for that command.
  */
-// These are the parameters we register with asynPortDriver
-#define MODBUS_DATA_STRING                "MODBUS_DATA"
-#define MODBUS_READ_STRING                "MODBUS_READ"
-#define MODBUS_ENABLE_HISTOGRAM_STRING    "ENABLE_HISTOGRAM"
-#define MODBUS_READ_HISTOGRAM_STRING      "READ_HISTOGRAM"
-#define MODBUS_HISTOGRAM_BIN_TIME_STRING  "HISTOGRAM_BIN_TIME"
-#define MODBUS_HISTOGRAM_TIME_AXIS_STRING "HISTOGRAM_TIME_AXIS"
-#define MODBUS_POLL_DELAY_STRING          "POLL_DELAY"
-#define MODBUS_READ_OK_STRING             "READ_OK"
-#define MODBUS_WRITE_OK_STRING            "WRITE_OK"
-#define MODBUS_IO_ERRORS_STRING           "IO_ERRORS"
-#define MODBUS_LAST_IO_TIME_STRING        "LAST_IO_TIME"
-#define MODBUS_MAX_IO_TIME_STRING         "MAX_IO_TIME"
-
-// These are the data type strings that are used in the drvUser parameter
-// They are not registered with asynPortDriver
 //Communication
 #define INFICON_IP_STRING                 "IP"
 #define INFICON_MAC_STRING                "MAC"
@@ -133,49 +117,6 @@ class drvInficon;
 
 #define MAX_INFICON_COMMAND_TYPES          73   
 
-typedef enum {
-    dataTypeInt16,
-    dataTypeInt16SM,
-    dataTypeBCDUnsigned,
-    dataTypeBCDSigned,
-    dataTypeUInt16,
-    dataTypeInt32LE,
-    dataTypeInt32LEBS,
-    dataTypeInt32BE,
-    dataTypeInt32BEBS,
-    dataTypeUInt32LE,
-    dataTypeUInt32LEBS,
-    dataTypeUInt32BE,
-    dataTypeUInt32BEBS,
-    dataTypeInt64LE,
-    dataTypeInt64LEBS,
-    dataTypeInt64BE,
-    dataTypeInt64BEBS,
-    dataTypeUInt64LE,
-    dataTypeUInt64LEBS,
-    dataTypeUInt64BE,
-    dataTypeUInt64BEBS,
-    dataTypeFloat32LE,
-    dataTypeFloat32LEBS,
-    dataTypeFloat32BE,
-    dataTypeFloat32BEBS,
-    dataTypeFloat64LE,
-    dataTypeFloat64LEBS,
-    dataTypeFloat64BE,
-    dataTypeFloat64BEBS,
-    dataTypeStringHigh,
-    dataTypeStringLow,
-    dataTypeStringHighLow,
-    dataTypeStringLowHigh,
-    dataTypeZStringHigh,
-    dataTypeZStringLow,
-    dataTypeZStringHighLow,
-    dataTypeZStringLowHigh,
-	MAX_INFICON_COMMAND_TYPES
-} inficonCommandType_t;
-
-struct inficonDrvUser_t;
-
 class drvInficon : public asynPortDriver {
 public:
 	drvInficon(const char *portName, const char* hostInfo);
@@ -187,12 +128,8 @@ public:
 
     /* These functions are in the asynCommon interface */
     virtual void report(FILE *fp, int details);
-    virtual asynStatus connect(asynUser *pasynUser);
+    //virtual asynStatus connect(asynUser *pasynUser);
     virtual asynStatus getAddress(asynUser *pasynUser, int *address);
-
-   /* These functions are in the asynDrvUser interface */
-    virtual asynStatus drvUserCreate(asynUser *pasynUser, const char *drvInfo, const char **pptypeName, size_t *psize);
-    virtual asynStatus drvUserDestroy(asynUser *pasynUser);
 
     /* These functions are in the asynUInt32Digital interface */
     virtual asynStatus writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask);
@@ -203,8 +140,8 @@ public:
     virtual asynStatus readInt32(asynUser *pasynUser, epicsInt32 *value);
 
     /* These functions are in the asynInt64 interface */
-    virtual asynStatus writeInt64(asynUser *pasynUser, epicsInt64 value);
-    virtual asynStatus readInt64(asynUser *pasynUser, epicsInt64 *value);
+    //virtual asynStatus writeInt64(asynUser *pasynUser, epicsInt64 value);
+    //virtual asynStatus readInt64(asynUser *pasynUser, epicsInt64 *value);
 
     /* These functions are in the asynFloat64 interface */
     virtual asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
@@ -216,20 +153,11 @@ public:
 
     /* These functions are in the asynOctet interface */
     virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
-    virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
+    //virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
-    inficonCommandType_t getCommandType(asynUser *pasynUser);
     int getStringLen(asynUser *pasynUser, size_t maxChars);
     asynStatus doInficonIO(int slave, int function, int start, epicsUInt16 *data, int len);
-    asynStatus readPlcInt32(inficonCommandType_t dataType, int offset, epicsInt32 *value, int *bufferLen);
-    asynStatus writePlcInt32(inficonCommandType_t dataType, int offset, epicsInt32 value, epicsUInt16 *buffer, int *bufferLen);
-    asynStatus readPlcInt64(inficonCommandType_t dataType, int offset, epicsInt64 *value, int *bufferLen);
-    asynStatus writePlcInt64(inficonCommandType_t dataType, int offset, epicsInt64 value, epicsUInt16 *buffer, int *bufferLen);
-    asynStatus readPlcFloat(inficonCommandType_t dataType, int offset, epicsFloat64 *value, int *bufferLen);
-    asynStatus writePlcFloat(inficonCommandType_t dataType, int offset, epicsFloat64  value, epicsUInt16 *buffer, int *bufferLen);
-    asynStatus readPlcString (inficonCommandType_t dataType, int offset, char *value, size_t maxChars, int *bufferLen);
-    asynStatus writePlcString(inficonCommandType_t dataType, int offset, const char *value, size_t maxChars, size_t *nActual, int *bufferLen);
     bool inficonExiting_;
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
 /*
@@ -238,18 +166,78 @@ public:
 	static drvInficon* Create(const char* portName, const char* hostinfo);*/
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
-    int P_Data;
-    int P_Read;
-    int P_EnableHistogram;
-    int P_ReadHistogram;
-    int P_HistogramBinTime;
-    int P_HistogramTimeAxis;
-    int P_PollDelay;
-    int P_ReadOK;
-    int P_WriteOK;
-    int P_IOErrors;
-    int P_LastIOTime;
-    int P_MaxIOTime;
+    //Communication parameters
+    int ip_;
+	#define FIRST_drvInficon_PARAM ip_
+    int mac_;
+    int errorLog_;
+    //General control parameters
+    int setEmi_;
+    int getEmi_;
+    int setEm_;
+    int getEm_;
+    int setRfGen_;
+    int getRfGen_;
+    int getFan_;
+    int shutdown_;
+    //Sensor info parameters
+    int sensName_;
+    int sensDesc_;
+    int sensSn_;
+    //Status parameters
+    int systStatus_;
+    int hwError_;
+    int hwWarn_;
+    int pwrOnTime_;
+    int emiOnTime_;
+    int emOnTime_;
+    int emiCmlOnTime_;
+    int emCmlOnTime_;
+    int emiPressTrip_;
+    //Diagnostic data parameters
+    int boxTemp_;
+    int anodePotential_;
+    int emiCurrent_;
+    int focusPotential_;
+    int electEnergy_;
+    int filPotential_;
+    int filCurrent_;
+    int emPotential_;
+    //Measurement parameters
+    int getPress_;
+    int getScan_;
+    //Scan info parameters
+    int firstScan_;
+    int lastScan_;
+    int currentScan_;
+    int ppscan_;
+    int scanStat;
+    //Sensor detector parameters
+    int emVoltageMax_;
+    int emVoltageMin_;
+    //Sensor filter parameters
+    int dwelMax_;
+    int dwelMin_;
+    //Scan setup parameters
+    int setStartCh_;
+    int getStartCh_;
+    int setStopCh_;
+    int getStopCh_;
+    int setChMode_;
+    int getChMode_;
+    int setChPpamu_;
+    int getChPpamu_;
+    int setChDwell_;
+    int getChDwell_;
+    int setChStartMass_;
+    int getChStartMass_;
+    int setChStopMass_;
+    int getChStopMass_;
+    int setScanCount_;
+    int getScanCount_;
+    int scanStart_;
+    int scanStop_;
+    #define LAST_drvInficon_PARAM scanStop_
 
 private:
     /* Our data */
@@ -258,12 +246,9 @@ private:
     char *octetPortName_;        /* asyn port name for the asyn octet port */
 	char *hostInfo_;
     bool isConnected_;           /* Connection status */
-    asynStatus ioStatus_;        /* I/O error status */
     asynUser  *pasynUserOctet_;  /* asynUser for asynOctet interface to asyn octet port */
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
-    inficonCommandType_t commandType_;  /* Command type */
-    inficonDrvUser_t *drvUser_;   /* Drv user structure */
     epicsUInt16 *data_;          /* Memory buffer */
     char inficonRequest_[MAX_REQUEST_SIZE];       /* Modbus request message */
     char inficonReply_[MAX_RESPONSE_SIZE];        /* Modbus reply message */
@@ -277,3 +262,5 @@ private:
 	/* Enable/disable debugging messages */
 	bool debug_;
 };
+
+#define NUM_PARAMS ((int)(&LAST_drvInficon_PARAM - &FIRST_drvInficon_PARAM + 1))
