@@ -355,8 +355,6 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *data, size_t maxChar
     int function = pasynUser->reason;
     static const char *functionName = "readOctet";
 
-    maxChars = getStringLen(pasynUser, maxChars);
-
     *nactual = 0;
 
     if (function == ip_) {
