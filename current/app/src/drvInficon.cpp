@@ -200,9 +200,9 @@ drvInficon::~drvInficon() {
 	if (octetPortName_)
 		free(octetPortName_);
 	
-	//pasynManager->disconnect(pasynUser);
-    //pasynManager->freeAsynUser(pasynUser);
-    //pasynUser = NULL;
+	pasynManager->disconnect(pasynUserOctet_);
+    pasynManager->freeAsynUser(pasynUserOctet_);
+    pasynUserOctet_ = NULL;
 }
 
 /***********************/
@@ -414,7 +414,7 @@ extern "C" {
 asynStatus drvInficonConfigure(const char *portName, const char *hostInfo)
 {
 	if (!portName || !hostInfo)
-		return asynError;
+	    return asynError;
 	
 	new drvInficon(portName, hostInfo);
 	
