@@ -26,7 +26,8 @@ inficon_registerRecordDeviceDriver(pdbbase)
 
 # Initialize IP Asyn support
 $$LOOP(INFICON)
-drvAsynIPPortConfigure("INFICON$$INDEX","$$PORT:80 TCP",0,0,0)
+#drvAsynIPPortConfigure("INFICON$$INDEX","$$PORT:80 TCP",0,0,0)
+drvInficonConfigure("INFICON$$INDEX","$$PORT",80)
 $$ENDLOOP(INFICON)
 
 $$LOOP(INFICON)
