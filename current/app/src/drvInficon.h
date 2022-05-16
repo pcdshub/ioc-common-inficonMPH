@@ -152,8 +152,8 @@ public:
     //virtual asynStatus writeFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans);
 
     /* These functions are in the asynOctet interface */
-    virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
-    //virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
+    //virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
+    virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
     int getStringLen(asynUser *pasynUser, size_t maxChars);
@@ -250,8 +250,8 @@ private:
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
     epicsUInt16 *data_;          /* Memory buffer */
-    char inficonRequest_[MAX_REQUEST_SIZE];       /* Modbus request message */
-    char inficonReply_[MAX_RESPONSE_SIZE];        /* Modbus reply message */
+    char inficonRequest_[100];       /* Modbus request message */
+    char inficonReply_[100];        /* Modbus reply message */
     int readOK_;
     int writeOK_;
     int IOErrors_;

@@ -43,7 +43,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     inficonExiting_(false),
     initialized_(false),
-	hostInfo_(epicsStrDup(hostinfo)),
+	hostInfo_(epicsStrDup(hostInfo)),
     portName_(epicsStrDup(portName)),
     octetPortName_(NULL),
     isConnected_(false),
