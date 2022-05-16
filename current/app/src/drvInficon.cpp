@@ -16,6 +16,7 @@
 #include <drvAsynIPPort.h>
 #include <asynPortDriver.h>
 #include <asynOctetSyncIO.h>
+#include <asynCommonSyncIO.h>
 
 #include "drvInficon.h"
 

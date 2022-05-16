@@ -33,9 +33,6 @@
 #include <functional>
 #include <list>
 
-/* Forward declarations */
-class drvInficon;
-
 #define PORT_PREFIX "PORT_"
 
 /* These are the strings that device support passes to drivers via
@@ -116,6 +113,9 @@ class drvInficon;
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
 #define MAX_INFICON_COMMAND_TYPES          73   
+
+/* Forward declarations */
+class drvInficon;
 
 class drvInficon : public asynPortDriver {
 public:
