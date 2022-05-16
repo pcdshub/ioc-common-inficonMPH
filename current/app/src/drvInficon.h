@@ -6,32 +6,13 @@
 // Date Created: May 10, 2022
 
 //======================================================//
-#pragma once
+#ifndef drvInficon_H
+#define drvInficon_H
 
-/* EPICS includes */
-#include <epicsExport.h>
-#include <epicsMath.h>
-#include <epicsStdio.h>
-#include <epicsStdlib.h>
-#include <epicsAssert.h>
-//#include <dbAccess.h>
-#include <devSup.h>
-#include <alarm.h>
-#include <epicsString.h>
-#include <dbScan.h>
-#include <iocsh.h>
-#include <callback.h>
-#include <epicsStdio.h>
-#include <errlog.h>
-#include <epicsMessageQueue.h>
+#include <epicsThread.h>
+#include <epicsEvent.h>
 
 #include <asynPortDriver.h>
-
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
-#include <functional>
-#include <list>
 
 #define PORT_PREFIX "PORT_"
 
