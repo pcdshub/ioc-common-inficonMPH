@@ -56,6 +56,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     inficonExiting_(false),
     initialized_(false),
+	ioStatus_(asynSuccess),
 	hostInfo_(NULL),
     portName_(NULL),
     octetPortName_(NULL),
@@ -166,8 +167,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
         return;
 	}
 
-    /*Allocate data memory, need to do some testing to define max length*/
-    //data_ = (epicsUInt16 *) callocMustSucceed(modbusLength_, sizeof(epicsUInt16), functionName);
+    /*Allocate memory*/
+    data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
@@ -388,8 +389,109 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *data, size_t maxChar
 /*
 **  User functions
 */
+asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
+{
+    asynStatus status = asynSuccess;
+    int eomReason;
+    int autoConnect;
+    size_t nwrite, nread;
+    int requestSize = 0;
+	int responseSize = 0;
+
+    static const char *functionName = "inficonReadWrite";
+  
+    /* If the Octet driver is not set for autoConnect then do connection management ourselves */
+    status = pasynManager->isAutoConnect(pasynUserOctet_, &autoConnect);
+    if (!autoConnect) {
+        /* See if we are connected */
+        int itemp;
+        status = pasynManager->isConnected(pasynUserOctet_, &itemp);
+        isConnected_ = (itemp != 0) ? true : false;
+         /* If we have an I/O error or are disconnected then disconnect device and reconnect */
+        if ((ioStatus_ != asynSuccess) || !isConnected_) {
+            if (ioStatus_ != asynSuccess)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s::%s port %s has I/O error\n",
+                          driverName, functionName, this->portName);
+            if (!isConnected_)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s::%s port %s is disconnected\n",
+                          driverName, functionName, this->portName);
+            status = pasynCommonSyncIO->disconnectDevice(pasynUserCommon_);
+            if (status == asynSuccess) {
+                asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
+                          "%s::%s port %s disconnect device OK\n",
+                          driverName, functionName, this->portName);
+            } else {
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s::%s port %s disconnect error=%s\n",
+                          driverName, functionName, this->portName, pasynUserOctet_->errorMessage);
+            }
+            status = pasynCommonSyncIO->connectDevice(pasynUserCommon_);
+            if (status == asynSuccess) {
+                asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
+                          "%s::%s port %s connect device OK\n",
+                          driverName, functionName, this->portName);
+            } else {
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s::%s port %s connect device error=%s\n",
+                          driverName, functionName, this->portName, pasynUserOctet_->errorMessage);
+                goto done;
+            }
+        }
+    }
+
+    /* Do the write/read cycle */
+	requestSize = (int)strlen(request);
+	responseSize = HTTP_RESPONSE_SIZE;
+    status = pasynOctetSyncIO->writeRead(pasynUserOctet_,
+                                         inficonRequest_, requestSize,
+                                         inficonResponse_, responseSize,
+                                         DEVICE_RW_TIMEOUT,
+                                         &nwrite, &nread, &eomReason);
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d\n",
+              driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason);
+
+    if (status != prevIOStatus_) {
+      if (status != asynSuccess) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                     "%s::%s port %s error calling writeRead,"
+                     " error=%s, nwrite=%d/%d, nread=%d\n",
+                     driverName, functionName, this->portName,
+                     pasynUserOctet_->errorMessage, (int)nwrite, requestSize, (int)nread);
+        } else {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                     "%s::%s port %s writeRead status back to normal having had %d errors,"
+                     " nwrite=%d/%d, nread=%d\n",
+                     driverName, functionName, this->portName,
+                     currentIOErrors_, (int)nwrite, requestSize, (int)nread);
+            currentIOErrors_ = 0;
+        }
+        prevIOStatus_ = status;
+    }
+
+
+    /* Make sure the function code in the response is 200 OK */
+    /* if function code not 200 set error and go to done
+	response = inficonResponse_[nread] = '\0';
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s::%s, port %s unsupported function code %d\n",
+                      driverName, functionName, this->portName, function);
+            status = asynError;
+			
+
+    }*/
+
+    /*if response code ok, remove header from the string
+	response = inficonResponse_[];
+	
+    */
+    done:
+    return status;
+}
+
 asynStatus drvInficon::verifyConnection() {
-	/* asynUsers should be pretty cheap to create */
 	asynUser* usr = pasynManager->createAsynUser(NULL, NULL);
 	usr->timeout = 0.5; /* 500ms timeout */
 

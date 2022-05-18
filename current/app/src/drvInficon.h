@@ -14,7 +14,14 @@
 
 #include <asynPortDriver.h>
 
+//User defines
 #define PORT_PREFIX "PORT_"
+#define HTTP_OK_CODE "200"
+#define DEVICE_RW_TIMEOUT 10.0
+#define HTTP_REQUEST_SIZE 2048
+#define HTTP_RESPONSE_SIZE 131072
+#define MAX_URI_LENGTH 512
+
 
 /* These are the strings that device support passes to drivers via
  * the asynDrvUser interface.
@@ -138,7 +145,7 @@ public:
 
     /* These are the methods that are new to this class */
     int getStringLen(asynUser *pasynUser, size_t maxChars);
-    asynStatus doInficonIO(int slave, int function, int start, epicsUInt16 *data, int len);
+    asynStatus inficonReadWrite(const char *request, char *response);
     bool inficonExiting_;
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
 /*
@@ -230,9 +237,11 @@ private:
     asynUser  *pasynUserOctet_;  /* asynUser for asynOctet interface to asyn octet port */
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
-    epicsUInt16 *data_;          /* Memory buffer */
-    char inficonRequest_[100];       /* Modbus request message */
-    char inficonReply_[100];        /* Modbus reply message */
+    char *data_;                 /* Memory buffer */
+    char inficonRequest_[HTTP_REQUEST_SIZE];       /* Inficon request */
+    char inficonResponse_[HTTP_RESPONSE_SIZE];        /* Inficon response */
+	asynStatus ioStatus_;
+    asynStatus prevIOStatus_;
     int readOK_;
     int writeOK_;
     int IOErrors_;
