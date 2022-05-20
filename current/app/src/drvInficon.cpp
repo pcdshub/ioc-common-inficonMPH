@@ -59,8 +59,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     initialized_(false),
 	ioStatus_(asynSuccess),
     prevIOStatus_(asynSuccess),
-    hostInfo_(epicsStrDup(hostInfo));
-    portName_(epicsStrDup(portName));
+    hostInfo_(epicsStrDup(hostInfo)),
+    portName_(epicsStrDup(portName)),
     octetPortName_(NULL),
     isConnected_(false),
     data_(NULL),
