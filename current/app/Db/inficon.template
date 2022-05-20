@@ -11,6 +11,6 @@ record(longin, "$(DEV):SYST_STAT")
 {
     field(DESC, "read system status")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asyn($(PORT))SYST_STAT")
-    field(SCAN, "10 seconds")
+    field(INP,  "@asynMask($(PORT))SYST_STAT")
+    field(SCAN, "10 second")
 }
