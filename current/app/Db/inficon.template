@@ -7,3 +7,10 @@
 ##
 ##
 #
+record(mbbiDirect, "$(DEV):SYST_STAT")
+{
+    field(DESC, "read system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asyn($(PORT))SYST_STAT")
+    field(SCAN, "10 seconds")
+}

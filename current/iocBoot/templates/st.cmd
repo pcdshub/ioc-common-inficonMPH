@@ -8,9 +8,6 @@ epicsEnvSet( "LOCATION",  "$$IF(LOCATION,$$LOCATION,$$IOC_PV)")
 epicsEnvSet( "IOCTOP",    "$$IOCTOP"   )
 epicsEnvSet( "TOP",       "$$TOP"      )
 epicsEnvSet(streamDebug, 0)
-## Add the path to the protocol files
-#epicsEnvSet("STREAM_PROTOCOL_PATH", "$(IOCTOP)/protocol")
-#epicsEnvSet("PROTO", "IM540.proto")
 
 cd( "$(IOCTOP)" )
 

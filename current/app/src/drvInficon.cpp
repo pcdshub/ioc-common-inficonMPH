@@ -711,6 +711,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
             "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
         return asynError;
     }
+	printf("%s::%s JSON data: %s\n", driverName, functionName, jsonData);
     return asynSuccess;
 }
 
@@ -788,7 +789,7 @@ static void drvInficonConfigureCallFunc(const iocshArgBuf* args) {
 	}
 	
 	char hostInfo[64];
-	sprintf(hostInfo,"%s:%i HTTP", ip, port);
+	sprintf(hostInfo,"%s:%i TCP", ip, port);
 
 	drvInficonConfigure(portName, hostInfo);
 }
