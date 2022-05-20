@@ -152,14 +152,7 @@ public:
     asynStatus parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum);
     bool inficonExiting_;
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
-	char *portName_;             /* asyn port name for the user driver */
-    char *octetPortName_;        /* asyn port name for the asyn octet port */
-	char *hostInfo_;             /* host info (IP address,connection type, port)
 	
-/*
-public:
-	//crete instance of inficon device
-	static drvInficon* Create(const char* portName, const char* hostinfo);*/
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
     //Communication parameters
@@ -237,6 +230,9 @@ private:
     /* Our data */
     bool initialized_;           /* If initialized successfully */
     bool isConnected_;           /* Connection status */
+	char *portName_;             /* asyn port name for the user driver */
+    char *octetPortName_;        /* asyn port name for the asyn octet port */
+	char *hostInfo_;             /* host info (IP address,connection type, port)*/
     asynUser  *pasynUserOctet_;  /* asynUser for asynOctet interface to asyn octet port */
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
@@ -247,13 +243,6 @@ private:
     asynStatus prevIOStatus_;
     int readOK_;
     int writeOK_;
-    int IOErrors_;
-    int currentIOErrors_; /* IO Errors since last successful writeRead cycle */
-    int maxIOMsec_;
-    int lastIOMsec_;
-
-	/* Enable/disable debugging messages */
-	bool debug_;
 };
 
 #endif /* drvInficon_H */

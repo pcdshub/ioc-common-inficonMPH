@@ -58,25 +58,19 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     inficonExiting_(false),
     initialized_(false),
 	ioStatus_(asynSuccess),
-	hostInfo_(NULL),
-    portName_(NULL),
+    prevIOStatus_(asynSuccess),
+    hostInfo_(epicsStrDup(hostInfo));
+    portName_(epicsStrDup(portName));
     octetPortName_(NULL),
     isConnected_(false),
     data_(NULL),
     readOK_(0),
-    writeOK_(0),
-    IOErrors_(0),
-    currentIOErrors_(0),
-    maxIOMsec_(0),
-    lastIOMsec_(0)
+    writeOK_(0)
 
 {
     int status;
 	int ipConfigureStatus;
     static const char *functionName = "drvInficon";
-    
-    hostInfo_ = epicsStrDup(hostInfo);
-    portName_ = epicsStrDup(portName);
 	
     //Communication parameters
     createParam(INFICON_IP_STRING,              asynParamOctet,             &ip_); //what parameter type should be here if the readback value is string
