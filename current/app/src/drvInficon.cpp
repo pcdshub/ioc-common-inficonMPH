@@ -57,13 +57,13 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     inficonExiting_(false),
     initialized_(false),
-	ioStatus_(asynSuccess),
-    prevIOStatus_(asynSuccess),
-    hostInfo_(epicsStrDup(hostInfo)),
+    isConnected_(false),
     portName_(epicsStrDup(portName)),
     octetPortName_(NULL),
-    isConnected_(false),
+    hostInfo_(epicsStrDup(hostInfo)),
     data_(NULL),
+	ioStatus_(asynSuccess),
+    prevIOStatus_(asynSuccess),
     readOK_(0),
     writeOK_(0)
 
