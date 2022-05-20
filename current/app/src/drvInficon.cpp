@@ -694,7 +694,7 @@ asynStatus drvInficon::parseInt32(const char *jsonData, int *data)
 
 asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
 {
-    json j = parse(jsonData);
+    json j = json::parse(jsonData);
 	unsigned int value;
 	//jsonData >> j;
 	
