@@ -697,7 +697,9 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
     json j = json::parse(jsonData);
 	unsigned int value;
 	//jsonData >> j;
-	
+    try {
+        ;
+    }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s JSON error parsing unsigned int: %s\n", driverName, functionName, e.what());
