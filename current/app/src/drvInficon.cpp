@@ -14,7 +14,7 @@
 #include <time.h>
 
 /* EPICS includes */
-#include <dbAccess.h>
+//#include <dbAccess.h>
 #include <epicsStdio.h>
 #include <epicsString.h>
 #include <epicsThread.h>

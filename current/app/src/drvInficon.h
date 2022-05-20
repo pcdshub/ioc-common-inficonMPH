@@ -144,7 +144,6 @@ public:
     virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
-    int getStringLen(asynUser *pasynUser, size_t maxChars);
     asynStatus inficonReadWrite(const char *request, char *response);
 	asynStatus parseInt32(const char *json, epicsInt32 *data, int *dataLen);
     asynStatus parseUInt32(const char *json, epicsUInt32 *data, int *dataLen);
@@ -153,6 +152,10 @@ public:
     asynStatus parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum);
     bool inficonExiting_;
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
+	char *portName_;             /* asyn port name for the user driver */
+    char *octetPortName_;        /* asyn port name for the asyn octet port */
+	char *hostInfo_;             /* host info (IP address,connection type, port)
+	
 /*
 public:
 	//crete instance of inficon device
@@ -233,9 +236,6 @@ protected:
 private:
     /* Our data */
     bool initialized_;           /* If initialized successfully */
-	char *portName_;             /* asyn port name for the user driver */
-    char *octetPortName_;        /* asyn port name for the asyn octet port */
-	char *hostInfo_;
     bool isConnected_;           /* Connection status */
     asynUser  *pasynUserOctet_;  /* asynUser for asynOctet interface to asyn octet port */
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
