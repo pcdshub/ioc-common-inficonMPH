@@ -65,7 +65,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 	ioStatus_(asynSuccess),
     prevIOStatus_(asynSuccess),
     readOK_(0),
-    writeOK_(0)
+    writeOK_(0),
+	scanChannel_(1)
 
 {
     int status;
@@ -237,8 +238,10 @@ asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
 asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value, epicsUInt32 mask)
 {
     int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
     static const char *functionName = "readUInt32D";
-
+    char request[HTTP_REQUEST_SIZE];
+	
     *value = 0;
 
     if (function == getEmi_) {
@@ -252,21 +255,34 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     } else if (function == getFan_) {
         ;
     } else if (function == systStatus_) {
-        ;
+        sprintf(request,"GET /mmsp/status/systemStatus/get\n\n");
+		ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+		status = parseUInt32(data_, value);
     } else if (function == hwError_) {
-        ;
+        sprintf(request,"GET /mmsp/status/hardwareErrors/get\n\n");
+		ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+		status = parseUInt32(data_, value);
     } else if (function == hwWarn_) {
-        ;
+        sprintf(request,"GET /mmsp/status/hardwareWarnings/get\n\n");
+		ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+		status = parseUInt32(data_, value);
     } else if (function == getChPpamu_) {
-        ;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\n\n", scanChannel_);
+		ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+		status = parseUInt32(data_, value);
     } else if (function == scanStat) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
+        return asynError;
     }
-	return asynSuccess;
+	return status;
 }
 
 
@@ -293,6 +309,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
+        return asynError;
     }
     return asynSuccess;
 }
@@ -338,6 +355,7 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
+        return asynError;
     }
     return asynSuccess;
 }
@@ -361,6 +379,7 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
+        return asynError;
     }
     return asynSuccess;
 }
@@ -413,6 +432,7 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
+        return asynError;
     }
 
     return asynSuccess;
@@ -666,31 +686,44 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     return status;
 }
 
-asynStatus drvInficon::parseInt32(const char *json, int *data, int *dataLen)
+asynStatus drvInficon::parseInt32(const char *jsonData, int *data)
 {
     asynStatus status = asynSuccess;
     return status;
 }
 
-asynStatus drvInficon::parseUInt32(const char *json, unsigned int *data, int *dataLen)
+asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
+{
+    json j = parse(jsonData);
+	unsigned int value;
+	//jsonData >> j;
+	
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing unsigned int: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseFloat64(const char *jsonData, double *data)
 {
     asynStatus status = asynSuccess;
     return status;
 }
 
-asynStatus drvInficon::parseFloat64(const char *json, double *data, int *dataLen)
+asynStatus drvInficon::parseString(const char *jsonData, char *data, int *dataLen)
 {
     asynStatus status = asynSuccess;
     return status;
 }
 
-asynStatus drvInficon::parseString(const char *json, char *data, int *dataLen)
-{
-    asynStatus status = asynSuccess;
-    return status;
-}
-
-asynStatus drvInficon::parseScan(const char *json, double *data, int *scanSize, int *scannum)
+asynStatus drvInficon::parseScan(const char *jsonData, double *data, int *scanSize, int *scannum)
 {
     asynStatus status = asynSuccess;
     return status;

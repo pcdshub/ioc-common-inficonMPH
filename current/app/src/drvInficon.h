@@ -145,11 +145,11 @@ public:
 
     /* These are the methods that are new to this class */
     asynStatus inficonReadWrite(const char *request, char *response);
-	asynStatus parseInt32(const char *json, int *data, int *dataLen);
-    asynStatus parseUInt32(const char *json, unsigned int *data, int *dataLen);
-    asynStatus parseFloat64(const char *json, double *data, int *dataLen);
-    asynStatus parseString(const char *json, char *data, int *dataLen);
-    asynStatus parseScan(const char *json, double *data, int *scanSize, int *scannum);
+	asynStatus parseInt32(const char *jsonData, int *data);
+    asynStatus parseUInt32(const char *jsonData, unsigned int *data);
+    asynStatus parseFloat64(const char *jsonData, double *data);
+    asynStatus parseString(const char *jsonData, char *data, int *dataLen);
+    asynStatus parseScan(const char *jsonData, double *data, int *scanSize, int *scannum);
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 	
@@ -243,6 +243,7 @@ private:
     asynStatus prevIOStatus_;
     int readOK_;
     int writeOK_;
+	int scanChannel_;
 };
 
 #endif /* drvInficon_H */
