@@ -73,7 +73,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     static const char *functionName = "drvInficon";
 	
     //Communication parameters
-    createParam(INFICON_IP_STRING,              something,             &ip_); //what parameter type should be here if the readback value is string
+    createParam(INFICON_IP_STRING,              asynParamOctet,             &ip_); //what parameter type should be here if the readback value is string
     createParam(INFICON_MAC_STRING,             asynParamOctet,             &mac_); //what parameter type should be here if the readback value is string
     createParam(INFICON_ERROR_LOG_STRING,       asynParamOctet,             &errorLog_); //what parameter type should be here if the readback value is string
     //General control parameters
