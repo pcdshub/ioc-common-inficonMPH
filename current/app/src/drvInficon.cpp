@@ -255,22 +255,22 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     } else if (function == getFan_) {
         ;
     } else if (function == systStatus_) {
-        sprintf(request,"GET /mmsp/status/systemStatus/get\n\n");
+        sprintf(request,"GET /mmsp/status/systemStatus/get\r\n");
 		ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		status = parseUInt32(data_, value);
     } else if (function == hwError_) {
-        sprintf(request,"GET /mmsp/status/hardwareErrors/get\n\n");
+        sprintf(request,"GET /mmsp/status/hardwareErrors/get\r\n");
 		ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		status = parseUInt32(data_, value);
     } else if (function == hwWarn_) {
-        sprintf(request,"GET /mmsp/status/hardwareWarnings/get\n\n");
+        sprintf(request,"GET /mmsp/status/hardwareWarnings/get\r\n");
 		ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		status = parseUInt32(data_, value);
     } else if (function == getChPpamu_) {
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\n\n", scanChannel_);
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\r\n", scanChannel_);
 		ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		status = parseUInt32(data_, value);
