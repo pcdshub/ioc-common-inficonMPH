@@ -21,6 +21,7 @@
 #include <epicsExport.h>
 #include <epicsPrint.h>
 #include <epicsExit.h>
+#include <cantProceed.h>
 #include <errlog.h>
 #include <iocsh.h>
 
@@ -269,6 +270,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     } else {
         return asynPortDriver::readUInt32Digital(pasynUser, value, mask);
     }
+	return asynSuccess;
 }
 
 
@@ -337,6 +339,7 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
     } else {
         return asynPortDriver::readInt32(pasynUser, value);
     }
+    return asynSuccess;
 }
 
 
@@ -605,7 +608,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 
     /* Make sure the function code in the response is 200 OK */
     /* if function code not 200 set error and go to done*/
-	static const char *matchString = "HTTP/1.1"
+	static const char *matchString = "HTTP/1.1";
 	const char *substring;
 	int responseCode;
     if (httpResponse == NULL) {
@@ -624,7 +627,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
         goto done;
 	} else {
-        sscanf(substring, "HTTP\/1.1 %3d  OK", &responseCode);
+        sscanf(substring, "HTTP/1.1 %3d  OK", &responseCode);
     }
 	
     if (responseCode == 200) {
