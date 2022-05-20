@@ -145,13 +145,13 @@ public:
 
     /* These are the methods that are new to this class */
     asynStatus inficonReadWrite(const char *request, char *response);
-	asynStatus parseInt32(const char *json, epicsInt32 *data, int *dataLen);
-    asynStatus parseUInt32(const char *json, epicsUInt32 *data, int *dataLen);
-    asynStatus parseFloat64(const char *json, epicsFloat64 *data, int *dataLen);
+	asynStatus parseInt32(const char *json, int *data, int *dataLen);
+    asynStatus parseUInt32(const char *json, unsigned int *data, int *dataLen);
+    asynStatus parseFloat64(const char *json, double *data, int *dataLen);
     asynStatus parseString(const char *json, char *data, int *dataLen);
-    asynStatus parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum);
-    bool inficonExiting_;
+    asynStatus parseScan(const char *json, double *data, int *scanSize, int *scannum);
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
+    bool inficonExiting_;
 	
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */

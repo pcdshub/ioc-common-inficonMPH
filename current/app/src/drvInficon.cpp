@@ -73,7 +73,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     static const char *functionName = "drvInficon";
 	
     //Communication parameters
-    createParam(INFICON_IP_STRING,              asynParamOctet,             &ip_); //what parameter type should be here if the readback value is string
+    createParam(INFICON_IP_STRING,              something,             &ip_); //what parameter type should be here if the readback value is string
     createParam(INFICON_MAC_STRING,             asynParamOctet,             &mac_); //what parameter type should be here if the readback value is string
     createParam(INFICON_ERROR_LOG_STRING,       asynParamOctet,             &errorLog_); //what parameter type should be here if the readback value is string
     //General control parameters
@@ -262,7 +262,9 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     } else if (function == scanStat) {
         ;
     } else {
-        return asynPortDriver::readUInt32Digital(pasynUser, value, mask);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
     }
 	return asynSuccess;
 }
@@ -288,7 +290,9 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     } else if (function == scanStop_) {
         ;
     } else {
-        return asynPortDriver::writeUInt32Digital(pasynUser, value, mask);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
     }
     return asynSuccess;
 }
@@ -331,7 +335,9 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
     } else if (function == getScanCount_) {
         ;
     } else {
-        return asynPortDriver::readInt32(pasynUser, value);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
     }
     return asynSuccess;
 }
@@ -352,7 +358,9 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
     } else if (function == setScanCount_) {
 		;
     } else {
-        return asynPortDriver::writeInt32(pasynUser, value);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
     }
     return asynSuccess;
 }
@@ -402,7 +410,9 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
     } else if (function == getChStopMass_) {
         ;
     } else {
-        return asynPortDriver::readFloat64(pasynUser, value);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
     }
 
     return asynSuccess;
@@ -656,19 +666,19 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     return status;
 }
 
-asynStatus drvInficon::parseInt32(const char *json, epicsInt32 *data, int *dataLen)
+asynStatus drvInficon::parseInt32(const char *json, int *data, int *dataLen)
 {
     asynStatus status;
     return status;
 }
 
-asynStatus drvInficon::parseUInt32(const char *json, epicsUInt32 *data, int *dataLen)
+asynStatus drvInficon::parseUInt32(const char *json, unsigned int *data, int *dataLen)
 {
     asynStatus status;
     return status;
 }
 
-asynStatus drvInficon::parseFloat64(const char *json, epicsFloat64 *data, int *dataLen)
+asynStatus drvInficon::parseFloat64(const char *json, double *data, int *dataLen)
 {
     asynStatus status;
     return status;
@@ -680,7 +690,7 @@ asynStatus drvInficon::parseString(const char *json, char *data, int *dataLen)
     return status;
 }
 
-asynStatus drvInficon::parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum)
+asynStatus drvInficon::parseScan(const char *json, double *data, int *scanSize, int *scannum)
 {
     asynStatus status;
     return status;
