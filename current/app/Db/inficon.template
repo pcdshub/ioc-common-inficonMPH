@@ -7,7 +7,7 @@
 ##
 ##
 #
-record(mbbiDirect, "$(DEV):SYST_STAT")
+record(longin, "$(DEV):SYST_STAT")
 {
     field(DESC, "read system status")
     field(DTYP, "asynUInt32Digital")
