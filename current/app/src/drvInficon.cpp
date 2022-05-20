@@ -668,31 +668,31 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 
 asynStatus drvInficon::parseInt32(const char *json, int *data, int *dataLen)
 {
-    asynStatus status;
+    asynStatus status = asynSuccess;
     return status;
 }
 
 asynStatus drvInficon::parseUInt32(const char *json, unsigned int *data, int *dataLen)
 {
-    asynStatus status;
+    asynStatus status = asynSuccess;
     return status;
 }
 
 asynStatus drvInficon::parseFloat64(const char *json, double *data, int *dataLen)
 {
-    asynStatus status;
+    asynStatus status = asynSuccess;
     return status;
 }
 
 asynStatus drvInficon::parseString(const char *json, char *data, int *dataLen)
 {
-    asynStatus status;
+    asynStatus status = asynSuccess;
     return status;
 }
 
 asynStatus drvInficon::parseScan(const char *json, double *data, int *scanSize, int *scannum)
 {
-    asynStatus status;
+    asynStatus status = asynSuccess;
     return status;
 }
 
