@@ -61,7 +61,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     portName_(NULL),
     octetPortName_(NULL),
     isConnected_(false),
-    data_(0),
+    data_(NULL),
     readOK_(0),
     writeOK_(0),
     IOErrors_(0),
@@ -91,9 +91,9 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_GET_FAN_STRING,         asynParamUInt32Digital,     &getFan_);
     createParam(INFICON_SHUTDOWN_STRING,        asynParamUInt32Digital,     &shutdown_);
     //Sensor info parameters
-    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);
-    createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);
-    createParam(INFICON_SENS_SN_STRING,            asynParamOctet,          &sensSn_);
+    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);  //what parameter type should be here if the readback value is string
+    createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);  //what parameter type should be here if the readback value is string
+    createParam(INFICON_SENS_SN_STRING,            asynParamOctet,          &sensSn_);  //what parameter type should be here if the readback value is string
     //Status parameters
     createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
     createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
@@ -121,7 +121,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_LAST_SCAN_STRING,          asynParamInt32,          &lastScan_);
     createParam(INFICON_CURRENT_SCAN_STRING,       asynParamInt32,          &currentScan_);
     createParam(INFICON_PPSCAN_STRING,             asynParamInt32,          &ppscan_);
-    createParam(INFICON_SCAN_STAT_STRING,          asynParamInt32,          &scanStat);
+    createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStat);
     //Sensor detector parameters
     createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamFloat64,        &emVoltageMax_);
     createParam(INFICON_EM_VOLTAGE_MIN_STRING,     asynParamFloat64,        &emVoltageMin_);
@@ -133,8 +133,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_GET_START_CH_STRING,       asynParamInt32,          &getStartCh_);
     createParam(INFICON_SET_STOP_CH_STRING,        asynParamInt32,          &setStopCh_);
     createParam(INFICON_GET_STOP_CH_STRING,        asynParamInt32,          &getStopCh_);
-    createParam(INFICON_SET_CH_MODE_STRING,        asynParamUInt32Digital,  &setChMode_);
-    createParam(INFICON_GET_CH_MODE_STRING,        asynParamUInt32Digital,  &getChMode_);
+    createParam(INFICON_SET_CH_MODE_STRING,        asynParamOctet,          &setChMode_);  //what parameter type should be here if the readback value is string // string only
+    createParam(INFICON_GET_CH_MODE_STRING,        asynParamOctet,          &getChMode_);  //what parameter type should be here if the readback value is string // string only
     createParam(INFICON_SET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &setChPpamu_);
     createParam(INFICON_GET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &getChPpamu_);
     createParam(INFICON_SET_CH_DWELL_STRING,       asynParamFloat64,        &setChDwell_);
@@ -209,11 +209,19 @@ drvInficon::~drvInficon() {
 /***********************/
 /* asynCommon routines */
 /***********************/
+/* Connect */
+asynStatus drvInficon::connect(asynUser *pasynUser)
+{
+    if (initialized_ == false) return asynDisabled;
+
+    pasynManager->exceptionConnect(pasynUser);
+    return asynSuccess;
+}
 
 /* Report  parameters */
 void drvInficon::report(FILE *fp, int details)
 {
-    fprintf(fp, "modbus port: %s\n", this->portName);
+    fprintf(fp, "inficon port: %s\n", this->portName);
     if (details) {
         fprintf(fp, "    initialized:        %s\n", initialized_ ? "true" : "false");
         fprintf(fp, "    asynOctet server:   %s\n", octetPortName_);
@@ -236,10 +244,29 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     int function = pasynUser->reason;
     static const char *functionName = "readUInt32D";
 
+    *value = 0;
+
     if (function == getEmi_) {
         ;
-    }
-    else {
+    } else if (function == getEmi_) {
+        ;
+    } else if (function == getEm_) {
+        ;
+    } else if (function == setRfGen_) {
+        ;
+    } else if (function == getFan_) {
+        ;
+    } else if (function == systStatus_) {
+        ;
+    } else if (function == hwError_) {
+        ;
+    } else if (function == hwWarn_) {
+        ;
+    } else if (function == getChPpamu_) {
+        ;
+    } else if (function == scanStat) {
+        ;
+    } else {
         return asynPortDriver::readUInt32Digital(pasynUser, value, mask);
     }
 }
@@ -248,13 +275,23 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask)
 {
     int function = pasynUser->reason;
-    epicsUInt16 data = value;
     static const char *functionName = "writeUInt32D";
 
     if (function == setEmi_) {
         ;
-    }
-    else {
+    else if (function == setEmi_) {
+        ;
+    else if (function == setEm_) {
+        ;
+    else if (function == shutdown_) {
+        ;
+    else if (function == setChPpamu_) {
+        ;
+    else if (function == scanStart_) {
+        ;
+    else if (function == scanStop_) {
+        ;
+    } else {
         return asynPortDriver::writeUInt32Digital(pasynUser, value, mask);
     }
     return asynSuccess;
@@ -264,7 +301,6 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 /*
 **  asynInt32 support
 */
-
 asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 {
     int function = pasynUser->reason;
@@ -272,10 +308,33 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 
     *value = 0;
 
-    if (function == getStartCh_) {
+    if (function == pwrOnTime_) {
         ;
-    }
-    else {
+    else if (function == emiOnTime_) {
+        ;
+    else if (function == emOnTime_) {
+        ;
+    else if (function == emiCmlOnTime_) {
+        ;
+    else if (function == emCmlOnTime_) {
+        ;
+    else if (function == emiPressTrip_) {
+        ;
+    else if (function == firstScan_) {
+        ;
+    else if (function == lastScan_) {
+        ;
+    else if (function == currentScan_) {
+        ;
+    else if (function == ppscan_) {
+        ;
+    else if (function == getStartCh_) {
+        ;
+    else if (function == getStopCh_) {
+        ;
+    else if (function == getScanCount_) {
+        ;
+    } else {
         return asynPortDriver::readInt32(pasynUser, value);
     }
 }
@@ -284,14 +343,18 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
     int function = pasynUser->reason;
-    epicsUInt16 buffer[4];
-    int bufferLen;
+    //epicsUInt16 buffer[4];
+    //int bufferLen;
+    asynStatus status;
     static const char *functionName = "writeInt32";
 
     if (function == setStartCh_) {
 		;
-    }
-    else {
+    else if (function == setStopCh_) {
+		;
+    else if (function == setScanCount_) {
+		;
+    } else {
         return asynPortDriver::writeInt32(pasynUser, value);
     }
     return asynSuccess;
@@ -311,8 +374,37 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 
     if (function == boxTemp_) {
         ;
-    }
-    else {
+    else if (function == anodePotential_) {
+        ;
+    else if (function == emiCurrent_) {
+        ;
+    else if (function == focusPotential_) {
+        ;
+    else if (function == electEnergy_) {
+        ;
+    else if (function == filPotential_) {
+        ;
+    else if (function == filCurrent_) {
+        ;
+    else if (function == emPotential_) {
+        ;
+    else if (function == getPress_) {
+        ;
+    else if (function == emVoltageMax_) {
+        ;
+    else if (function == emVoltageMin_) {
+        ;
+    else if (function == dwelMax_) {
+        ;
+    else if (function == dwelMin_) {
+        ;
+    else if (function == getChDwell_) {
+        ;
+    else if (function == getChStartMass_) {
+        ;
+    else if (function == getChStopMass_) {
+        ;
+    } else {
         return asynPortDriver::readFloat64(pasynUser, value);
     }
 
@@ -330,6 +422,15 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 
     if (function == setChDwell_) {
         ;
+    } else if (function == setChStartMass_) {
+        ;
+    } else if (function == setChStopMass_) {
+        ;
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
+        return asynError;
     }
     return asynSuccess;
 }
@@ -342,7 +443,6 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans, size_t *nactual)
 {
     int function = pasynUser->reason;
-    int bufferLen;
 	size_t i;
     static const char *functionName = "readFloat32Array";
 
@@ -350,8 +450,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 
     if (function == getScan_) {
         ;
-    }
-	else {
+    } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
@@ -366,7 +465,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 /*
 **  asynOctet support
 */
-asynStatus drvInficon::readOctet(asynUser *pasynUser, char *data, size_t maxChars, size_t *nactual, int *eomReason)
+asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nactual, int *eomReason)
 {
     int function = pasynUser->reason;
     static const char *functionName = "readOctet";
@@ -375,16 +474,45 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *data, size_t maxChar
 
     if (function == ip_) {
         ;
-    }
-    else {
+    } else if (function == mac_) {
+        ;
+    } else if (function == errorLog_) {
+        ;
+    } else if (function == sensName_) {
+        ;
+    } else if (function == sensDesc_) {
+        ;
+    } else if (function == sensSn_) {
+        ;
+    } else if (function == setChMode_) {
+        ;
+    } else if (function == getChMode_) {
+        ;
+    } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-
     return asynSuccess;
 }
+
+asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual)
+{
+    int function = pasynUser->reason;
+    static const char *functionName = "writeOctet";
+
+    if (function == setChMode_) {
+        ;
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, pasynUser->reason);
+        return asynError;
+    }
+    return asynSuccess;
+}
+
 
 /*
 **  User functions
@@ -397,6 +525,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     size_t nwrite, nread;
     int requestSize = 0;
 	int responseSize = 0;
+	char httpResponse[HTTP_RESPONSE_SIZE];
 
     static const char *functionName = "inficonReadWrite";
   
@@ -404,9 +533,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     status = pasynManager->isAutoConnect(pasynUserOctet_, &autoConnect);
     if (!autoConnect) {
         /* See if we are connected */
-        int itemp;
-        status = pasynManager->isConnected(pasynUserOctet_, &itemp);
-        isConnected_ = (itemp != 0) ? true : false;
+        int yn = 0;
+        status = pasynManager->isConnected(pasynUserOctet_, &yn);
+        isConnected_ = (yn != 0) ? true : false;
          /* If we have an I/O error or are disconnected then disconnect device and reconnect */
         if ((ioStatus_ != asynSuccess) || !isConnected_) {
             if (ioStatus_ != asynSuccess)
@@ -445,8 +574,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 	requestSize = (int)strlen(request);
 	responseSize = HTTP_RESPONSE_SIZE;
     status = pasynOctetSyncIO->writeRead(pasynUserOctet_,
-                                         inficonRequest_, requestSize,
-                                         inficonResponse_, responseSize,
+                                         request, requestSize,
+                                         httpResponse, responseSize,
                                          DEVICE_RW_TIMEOUT,
                                          &nwrite, &nread, &eomReason);
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
@@ -454,40 +583,109 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason);
 
     if (status != prevIOStatus_) {
-      if (status != asynSuccess) {
+        if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                      "%s::%s port %s error calling writeRead,"
-                     " error=%s, nwrite=%d/%d, nread=%d\n",
+                     " error=%s, nwrite=%d, nread=%d\n",
                      driverName, functionName, this->portName,
-                     pasynUserOctet_->errorMessage, (int)nwrite, requestSize, (int)nread);
+                     pasynUserOctet_->errorMessage, (int)nwrite, (int)nread);
         } else {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                     "%s::%s port %s writeRead status back to normal having had %d errors,"
-                     " nwrite=%d/%d, nread=%d\n",
+                     "%s::%s port %s writeRead status back to normal,"
+                     " nwrite=%d, nread=%d\n",
                      driverName, functionName, this->portName,
-                     currentIOErrors_, (int)nwrite, requestSize, (int)nread);
-            currentIOErrors_ = 0;
+                     (int)nwrite, (int)nread);
         }
         prevIOStatus_ = status;
+    }
+    if (status != asynSuccess) {
+        goto done;
     }
 
 
     /* Make sure the function code in the response is 200 OK */
-    /* if function code not 200 set error and go to done
-	response = inficonResponse_[nread] = '\0';
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                      "%s::%s, port %s unsupported function code %d\n",
-                      driverName, functionName, this->portName, function);
-            status = asynError;
-			
-
-    }*/
-
-    /*if response code ok, remove header from the string
-	response = inficonResponse_[];
+    /* if function code not 200 set error and go to done*/
+	static const char *matchString = "HTTP/1.1"
+	const char *substring;
+	int responseCode;
+    if (httpResponse == NULL) {
+        status = asynError;
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                 "%s::%s port %s http response is empty string\n",
+                 driverName, functionName, this->portName);
+        goto done;
+	}
 	
-    */
-    done:
+    substring = strstr(httpResponse, matchString);
+    if (substring == NULL) {
+        status = asynError;
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                 "%s::%s port %s HTTP response not valid\n",
+                 driverName, functionName, this->portName);
+        goto done;
+	} else {
+        sscanf(substring, "HTTP\/1.1 %3d  OK", &responseCode);
+    }
+	
+    if (responseCode == 200) {
+        const char *jsonStart;
+		const char *jsonStop;
+        jsonStart = strchr(httpResponse,'{');
+		jsonStop = strrchr(httpResponse,'}');
+        if (jsonStart == NULL){
+            status = asynError;
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                 "%s::%s port %s json data not valid\n",
+                 driverName, functionName, this->portName);
+            goto done;
+        } else if (jsonStop == NULL){
+            status = asynError;
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                 "%s::%s port %s json data not valid\n",
+                 driverName, functionName, this->portName);
+            goto done;
+        } else {
+            size_t len = jsonStop - jsonStart;
+			memcpy(response, httpResponse + (jsonStart-httpResponse), len);
+            response[len + 1] = '\0';
+        }
+    } else {
+        status = asynError;
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+             "%s::%s port %s error response code %3d\n",
+             driverName, functionName, this->portName, responseCode);
+    }
+    done: response[0] = '\0';
+    return status;
+}
+
+asynStatus drvInficon::parseInt32(const char *json, epicsInt32 *data, int *dataLen)
+{
+    asynStatus status;
+    return status;
+}
+
+asynStatus drvInficon::parseUInt32(const char *json, epicsUInt32 *data, int *dataLen)
+{
+    asynStatus status;
+    return status;
+}
+
+asynStatus drvInficon::parseFloat64(const char *json, epicsFloat64 *data, int *dataLen)
+{
+    asynStatus status;
+    return status;
+}
+
+asynStatus drvInficon::parseString(const char *json, char *data, int *dataLen)
+{
+    asynStatus status;
+    return status;
+}
+
+asynStatus drvInficon::parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum)
+{
+    asynStatus status;
     return status;
 }
 

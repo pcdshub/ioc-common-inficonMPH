@@ -116,7 +116,7 @@ public:
 
     /* These functions are in the asynCommon interface */
     virtual void report(FILE *fp, int details);
-    //virtual asynStatus connect(asynUser *pasynUser);
+    virtual asynStatus connect(asynUser *pasynUser);
     virtual asynStatus getAddress(asynUser *pasynUser, int *address);
 
     /* These functions are in the asynUInt32Digital interface */
@@ -135,17 +135,22 @@ public:
     virtual asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
     virtual asynStatus readFloat64(asynUser *pasynUser, epicsFloat64 *value);
 
-    /* These functions are in the asynInt32Array interface */
+    /* These functions are in the asynFloat32Array interface */
     virtual asynStatus readFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans, size_t *nactual);
     //virtual asynStatus writeFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans);
 
     /* These functions are in the asynOctet interface */
-    //virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
+    virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
     virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
     int getStringLen(asynUser *pasynUser, size_t maxChars);
     asynStatus inficonReadWrite(const char *request, char *response);
+	asynStatus parseInt32(const char *json, epicsInt32 *data, int *dataLen);
+    asynStatus parseUInt32(const char *json, epicsUInt32 *data, int *dataLen);
+    asynStatus parseFloat64(const char *json, epicsFloat64 *data, int *dataLen);
+    asynStatus parseString(const char *json, char *data, int *dataLen);
+    asynStatus parseScan(const char *json, epicsFloat64 *data, int *scanSize, int *scannum);
     bool inficonExiting_;
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
 /*
@@ -156,7 +161,6 @@ protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
     //Communication parameters
     int ip_;
-	#define FIRST_drvInficon_PARAM ip_
     int mac_;
     int errorLog_;
     //General control parameters
@@ -225,7 +229,6 @@ protected:
     int getScanCount_;
     int scanStart_;
     int scanStop_;
-    #define LAST_drvInficon_PARAM scanStop_
 
 private:
     /* Our data */
@@ -238,8 +241,8 @@ private:
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
     char *data_;                 /* Memory buffer */
-    char inficonRequest_[HTTP_REQUEST_SIZE];       /* Inficon request */
-    char inficonResponse_[HTTP_RESPONSE_SIZE];        /* Inficon response */
+    //char inficonRequest_[HTTP_REQUEST_SIZE];       /* Inficon request */
+    //char inficonResponse_[HTTP_RESPONSE_SIZE];        /* Inficon response */
 	asynStatus ioStatus_;
     asynStatus prevIOStatus_;
     int readOK_;
@@ -253,5 +256,4 @@ private:
 	bool debug_;
 };
 
-#define NUM_PARAMS ((int)(&LAST_drvInficon_PARAM - &FIRST_drvInficon_PARAM + 1))
 #endif /* drvInficon_H */
