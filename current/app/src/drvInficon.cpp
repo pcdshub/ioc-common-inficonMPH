@@ -697,6 +697,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
     json j = json::parse(jsonData);
 	unsigned int value;
 	//jsonData >> j;
+    static const char *functionName = "parseUInt32";
     try {
         ;
     }
