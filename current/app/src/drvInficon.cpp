@@ -279,17 +279,17 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
     if (function == setEmi_) {
         ;
-    else if (function == setEmi_) {
+    } else if (function == setEmi_) {
         ;
-    else if (function == setEm_) {
+    } else if (function == setEm_) {
         ;
-    else if (function == shutdown_) {
+    } else if (function == shutdown_) {
         ;
-    else if (function == setChPpamu_) {
+    } else if (function == setChPpamu_) {
         ;
-    else if (function == scanStart_) {
+    } else if (function == scanStart_) {
         ;
-    else if (function == scanStop_) {
+    } else if (function == scanStop_) {
         ;
     } else {
         return asynPortDriver::writeUInt32Digital(pasynUser, value, mask);
@@ -310,29 +310,29 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 
     if (function == pwrOnTime_) {
         ;
-    else if (function == emiOnTime_) {
+    } else if (function == emiOnTime_) {
         ;
-    else if (function == emOnTime_) {
+    } else if (function == emOnTime_) {
         ;
-    else if (function == emiCmlOnTime_) {
+    } else if (function == emiCmlOnTime_) {
         ;
-    else if (function == emCmlOnTime_) {
+    } else if (function == emCmlOnTime_) {
         ;
-    else if (function == emiPressTrip_) {
+    } else if (function == emiPressTrip_) {
         ;
-    else if (function == firstScan_) {
+    } else if (function == firstScan_) {
         ;
-    else if (function == lastScan_) {
+    } else if (function == lastScan_) {
         ;
-    else if (function == currentScan_) {
+    } else if (function == currentScan_) {
         ;
-    else if (function == ppscan_) {
+    } else if (function == ppscan_) {
         ;
-    else if (function == getStartCh_) {
+    } else if (function == getStartCh_) {
         ;
-    else if (function == getStopCh_) {
+    } else if (function == getStopCh_) {
         ;
-    else if (function == getScanCount_) {
+    } else if (function == getScanCount_) {
         ;
     } else {
         return asynPortDriver::readInt32(pasynUser, value);
@@ -350,9 +350,9 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
     if (function == setStartCh_) {
 		;
-    else if (function == setStopCh_) {
+    } else if (function == setStopCh_) {
 		;
-    else if (function == setScanCount_) {
+    } else if (function == setScanCount_) {
 		;
     } else {
         return asynPortDriver::writeInt32(pasynUser, value);
@@ -374,35 +374,35 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 
     if (function == boxTemp_) {
         ;
-    else if (function == anodePotential_) {
+    } else if (function == anodePotential_) {
         ;
-    else if (function == emiCurrent_) {
+    } else if (function == emiCurrent_) {
         ;
-    else if (function == focusPotential_) {
+    } else if (function == focusPotential_) {
         ;
-    else if (function == electEnergy_) {
+    } else if (function == electEnergy_) {
         ;
-    else if (function == filPotential_) {
+    } else if (function == filPotential_) {
         ;
-    else if (function == filCurrent_) {
+    } else if (function == filCurrent_) {
         ;
-    else if (function == emPotential_) {
+    } else if (function == emPotential_) {
         ;
-    else if (function == getPress_) {
+    } else if (function == getPress_) {
         ;
-    else if (function == emVoltageMax_) {
+    } else if (function == emVoltageMax_) {
         ;
-    else if (function == emVoltageMin_) {
+    } else if (function == emVoltageMin_) {
         ;
-    else if (function == dwelMax_) {
+    } else if (function == dwelMax_) {
         ;
-    else if (function == dwelMin_) {
+    } else if (function == dwelMin_) {
         ;
-    else if (function == getChDwell_) {
+    } else if (function == getChDwell_) {
         ;
-    else if (function == getChStartMass_) {
+    } else if (function == getChStartMass_) {
         ;
-    else if (function == getChStopMass_) {
+    } else if (function == getChStopMass_) {
         ;
     } else {
         return asynPortDriver::readFloat64(pasynUser, value);
