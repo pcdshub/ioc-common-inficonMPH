@@ -606,7 +606,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                                          DEVICE_RW_TIMEOUT,
                                          &nwrite, &nread, &eomReason);
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d %s %s\n",
+              "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
 
     if (status != prevIOStatus_) {
