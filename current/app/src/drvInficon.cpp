@@ -649,12 +649,18 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         }
         prevIOStatus_ = status;
     }
-    if (status != asynSuccess) {
-        //goto done;
+
+    if (status == asynSuccess && nread > 0) {
+        httpResponse[nread +1] = '\0';
+    } else if (status == asynTimeout && nread > 0) {
+        httpResponse[nread +1] = '\0';
+        status = asynSuccess;
+    } else if (status == asynError && nread > 0) {
+        httpResponse[nread +1] = '\0';
+        status = asynSuccess;
+    } else {
+        goto done;
     }
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s after checking asynStatus\n",
-              driverName, functionName);
 
     /* Make sure the function code in the response is 200 OK */
     /* if function code not 200 set error and go to done*/
@@ -668,10 +674,6 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
         goto done;
 	}
-
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s after checking httpResponse\n",
-              driverName, functionName);
 
     substring = strstr(httpResponse, matchString);
     if (substring == NULL) {
@@ -692,7 +694,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         const char *jsonStart;
 		const char *jsonStop;
         jsonStart = strchr(httpResponse,'{');
-		jsonStop = strrchr(httpResponse,'}') + 1;
+		jsonStop = strrchr(httpResponse,'}');
         if (jsonStart == NULL){
             status = asynError;
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -706,7 +708,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
             goto done;
         } else {
-            size_t len = jsonStop - jsonStart;
+            size_t len = (jsonStop+1) - jsonStart;
 			memcpy(response, httpResponse + (jsonStart-httpResponse), len);
             response[len + 1] = '\0';
         }
@@ -719,7 +721,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     }
 	
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s parsed response %s\n",
+              "%s::%s parsed response:%s\n",
               driverName, functionName, response);
     done:
     return status;
