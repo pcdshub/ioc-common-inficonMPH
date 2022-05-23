@@ -828,7 +828,7 @@ static void drvInficonConfigureCallFunc(const iocshArgBuf* args) {
 	}
 	
 	char hostInfo[64];
-	sprintf(hostInfo,"%s:%i HTTP", ip, port);
+	sprintf(hostInfo,"%s:%i TCP", ip, port);
 
 	drvInficonConfigure(portName, hostInfo);
 }
