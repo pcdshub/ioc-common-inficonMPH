@@ -175,14 +175,14 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
         return;
     }
 
-    /* Connect to asyn octet port with asynCommonSyncIO */
+    /* Connect to asyn octet port with asynCommonSyncIO 
     status = pasynCommonSyncIO->connect(octetPortName_, 0, &pasynUserCommon_, 0);
     if (status != asynSuccess) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s port %s can't connect to asynCommon on Octet server %s.\n",
         driverName, functionName, portName_, octetPortName_);
         return;
-     }
+     }*/
 
     //epicsAtExit(inficonExitCallback, this);
 
@@ -575,14 +575,14 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 
     static const char *functionName = "inficonReadWrite";
   
-    /* If the Octet driver is not set for autoConnect then do connection management ourselves */
+/*    // If the Octet driver is not set for autoConnect then do connection management ourselves
     status = pasynManager->isAutoConnect(pasynUserOctet_, &autoConnect);
     if (!autoConnect) {
-        /* See if we are connected */
+        // See if we are connected
         int yn = 0;
         status = pasynManager->isConnected(pasynUserOctet_, &yn);
         isConnected_ = (yn != 0) ? true : false;
-         /* If we have an I/O error or are disconnected then disconnect device and reconnect */
+         // If we have an I/O error or are disconnected then disconnect device and reconnect 
         if ((ioStatus_ != asynSuccess) || !isConnected_) {
             if (ioStatus_ != asynSuccess)
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -615,7 +615,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
             }
         }
     }
-
+*/
     /* Do the write/read cycle */
 	requestSize = (int)strlen(request);
 	responseSize = HTTP_RESPONSE_SIZE;
