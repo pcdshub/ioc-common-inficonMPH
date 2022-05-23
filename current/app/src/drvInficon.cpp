@@ -696,12 +696,17 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
             response[len + 1] = '\0';
         }
     } else {
+        response[0] = '\0';
         status = asynError;
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
              "%s::%s port %s error response code %3d\n",
              driverName, functionName, this->portName, responseCode);
     }
-    done: response[0] = '\0';
+	
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s parsed response %s\n",
+              driverName, functionName, response);
+    done:
     return status;
 }
 
