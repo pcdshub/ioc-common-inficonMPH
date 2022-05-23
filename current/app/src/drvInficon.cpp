@@ -628,6 +628,11 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
               "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
 
+
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s status=%d previous IO status=%d  asynsuccess status code=%d\n",
+              driverName, functionName, status, prevIOStatus_, asynSuccess);
+
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
