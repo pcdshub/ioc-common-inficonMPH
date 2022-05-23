@@ -625,8 +625,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                                          DEVICE_RW_TIMEOUT,
                                          &nwrite, &nread, &eomReason);
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s response:%s\n",
-              driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request, httpResponse);
+              "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
+              driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
 
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
@@ -647,7 +647,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     if (status != asynSuccess) {
         goto done;
     }
-
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s after checking asynStatus\n",
+              driverName, functionName);
 
     /* Make sure the function code in the response is 200 OK */
     /* if function code not 200 set error and go to done*/
@@ -661,7 +663,11 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
         goto done;
 	}
-	
+
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s after checking httpResponse\n",
+              driverName, functionName);
+
     substring = strstr(httpResponse, matchString);
     if (substring == NULL) {
         status = asynError;
@@ -672,6 +678,10 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 	} else {
         sscanf(substring, "HTTP/1.1 %3d ", &responseCode);
     }
+	
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s after checking httpResponse code %d\n",
+              driverName, functionName, responseCode);
 	
     if (responseCode == 200) {
         const char *jsonStart;
