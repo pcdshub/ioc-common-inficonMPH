@@ -154,7 +154,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 	octetPortName_[len - 1] = '\0';
 	
     // drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect,noProcessEos)
-	ipConfigureStatus = drvAsynIPPortConfigure(octetPortName_, hostInfo_, 0, 1, 0); //I think for the HTTP port the noAutoConnect should be set to 1
+	ipConfigureStatus = drvAsynIPPortConfigure(octetPortName_, hostInfo_, 0, 0, 0); //I think for the HTTP port the noAutoConnect should be set to 1
 
 	if (ipConfigureStatus) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
