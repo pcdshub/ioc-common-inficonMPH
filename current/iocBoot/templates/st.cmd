@@ -7,7 +7,7 @@ epicsEnvSet( "IOC_PV",    "$$IOC_PV"   )
 epicsEnvSet( "LOCATION",  "$$IF(LOCATION,$$LOCATION,$$IOC_PV)")
 epicsEnvSet( "IOCTOP",    "$$IOCTOP"   )
 epicsEnvSet( "TOP",       "$$TOP"      )
-epicsEnvSet(streamDebug, 0)
+#epicsEnvSet(streamDebug, 0)
 
 cd( "$(IOCTOP)" )
 
