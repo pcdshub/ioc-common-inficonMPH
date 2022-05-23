@@ -740,7 +740,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
 	//jsonData >> j;
     static const char *functionName = "parseUInt32";
     try {
-        ;
+        value = j["data"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -752,7 +752,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, unsigned int *data)
             "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-	printf("%s::%s JSON data: %s\n", driverName, functionName, jsonData);
+	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, value);
     return asynSuccess;
 }
 
