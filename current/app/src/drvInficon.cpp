@@ -630,8 +630,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 
 
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s status=%d previous IO status=%d  asynsuccess status code=%d\n",
-              driverName, functionName, status, prevIOStatus_, asynSuccess);
+              "%s::%s status=%d previous IO status=%d  asynsuccess status code=%d, asynError code=%d\n",
+              driverName, functionName, status, prevIOStatus_, asynSuccess, asynError);
 
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
@@ -650,7 +650,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         prevIOStatus_ = status;
     }
     if (status != asynSuccess) {
-        goto done;
+        //goto done;
     }
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s after checking asynStatus\n",
