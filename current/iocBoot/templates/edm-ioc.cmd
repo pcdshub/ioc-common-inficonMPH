@@ -13,5 +13,5 @@ source /reg/g/pcds/pyps/conda/py36env.sh
 pushd $$IOCTOP/inficonMPHScreens
 
 $$LOOP(INFICON)
-pydm -m "DEV=$$BASE,IOC=$$IOC_PV" mph.ui &
+pydm -m "DEV=$$BASE,IOC=$$IOC_PV" inficon.ui &
 $$ENDLOOP(INFICON)
