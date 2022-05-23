@@ -692,7 +692,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         const char *jsonStart;
 		const char *jsonStop;
         jsonStart = strchr(httpResponse,'{');
-		jsonStop = strrchr(httpResponse,'}');
+		jsonStop = strrchr(httpResponse,'}') + 1;
         if (jsonStart == NULL){
             status = asynError;
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
