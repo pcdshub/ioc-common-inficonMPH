@@ -741,9 +741,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
             goto done;
         } else {
-            size_t len = (jsonStop+1) - jsonStart;
+            size_t len = (jsonStop + 1) - jsonStart;
 			memcpy(response, httpResponse + (jsonStart-httpResponse), len);
-            response[len + 1] = '\0';
+            response[len] = '\0';
         }
     } else {
         response[0] = '\0';
