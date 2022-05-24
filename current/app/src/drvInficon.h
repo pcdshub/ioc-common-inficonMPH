@@ -100,7 +100,21 @@
 #define INFICON_SCAN_START_STRING         "SCAN_START"
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
-#define MAX_INFICON_COMMAND_TYPES          73   
+#define MAX_INFICON_COMMAND_TYPES          10
+
+typedef enum {
+    stringCommand,
+	setEmiCommand,
+	setEmCommand,
+	setRfGenCommand,
+	getFanCommand,
+	shutdownCommand,
+	scanStatCommand,
+	setChModeCommand,
+	scanStartCommand,
+	scanStopCommand,
+    MAX_INFICON_COMMAND_TYPES
+} commandType_t;
 
 /* Forward declarations */
 class drvInficon;
@@ -145,11 +159,11 @@ public:
 
     /* These are the methods that are new to this class */
     asynStatus inficonReadWrite(const char *request, char *response);
-	asynStatus parseInt32(const char *jsonData, int *data);
-    asynStatus parseUInt32(const char *jsonData, unsigned int *data);
-    asynStatus parseFloat64(const char *jsonData, double *data);
-    asynStatus parseString(const char *jsonData, char *data, int *dataLen);
-    asynStatus parseScan(const char *jsonData, double *data, int *scanSize, int *scannum);
+	asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType);
+    asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
+    asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType);
+    asynStatus parseString(const char *jsonData, char *data, int *dataLen, commandType_t commandType);
+    asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
 	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 	
