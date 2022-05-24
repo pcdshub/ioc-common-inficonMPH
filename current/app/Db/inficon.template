@@ -7,7 +7,7 @@
 ##
 ##
 #
-record(longin, "$(DEV):SYST_STAT")
+record(mbbiDirect, "$(DEV):SYST_STAT")
 {
     field(DESC, "read system status")
     field(DTYP, "asynUInt32Digital")
@@ -17,7 +17,7 @@ record(longin, "$(DEV):SYST_STAT")
 }
 
 record(stringin,"$(DEV):IP") {
-    field(DTYP,"asynOctetRead")
-    field(INP,"@asyn($(PORT))IP")
-    field(SCAN,"$(DSCAN) second")
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))IP")
+    field(SCAN, "$(DSCAN) second")
 }
