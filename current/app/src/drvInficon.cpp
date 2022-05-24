@@ -772,7 +772,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
 	char *stemp;
 	bool btemp;
     static const char *functionName = "parseUInt32";
-	
+	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
     try {
         auto j = json::parse(jsonData);
         //json j_string;
@@ -823,7 +823,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
             "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
+
 	//*data = value;
     return asynSuccess;
 }
@@ -838,7 +838,7 @@ asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, c
 asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dataLen, commandType_t commandType)
 {
     static const char *functionName = "parseString";
-
+    printf("%s::%s JSON data:%s string:%s\n", driverName, functionName, jsonData, data);
     try {
         auto j = json::parse(jsonData);
         //json j_string;
@@ -867,7 +867,6 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-    printf("%s::%s JSON data:%s string:%s\n", driverName, functionName, jsonData, data);
     return asynSuccess;
 }
 
