@@ -661,11 +661,6 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
               "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
 
-
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s status=%d previous IO status=%d  asynsuccess status code=%d, asynError code=%d\n",
-              driverName, functionName, status, prevIOStatus_, asynSuccess, asynError);
-
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -720,8 +715,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     }
 	
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s after checking httpResponse code %d\n",
-              driverName, functionName, responseCode);
+              "%s::%s httpResponse:%s\n",
+              driverName, functionName, httpResponse);
 	
     if (responseCode == 200) {
         const char *jsonStart;
@@ -741,9 +736,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
             goto done;
         } else {
-            size_t len = (jsonStop + 1) - jsonStart;
-			memcpy(response, httpResponse + (jsonStart-httpResponse), len);
-            response[len] = '\0';
+            size_t len = jsonStop - jsonStart;
+			memcpy(response, jsonStart, len);
+            response[len + 1] = '\0';
         }
     } else {
         response[0] = '\0';
@@ -754,8 +749,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     }
 	
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s parsed response:%s\n",
-              driverName, functionName, response);
+              "%s::%s parsed response:%s, len:%d\n",
+              driverName, functionName, response, len);
     done:
     return status;
 }
