@@ -744,7 +744,7 @@ asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t com
 asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
 {
     json j = json::parse(jsonData);
-	unsigned int value;
+	//unsigned int value;
 	//jsonData >> j;
     static const char *functionName = "parseUInt32";
     try {
