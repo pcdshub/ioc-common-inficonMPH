@@ -735,13 +735,13 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     return status;
 }
 
-asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType)
+asynStatus drvInficon::parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType)
 {
     asynStatus status = asynSuccess;
     return status;
 }
 
-asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType)
+asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType)
 {
     json j = json::parse(jsonData);
 	//unsigned int value;
@@ -765,13 +765,13 @@ asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t c
     return asynSuccess;
 }
 
-asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType)
+asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType)
 {
     asynStatus status = asynSuccess;
     return status;
 }
 
-asynStatus parseString(const char *jsonData, char *data, int *dataLen, commandType_t commandType)
+asynStatus drvInficon::parseString(const char *jsonData, char *data, int *dataLen, commandType_t commandType)
 {
     asynStatus status = asynSuccess;
     return status;
