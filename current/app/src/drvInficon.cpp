@@ -779,13 +779,15 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
     static const char *functionName = "parseUInt32";
 	
     try {
-        auto j = json::parse(jsonData);
+        json j = json::parse(jsonData);
+        json j_string;
         switch (commandType) {
             case uint32Command:
                 *value = j["data"];
                 break;
             case setEmiCommand:
-                stemp = j["data"];
+                j_string = j["data"];
+				stemp = j_string.dump();
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -795,7 +797,8 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
                 }
                 break;
             case setEmCommand:
-                stemp = j["data"];
+                j_string = j["data"];
+				stemp = j_string.dump();
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -842,10 +845,12 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
     static const char *functionName = "parseString";
 
     try {
-        auto j = json::parse(jsonData);
+        json j = json::parse(jsonData);
+        json j_string;
         switch (commandType) {
             case stringCommand:
-                data = j["data"];
+                j_string = j["data"];
+				data = j_string.dump();
 				*dataLen = strlen(data);
                 break;
             default:
