@@ -813,6 +813,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
                         "%s::%s, port %s unknown command type %d\n",
                         driverName, functionName, this->portName, commandType);
                 return asynError;
+        }
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -852,6 +853,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
                         "%s::%s, port %s unknown command type %d\n",
                         driverName, functionName, this->portName, commandType);
                 return asynError;
+        }
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
