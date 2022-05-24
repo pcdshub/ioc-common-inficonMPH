@@ -393,7 +393,6 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
     int function = pasynUser->reason;
     //epicsUInt16 buffer[4];
     //int bufferLen;
-    asynStatus status;
     static const char *functionName = "writeInt32";
 
     if (function == setStartCh_) {
@@ -418,7 +417,6 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 {
     int function = pasynUser->reason;
-    int bufferLen;
     static const char *functionName = "readFloat64";
 
     *value = 0;
@@ -469,10 +467,7 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 {
     int function = pasynUser->reason;
-    epicsUInt16 buffer[4];
-    int bufferLen;
     static const char *functionName = "writeFloat64";
-
 
     if (function == setChDwell_) {
         ;
@@ -847,11 +842,13 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
     try {
         auto j = json::parse(jsonData);
         //json j_string;
+		std::string jstring;
         switch (commandType) {
             case stringCommand:
                 //j_string = j["data"];
-				//data = j["data"];
-				*dataLen = strlen(data);
+                jstring = j["data"];
+                data = jstring;
+                *dataLen = strlen(data);
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
