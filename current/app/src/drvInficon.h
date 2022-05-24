@@ -112,8 +112,7 @@ typedef enum {
 	scanStatCommand,
 	setChModeCommand,
 	scanStartCommand,
-	scanStopCommand,
-    MAX_INFICON_COMMAND_TYPES
+	scanStopCommand
 } commandType_t;
 
 /* Forward declarations */
