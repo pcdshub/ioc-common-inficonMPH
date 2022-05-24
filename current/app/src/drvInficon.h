@@ -105,15 +105,16 @@
 typedef enum {
     stringCommand,
     uint32Command,
+    int32Command,
+	float64Command,
 	setEmiCommand,
 	setEmCommand,
-	setRfGenCommand,
-	getFanCommand,
 	shutdownCommand,
 	scanStatCommand,
 	setChModeCommand,
 	scanStartCommand,
-	scanStopCommand
+	scanStopCommand,
+	errorLogCommand
 } commandType_t;
 
 /* Forward declarations */

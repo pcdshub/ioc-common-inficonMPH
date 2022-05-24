@@ -12,6 +12,12 @@ record(longin, "$(DEV):SYST_STAT")
     field(DESC, "read system status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SYST_STAT")
-    field(SCAN, ".5 second")
+    field(SCAN, "$(DSCAN)")
 	field(PINI, "YES")
+}
+
+record(stringin,"$(DEV):IP") {
+    field(DTYP,"asynOctetRead")
+    field(INP,"@asyn($(PORT))IP")
+    field(SCAN,"$(DSCAN)")
 }
