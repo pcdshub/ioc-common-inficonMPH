@@ -523,6 +523,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 {
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
+    char request[HTTP_REQUEST_SIZE];
 	int chNumber;
     static const char *functionName = "readOctet";
 
@@ -835,7 +836,7 @@ asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, c
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseString(const char *jsonData, char *data, int *dataLen, commandType_t commandType)
+asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dataLen, commandType_t commandType)
 {
     static const char *functionName = "parseString";
 
@@ -844,7 +845,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, int *dataLe
         switch (commandType) {
             case stringCommand:
                 data = j["data"];
-				*dataLen = (int)strlen(data);
+				*dataLen = strlen(data);
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
