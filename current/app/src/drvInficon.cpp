@@ -739,6 +739,10 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
             size_t len = jsonStop - jsonStart;
 			memcpy(response, jsonStart, len);
             response[len + 1] = '\0';
+	
+            asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s parsed response:%s, len:%d\n",
+              driverName, functionName, response, (int)len);
         }
     } else {
         response[0] = '\0';
@@ -747,10 +751,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
              "%s::%s port %s error response code %3d\n",
              driverName, functionName, this->portName, responseCode);
     }
-	
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s parsed response:%s, len:%d\n",
-              driverName, functionName, response, len);
+
     done:
     return status;
 }
