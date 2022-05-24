@@ -847,7 +847,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
             case stringCommand:
                 //j_string = j["data"];
                 jstring = j["data"];
-                data = jstring;
+                //data = jstring;
                 *dataLen = strlen(data);
                 break;
             default:
