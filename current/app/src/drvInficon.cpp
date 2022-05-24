@@ -785,7 +785,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
                 *value = j["data"];
                 break;
             case setEmiCommand:
-                stemp = j["data"];
+                auto stemp = j["data"];
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -795,7 +795,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
                 }
                 break;
             case setEmCommand:
-                stemp = j["data"];
+                auto stemp = j["data"];
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -845,7 +845,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         json j = json::parse(jsonData);
         switch (commandType) {
             case stringCommand:
-                data = j["data"];
+                auto data = j["data"];
 				*dataLen = strlen(data);
                 break;
             default:
