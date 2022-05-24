@@ -823,7 +823,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
             "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-	//printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
+	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
 	//*data = value;
     return asynSuccess;
 }
@@ -866,7 +866,8 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
-    }	
+    }
+    printf("%s::%s JSON data:%s string:%s\n", driverName, functionName, jsonData, data);
     return asynSuccess;
 }
 
