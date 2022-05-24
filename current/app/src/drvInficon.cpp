@@ -251,56 +251,56 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, setEmiCommand);
     } else if (function == getEm_) {
         sprintf(request,"GET /mmsp/generalControl/setEM/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, setEmCommand);
     } else if (function == getRfGen_) {
         sprintf(request,"GET /mmsp/generalControl/rfGeneratorSet/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, setRfGenCommand);
     } else if (function == getFan_) {
         sprintf(request,"GET /mmsp/generalControl/fanState/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, getFanCommand);
     } else if (function == systStatus_) {
         sprintf(request,
         "GET /mmsp/status/systemStatus/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == hwError_) {
         sprintf(request,"GET /mmsp/status/hardwareErrors/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == hwWarn_) {
         sprintf(request,"GET /mmsp/status/hardwareWarnings/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == getChPpamu_) {
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\r\n"
         "\r\n", chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == scanStat) {
         sprintf(request,"GET /mmsp/scanInfo/scanning/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value);
+        status = parseUInt32(data_, value, scanStatCommand);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",

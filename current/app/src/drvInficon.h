@@ -104,6 +104,7 @@
 
 typedef enum {
     stringCommand,
+    uint32Command,
 	setEmiCommand,
 	setEmCommand,
 	setRfGenCommand,
