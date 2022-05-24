@@ -660,7 +660,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
-
+/*
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -677,7 +677,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         }
         prevIOStatus_ = status;
     }
-
+*/
     if (status == asynSuccess && nread > 0) {
         httpResponse[nread +1] = '\0';
     } else if (status == asynTimeout && nread > 0) {
