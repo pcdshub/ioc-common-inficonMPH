@@ -765,7 +765,7 @@ asynStatus drvInficon::parseInt32(const char *jsonData, epicsInt32 *value, comma
 
 asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType)
 {
-	char stemp[32];
+	char *stemp;
 	bool btemp;
     static const char *functionName = "parseUInt32";
 
@@ -845,10 +845,8 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         switch (commandType) {
             case stringCommand:
                 jstring = j["data"];
-                //strcpy(data, jstring.c_str());
-                //strcpy(stemp, jstring.c_str());
-                //*dataLen = strlen(data);
-                //stempLen = strlen(stemp);
+                strcpy(data, jstring.c_str());
+                *dataLen = strlen(data);
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -867,7 +865,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-    printf("%s::%s JSON data:%s string:%d\n", driverName, functionName, jsonData, (int)stempLen);
+    printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, data, (int)*dataLen);
     return asynSuccess;
 }
 
