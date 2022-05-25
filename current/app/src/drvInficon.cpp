@@ -845,10 +845,10 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         switch (commandType) {
             case stringCommand:
                 jstring = j["data"];
-                strcpy(data, jstring.c_str());
-                strcpy(stemp, jstring.c_str());
-                *dataLen = strlen(data);
-                stempLen = strlen(stemp);
+                //strcpy(data, jstring.c_str());
+                //strcpy(stemp, jstring.c_str());
+                //*dataLen = strlen(data);
+                //stempLen = strlen(stemp);
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
