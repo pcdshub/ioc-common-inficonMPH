@@ -16,8 +16,8 @@ record(mbbiDirect, "$(DEV):SYST_STAT")
 	field(PINI, "YES")
 }
 
-record(stringin,"$(DEV):IP") {
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT) 1)IP")
-    field(SCAN, "$(DSCAN) second")
-}
+#record(stringin,"$(DEV):IP") {
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT) 1)IP")
+#    field(SCAN, "$(DSCAN) second")
+#}
