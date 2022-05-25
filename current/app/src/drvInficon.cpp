@@ -269,7 +269,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, uint32Command);
+        //status = parseUInt32(data_, value, uint32Command);
     } else if (function == hwError_) {
         sprintf(request,"GET /mmsp/status/hardwareErrors/get\r\n"
         "\r\n");
@@ -581,7 +581,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);
+        //status = parseString(data_, value, nactual, stringCommand);
     } else if (function == mac_) {
         sprintf(request,"GET /mmsp/communication/macAddress/get\r\n"
         "\r\n");
@@ -874,7 +874,7 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
         return asynError;
     }
 
-	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
+	//printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
     return asynSuccess;
 }
 
@@ -918,7 +918,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         return asynError;
     }
 
-    printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, data, (int)*dataLen);
+    //printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, data, (int)*dataLen);
     return asynSuccess;
 }
 
