@@ -236,7 +236,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 	int chNumber;
     static const char *functionName = "readUInt32D";
 	
-	//pasynManager->getAddr(pasynUser, &chNumber);
+	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
     if (function == getEmi_) {
