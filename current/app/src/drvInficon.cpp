@@ -768,7 +768,7 @@ asynStatus drvInficon::parseInt32(const char *jsonData, epicsInt32 *value, comma
 
 asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType)
 {
-	char *stemp;
+	char stemp[32];
 	bool btemp;
     static const char *functionName = "parseUInt32";
 
