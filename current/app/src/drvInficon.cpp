@@ -72,24 +72,26 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     int status;
 	int ipConfigureStatus;
     static const char *functionName = "drvInficon";
-	
+
+    //Electronics Info
+    createParam(INFICON_MASS_RANGE_STRING,         asynParamInt32,          &massRange_);
     //Communication parameters
-    createParam(INFICON_IP_STRING,              asynParamOctet,             &ip_); //what parameter type should be here if the readback value is string
-    createParam(INFICON_MAC_STRING,             asynParamOctet,             &mac_); //what parameter type should be here if the readback value is string
-    createParam(INFICON_ERROR_LOG_STRING,       asynParamOctet,             &errorLog_); //what parameter type should be here if the readback value is string
+    createParam(INFICON_IP_STRING,                 asynParamOctet,          &ip_);
+    createParam(INFICON_MAC_STRING,                asynParamOctet,          &mac_);
+    createParam(INFICON_ERROR_LOG_STRING,          asynParamOctet,          &errorLog_);
     //General control parameters
-    createParam(INFICON_SET_EMI_STRING,         asynParamUInt32Digital,     &setEmi_);
-    createParam(INFICON_GET_EMI_STRING,         asynParamUInt32Digital,     &getEmi_);
-    createParam(INFICON_SET_EM_STRING,          asynParamUInt32Digital,     &setEm_);
-    createParam(INFICON_GET_EM_STRING,          asynParamUInt32Digital,     &getEm_);
-    createParam(INFICON_SET_RFGEN_STRING,       asynParamUInt32Digital,     &setRfGen_);
-    createParam(INFICON_GET_RFGEN_STRING,       asynParamUInt32Digital,     &getRfGen_);
-    createParam(INFICON_GET_FAN_STRING,         asynParamUInt32Digital,     &getFan_);
-    createParam(INFICON_SHUTDOWN_STRING,        asynParamUInt32Digital,     &shutdown_);
+    createParam(INFICON_SET_EMI_STRING,            asynParamUInt32Digital,  &setEmi_);
+    createParam(INFICON_GET_EMI_STRING,            asynParamUInt32Digital,  &getEmi_);
+    createParam(INFICON_SET_EM_STRING,             asynParamUInt32Digital,  &setEm_);
+    createParam(INFICON_GET_EM_STRING,             asynParamUInt32Digital,  &getEm_);
+    createParam(INFICON_SET_RFGEN_STRING,          asynParamUInt32Digital,  &setRfGen_);
+    createParam(INFICON_GET_RFGEN_STRING,          asynParamUInt32Digital,  &getRfGen_);
+    createParam(INFICON_GET_FAN_STRING,            asynParamUInt32Digital,  &getFan_);
+    createParam(INFICON_SHUTDOWN_STRING,           asynParamUInt32Digital,  &shutdown_);
     //Sensor info parameters
-    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);  //what parameter type should be here if the readback value is string
-    createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);  //what parameter type should be here if the readback value is string
-    createParam(INFICON_SENS_SN_STRING,            asynParamOctet,          &sensSn_);  //what parameter type should be here if the readback value is string
+    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);
+    createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);
+    createParam(INFICON_SENS_SN_STRING,            asynParamOctet,          &sensSn_);
     //Status parameters
     createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
     createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
@@ -119,26 +121,26 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_PPSCAN_STRING,             asynParamInt32,          &ppscan_);
     createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStat);
     //Sensor detector parameters
-    createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamFloat64,        &emVoltageMax_);
-    createParam(INFICON_EM_VOLTAGE_MIN_STRING,     asynParamFloat64,        &emVoltageMin_);
+    createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamInt32,          &emVoltageMax_);
+    createParam(INFICON_EM_VOLTAGE_MIN_STRING,     asynParamInt32,          &emVoltageMin_);
     //Sensor filter parameters
-    createParam(INFICON_DWELL_MAX_STRING,          asynParamFloat64,        &dwelMax_);
-    createParam(INFICON_DWELL_MIN_STRING,          asynParamFloat64,        &dwelMin_);
+    createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
+    createParam(INFICON_DWELL_MIN_STRING,          asynParamUInt32Digital,  &dwelMin_);
     //Scan setup parameters
     createParam(INFICON_SET_START_CH_STRING,       asynParamInt32,          &setStartCh_);
     createParam(INFICON_GET_START_CH_STRING,       asynParamInt32,          &getStartCh_);
     createParam(INFICON_SET_STOP_CH_STRING,        asynParamInt32,          &setStopCh_);
     createParam(INFICON_GET_STOP_CH_STRING,        asynParamInt32,          &getStopCh_);
-    createParam(INFICON_SET_CH_MODE_STRING,        asynParamOctet,          &setChMode_);  //what parameter type should be here if the readback value is string // string only
-    createParam(INFICON_GET_CH_MODE_STRING,        asynParamOctet,          &getChMode_);  //what parameter type should be here if the readback value is string // string only
+    createParam(INFICON_SET_CH_MODE_STRING,        asynParamOctet,          &setChMode_); //octet
+    createParam(INFICON_GET_CH_MODE_STRING,        asynParamOctet,          &getChMode_); //octet
     createParam(INFICON_SET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &setChPpamu_);
     createParam(INFICON_GET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &getChPpamu_);
-    createParam(INFICON_SET_CH_DWELL_STRING,       asynParamFloat64,        &setChDwell_);
-    createParam(INFICON_GET_CH_DWELL_STRING,       asynParamFloat64,        &getChDwell_);
-    createParam(INFICON_SET_CH_START_MASS_STRING,  asynParamFloat64,        &setChStartMass_);
-    createParam(INFICON_GET_CH_START_MASS_STRING,  asynParamFloat64,        &getChStartMass_);
-    createParam(INFICON_SET_CH_STOP_MASS_STRING,   asynParamFloat64,        &setChStopMass_);
-    createParam(INFICON_GET_CH_STOP_MASS_STRING,   asynParamFloat64,        &getChStopMass_);
+    createParam(INFICON_SET_CH_DWELL_STRING,       asynParamUInt32Digital,  &setChDwell_);
+    createParam(INFICON_GET_CH_DWELL_STRING,       asynParamUInt32Digital,  &getChDwell_);
+    createParam(INFICON_SET_CH_START_MASS_STRING,  asynParamInt32,          &setChStartMass_);
+    createParam(INFICON_GET_CH_START_MASS_STRING,  asynParamInt32,          &getChStartMass_);
+    createParam(INFICON_SET_CH_STOP_MASS_STRING,   asynParamInt32,          &setChStopMass_);
+    createParam(INFICON_GET_CH_STOP_MASS_STRING,   asynParamInt32,          &getChStopMass_);
     createParam(INFICON_SET_SCAN_COUNT_STRING,     asynParamInt32,          &setScanCount_);
     createParam(INFICON_GET_SCAN_COUNT_STRING,     asynParamInt32,          &getScanCount_);
     createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
@@ -174,15 +176,6 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
             driverName, functionName, portName_, octetPortName_);
         return;
     }
-
-    /* Connect to asyn octet port with asynCommonSyncIO 
-    status = pasynCommonSyncIO->connect(octetPortName_, 0, &pasynUserCommon_, 0);
-    if (status != asynSuccess) {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-            "%s::%s port %s can't connect to asynCommon on Octet server %s.\n",
-        driverName, functionName, portName_, octetPortName_);
-        return;
-     }*/
 
     //epicsAtExit(inficonExitCallback, this);
 
@@ -301,6 +294,12 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseUInt32(data_, value, scanStatCommand);
+    } else if (function == getChDwell_) {
+        ;
+    } else if (function == dwelMax_) {
+        ;
+    } else if (function == dwelMin_) {
+        ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -332,6 +331,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     } else if (function == scanStart_) {
         ;
     } else if (function == scanStop_) {
+        ;
+    } else if (function == setChDwell_) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -379,6 +380,14 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
         ;
     } else if (function == getScanCount_) {
         ;
+    } else if (function == getChStartMass_) {
+        ;
+    } else if (function == getChStopMass_) {
+        ;
+	} else if (function == emVoltageMax_) {
+        ;
+    } else if (function == emVoltageMin_) {
+        ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -402,6 +411,10 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 		;
     } else if (function == setScanCount_) {
 		;
+    } else if (function == setChStartMass_) {
+        ;
+    } else if (function == setChStopMass_) {
+        ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -440,20 +453,6 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
         ;
     } else if (function == getPress_) {
         ;
-    } else if (function == emVoltageMax_) {
-        ;
-    } else if (function == emVoltageMin_) {
-        ;
-    } else if (function == dwelMax_) {
-        ;
-    } else if (function == dwelMin_) {
-        ;
-    } else if (function == getChDwell_) {
-        ;
-    } else if (function == getChStartMass_) {
-        ;
-    } else if (function == getChStopMass_) {
-        ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -470,7 +469,7 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
     int function = pasynUser->reason;
     static const char *functionName = "writeFloat64";
 
-    if (function == setChDwell_) {
+/*    if (function == setChDwell_) {
         ;
     } else if (function == setChStartMass_) {
         ;
@@ -481,7 +480,7 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
-    }
+    }*/
     return asynSuccess;
 }
 
@@ -574,6 +573,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
+    printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
     callParamCallbacks(chNumber);
     return status;
 }
@@ -588,7 +588,7 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
-                  driverName, functionName, this->portName, pasynUser->reason);
+                  driverName, functionName, this->portName, function);
         return asynError;
     }
     return asynSuccess;

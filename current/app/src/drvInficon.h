@@ -28,6 +28,8 @@
  * Drivers must return a value in pasynUser->reason that is unique
  * for that command.
  */
+//Electronics Info
+#define INFICON_MASS_RANGE_STRING         "MASS_MAX"
 //Communication
 #define INFICON_IP_STRING                 "IP"
 #define INFICON_MAC_STRING                "MAC"
@@ -170,6 +172,8 @@ public:
 	
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
+    //Electronics Info
+    int massRange_;
     //Communication parameters
     int ip_;
     int mac_;
