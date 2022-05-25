@@ -307,6 +307,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
                   driverName, functionName, this->portName, function);
         return asynError;
     }
+    callParamCallbacks(chNumber);
 	return status;
 }
 
@@ -573,6 +574,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
+    callParamCallbacks(chNumber);
     return status;
 }
 
@@ -834,7 +836,6 @@ asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, c
 
 asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dataLen, commandType_t commandType)
 {
-	char stemp[32];
 	size_t stempLen;
     static const char *functionName = "parseString";
 
