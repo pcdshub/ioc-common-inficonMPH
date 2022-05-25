@@ -390,6 +390,7 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 {
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
+    char request[HTTP_REQUEST_SIZE];
 	int chNumber;
     static const char *functionName = "readInt32";
 
