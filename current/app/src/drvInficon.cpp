@@ -523,7 +523,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 	int chNumber;
     static const char *functionName = "readOctet";
 
-    //pasynManager->getAddr(pasynUser, &chNumber);
+    pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
     if (function == ip_) {
