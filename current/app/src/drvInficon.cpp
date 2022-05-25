@@ -771,14 +771,15 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
 
     try {
         json j = json::parse(jsonData);
-        //json j_string;
+		std::string jstring;
+
         switch (commandType) {
             case uint32Command:
                 *value = j["data"];
                 break;
             case setEmiCommand:
-                //j_string = j["data"];
-				//stemp = j["data"];
+                jstring = j["data"];
+                strcpy(stemp, jstring.c_str());
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -788,8 +789,8 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
                 }
                 break;
             case setEmCommand:
-                //j_string = j["data"];
-				//stemp = j["data"];
+                jstring = j["data"];
+                strcpy(stemp, jstring.c_str());
 				if(strcmp(stemp,"Off") == 0) {
                     *value = 0;
                 } else if (strcmp(stemp,"On") == 0) {
@@ -862,7 +863,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-    //printf("%s::%s JSON data:%s string:%s\n", driverName, functionName, jsonData, data);
+    printf("%s::%s JSON data:%s string:%s\n", driverName, functionName, jsonData, dataLen);
     return asynSuccess;
 }
 
