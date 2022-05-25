@@ -96,11 +96,11 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
     createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
     createParam(INFICON_HW_WARN_STRING,            asynParamUInt32Digital,  &hwWarn_);
-    createParam(INFICON_PWR_ON_TIME_STRING,        asynParamInt32,          &pwrOnTime_);
-    createParam(INFICON_EMI_ON_TIME_STRING,        asynParamInt32,          &emiOnTime_);
-    createParam(INFICON_EM_ON_TIME_STRING,         asynParamInt32,          &emOnTime_);
-    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamInt32,          &emiCmlOnTime_);
-    createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamInt32,          &emCmlOnTime_);
+    createParam(INFICON_PWR_ON_TIME_STRING,        asynParamUInt32Digital,  &pwrOnTime_);
+    createParam(INFICON_EMI_ON_TIME_STRING,        asynParamUInt32Digital,  &emiOnTime_);
+    createParam(INFICON_EM_ON_TIME_STRING,         asynParamUInt32Digital,  &emOnTime_);
+    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamUInt32Digital,  &emiCmlOnTime_);
+    createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamUInt32Digital,  &emCmlOnTime_);
     createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamInt32,          &emiPressTrip_);
     //Diagnostic data parameters
     createParam(INFICON_BOX_TEMP_STRING,           asynParamFloat64,        &boxTemp_);
@@ -295,10 +295,48 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseUInt32(data_, value, scanStatCommand);
     } else if (function == getChDwell_) {
-        ;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/dwell/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == dwelMax_) {
-        ;
+        sprintf(request,"GET /mmsp/sensorFilter/massMax/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == dwelMin_) {
+        sprintf(request,"GET /mmsp/sensorFilter/massMin/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == pwrOnTime_) {
+        sprintf(request,"GET /mmsp/status/powerSupplyPowerOnTime/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emiOnTime_) {
+        sprintf(request,"GET /mmsp/status/emissionStretch/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emOnTime_) {
+        sprintf(request,"GET /mmsp/status/emStretch/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emiCmlOnTime_) {
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisOnTime/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emCmlOnTime_) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -351,28 +389,36 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 {
     int function = pasynUser->reason;
+	int chNumber;
     static const char *functionName = "readInt32";
 
+	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    if (function == pwrOnTime_) {
-        ;
-    } else if (function == emiOnTime_) {
-        ;
-    } else if (function == emOnTime_) {
-        ;
-    } else if (function == emiCmlOnTime_) {
-        ;
-    } else if (function == emCmlOnTime_) {
-        ;
-    } else if (function == emiPressTrip_) {
-        ;
+    if (function == emiPressTrip_) {
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseInt32(data_, value, int32Command);
     } else if (function == firstScan_) {
-        ;
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseInt32(data_, value, int32Command);
     } else if (function == lastScan_) {
-        ;
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseInt32(data_, value, int32Command);
     } else if (function == currentScan_) {
-        ;
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseInt32(data_, value, int32Command);
     } else if (function == ppscan_) {
         ;
     } else if (function == getStartCh_) {
@@ -388,6 +434,8 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 	} else if (function == emVoltageMax_) {
         ;
     } else if (function == emVoltageMin_) {
+        ;
+    } else if (function == massRange_) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
