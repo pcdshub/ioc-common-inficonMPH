@@ -306,7 +306,8 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    callParamCallbacks(chNumber);
+    printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
+    //callParamCallbacks(chNumber);
 	return status;
 }
 
@@ -574,7 +575,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         return asynError;
     }
     printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
-    callParamCallbacks(chNumber);
+    //callParamCallbacks(chNumber);
     return status;
 }
 
