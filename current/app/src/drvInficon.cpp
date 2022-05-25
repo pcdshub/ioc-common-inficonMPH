@@ -389,6 +389,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 {
     int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
 	int chNumber;
     static const char *functionName = "readInt32";
 
@@ -443,7 +444,7 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    return asynSuccess;
+    return status;
 }
 
 
