@@ -243,7 +243,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 	int chNumber;
     static const char *functionName = "readUInt32D";
 	
-	pasynManager->getAddr(pasynUser, &chNumber);
+	//pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
     if (function == getEmi_) {
@@ -523,7 +523,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 	int chNumber;
     static const char *functionName = "readOctet";
 
-    pasynManager->getAddr(pasynUser, &chNumber);
+    //pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
     if (function == ip_) {
@@ -662,7 +662,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
-/*
+
     if (status != prevIOStatus_) {
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -679,7 +679,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         }
         prevIOStatus_ = status;
     }
-*/
+
     if (status == asynSuccess && nread > 0) {
         httpResponse[nread +1] = '\0';
     } else if (status == asynTimeout && nread > 0) {
@@ -716,9 +716,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         sscanf(substring, "HTTP/1.1 %3d ", &responseCode);
     }
 	
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+    /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s httpResponse:%s\n",
-              driverName, functionName, httpResponse);
+              driverName, functionName, httpResponse);*/
 	
     if (responseCode == 200) {
         const char *jsonStart;
@@ -742,9 +742,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 			memcpy(response, jsonStart, len);
             response[len] = '\0';
 	
-            asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+            /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s parsed response:%s, len:%d\n",
-              driverName, functionName, response, (int)len);
+              driverName, functionName, response, (int)len);*/
         }
     } else {
         response[0] = '\0';
@@ -822,8 +822,8 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
             "%s::%s other error parsing unsigned int: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-	//printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
-	//*data = value;
+
+	printf("%s::%s JSON data:%s value:%d\n", driverName, functionName, jsonData, *value);
     return asynSuccess;
 }
 
@@ -866,6 +866,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
+
     printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, data, (int)*dataLen);
     return asynSuccess;
 }
