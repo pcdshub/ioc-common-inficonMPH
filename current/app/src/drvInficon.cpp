@@ -267,7 +267,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         sprintf(request,
         "GET /mmsp/status/systemStatus/get\r\n"
         "\r\n");
-        //ioStatus_ = inficonReadWrite(request, data_);
+        ioStatus_ = inficonReadWrite(request, data_);
         //if (ioStatus_ != asynSuccess) return(ioStatus_);
         //status = parseUInt32(data_, value, uint32Command);
     } else if (function == hwError_) {
