@@ -18,10 +18,8 @@
 #define PORT_PREFIX "PORT_"
 #define HTTP_OK_CODE "200"
 #define DEVICE_RW_TIMEOUT 0.5
-#define HTTP_REQUEST_SIZE 2048
+#define HTTP_REQUEST_SIZE 512
 #define HTTP_RESPONSE_SIZE 150000
-#define MAX_URI_LENGTH 512
-
 
 /* These are the strings that device support passes to drivers via
  * the asynDrvUser interface.

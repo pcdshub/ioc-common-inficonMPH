@@ -731,6 +731,19 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         prevIOStatus_ = status;
     }
 */
+    if (status != asynSuccess) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s::%s port %s error calling writeRead,"
+            " error=%s, nwrite=%d, nread=%d\n",
+            driverName, functionName, this->portName,
+            pasynUserOctet_->errorMessage, (int)nwrite, (int)nread);
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s::%s port %s writeRead status back to normal,"
+            " nwrite=%d, nread=%d\n",
+            driverName, functionName, this->portName,(int)nwrite, (int)nread);
+    }
+
     if (status == asynSuccess && nread > 0) {
         httpResponse[nread +1] = '\0';
     } else if (status == asynTimeout && nread > 0) {
