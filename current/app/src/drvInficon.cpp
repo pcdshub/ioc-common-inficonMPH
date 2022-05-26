@@ -703,7 +703,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     }
 */
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-            "%s::%s port %s starting with read",
+            "%s::%s port %s starting with read\n",
             driverName, functionName, this->portName);
 
     /* Do the write/read cycle */
