@@ -344,7 +344,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
+    //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
     //callParamCallbacks(chNumber);
 	return status;
 }
@@ -624,7 +624,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
+    //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
     //callParamCallbacks(chNumber);
     return status;
 }
@@ -771,9 +771,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         sscanf(substring, "HTTP/1.1 %3d", &responseCode);
     }
 	
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+    /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s httpResponse:%s\nhttp response code:%d\n",
-              driverName, functionName, httpResponse, responseCode);
+              driverName, functionName, httpResponse, responseCode);*/
 	
     if (responseCode == 200) {
         const char *jsonStart;
