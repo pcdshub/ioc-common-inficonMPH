@@ -764,7 +764,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                  driverName, functionName, this->portName);
         goto done;
 	} else {
-        sscanf(substring, "HTTP/1.1 %3d ", &responseCode);
+        sscanf(substring, "HTTP/1.1 %3d", &responseCode);
     }
 	
     /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
