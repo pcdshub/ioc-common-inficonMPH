@@ -767,9 +767,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         sscanf(substring, "HTTP/1.1 %3d", &responseCode);
     }
 	
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+    /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s httpResponse:%s, http response code:%d\n",
-              driverName, functionName, httpResponse, responseCode);
+              driverName, functionName, httpResponse, responseCode);*/
 	
     if (responseCode == 200) {
         const char *jsonStart;
