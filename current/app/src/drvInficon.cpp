@@ -784,9 +784,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         sscanf(substring, "HTTP/1.1 %3d", &responseCode);
     }
 	
-    /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
-              "%s::%s httpResponse:%s, http response code:%d\n",
-              driverName, functionName, httpResponse, responseCode);*/
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s httpResponse:%s\nhttp response code:%d\n",
+              driverName, functionName, httpResponse, responseCode);
 	
     if (responseCode == 200) {
         const char *jsonStart;
@@ -1002,7 +1002,7 @@ static void drvInficonConfigureCallFunc(const iocshArgBuf* args) {
 	}
 	
 	char hostInfo[64];
-	sprintf(hostInfo,"%s:%i HTTP", ip, port);
+	sprintf(hostInfo,"%s:%i TCP", ip, port);
 
 	drvInficonConfigure(portName, hostInfo);
 }
