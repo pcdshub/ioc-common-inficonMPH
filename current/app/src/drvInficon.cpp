@@ -889,9 +889,8 @@ asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, c
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dataLen, commandType_t commandType)
+asynStatus drvInficon::parseString(const char *jsonData, char *value, size_t *valueLen, commandType_t commandType)
 {
-	size_t stempLen;
     static const char *functionName = "parseString";
 
     try {
@@ -901,8 +900,8 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         switch (commandType) {
             case stringCommand:
                 jstring = j["data"];
-                strcpy(data, jstring.c_str());
-                *dataLen = strlen(data);
+                strcpy(value, jstring.c_str());
+                *valueLen = strlen(value);
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -922,7 +921,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *data, size_t *dat
         return asynError;
     }
 
-    //printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, data, (int)*dataLen);
+    //printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, value, (int)*dataLen);
     return asynSuccess;
 }
 
