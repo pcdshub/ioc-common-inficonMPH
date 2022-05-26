@@ -579,7 +579,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     if (function == ip_) {
         sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
-        //ioStatus_ = inficonReadWrite(request, data_);
+        ioStatus_ = inficonReadWrite(request, data_);
         //if (ioStatus_ != asynSuccess) return(ioStatus_);
         //status = parseString(data_, value, nactual, stringCommand);
     } else if (function == mac_) {
