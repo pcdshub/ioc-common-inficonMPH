@@ -268,8 +268,8 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         "GET /mmsp/status/systemStatus/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
-        //if (ioStatus_ != asynSuccess) return(ioStatus_);
-        //status = parseUInt32(data_, value, uint32Command);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
     } else if (function == hwError_) {
         sprintf(request,"GET /mmsp/status/hardwareErrors/get\r\n"
         "\r\n");
@@ -580,8 +580,8 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
-        //if (ioStatus_ != asynSuccess) return(ioStatus_);
-        //status = parseString(data_, value, nactual, stringCommand);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseString(data_, value, nactual, stringCommand);
     } else if (function == mac_) {
         sprintf(request,"GET /mmsp/communication/macAddress/get\r\n"
         "\r\n");
@@ -656,12 +656,12 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     int autoConnect;
     size_t nwrite, nread;
     int requestSize = 0;
-	int responseSize = 0;
+	//int responseSize = 0;
 	char httpResponse[HTTP_RESPONSE_SIZE];
 
     static const char *functionName = "inficonReadWrite";
   
-/*    // If the Octet driver is not set for autoConnect then do connection management ourselves
+    /*// If the Octet driver is not set for autoConnect then do connection management ourselves
     status = pasynManager->isAutoConnect(pasynUserOctet_, &autoConnect);
     if (!autoConnect) {
         // See if we are connected
@@ -700,25 +700,25 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                 goto done;
             }
         }
-    }
-*/
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+    }*/
+
+    /*asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
             "%s::%s port %s starting with read\n",
-            driverName, functionName, this->portName);
+            driverName, functionName, this->portName);*/
 
     /* Do the write/read cycle */
 	requestSize = (int)strlen(request);
-	responseSize = HTTP_RESPONSE_SIZE;
+	//responseSize = HTTP_RESPONSE_SIZE;
     status = pasynOctetSyncIO->writeRead(pasynUserOctet_,
                                          request, requestSize,
-                                         httpResponse, responseSize,
+                                         httpResponse, HTTP_RESPONSE_SIZE,
                                          DEVICE_RW_TIMEOUT,
                                          &nwrite, &nread, &eomReason);
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
               "%s::%s port %s called pasynOctetSyncIO->writeRead, status=%d, requestSize=%d, responseSize=%d, nwrite=%d, nread=%d, eomReason=%d request:%s\n",
               driverName, functionName, this->portName, status, requestSize, responseSize, (int)nwrite, (int)nread, eomReason, request);
-/*
-    if (status != prevIOStatus_) {
+
+    /*if (status != prevIOStatus_) {
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                      "%s::%s port %s error calling writeRead,"
@@ -733,20 +733,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
                      (int)nwrite, (int)nread);
         }
         prevIOStatus_ = status;
-    }
-*/
-    if (status != asynSuccess) {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-            "%s::%s port %s error calling writeRead,"
-            " error=%s, nwrite=%d, nread=%d\n",
-            driverName, functionName, this->portName,
-            pasynUserOctet_->errorMessage, (int)nwrite, (int)nread);
-    } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-            "%s::%s port %s writeRead status back to normal,"
-            " nwrite=%d, nread=%d\n",
-            driverName, functionName, this->portName,(int)nwrite, (int)nread);
-    }
+    }*/
 
     if (status == asynSuccess && nread > 0) {
         httpResponse[nread +1] = '\0';
@@ -761,7 +748,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
     }
 
     /* Make sure the function code in the response is 200 OK */
-    /* if function code not 200 set error and go to done*/
+    /* If function code not 200 set error and go to done*/
 	static const char *matchString = "HTTP/1.1";
 	const char *substring;
 	int responseCode;
