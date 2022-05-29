@@ -979,7 +979,7 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct valu
         json j = json::parse(jsonData);
 		std::string jstring;
 		
-		//jstring = j["data"]["ipAddress"];
+		jstring = j["data"]["ipAddress"];
         //strcpy(value.ip, jstring.c_str());
 
 		//jstring = j["data"]["macAddress"];
@@ -996,7 +996,7 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct valu
         return asynError;
     }
 
-    printf("%s::%s JSON data:%s ip:%s mac:%s\n", driverName, functionName, jsonData, value.ip, value.mac);
+    printf("%s::%s ip:%s mac:%s\n", driverName, functionName, jstring, value.mac);
     return asynSuccess;
 }
 
