@@ -1011,6 +1011,8 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
 asynStatus drvInficon::parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo)
 {
     static const char *functionName = "parseSensInfo";
+    printf("%s::%s JSON data:%s\n", driverName, functionName, jsonData);
+    unsigned int temp = 0;
 
     try {
         json j = json::parse(jsonData);
@@ -1020,7 +1022,8 @@ asynStatus drvInficon::parseSensInfo(const char *jsonData, sensInfoStruct *sensI
         strcpy(sensInfo->sensName, jstring.c_str());
 		jstring = j["data"]["description"];
         strcpy(sensInfo->sensDesc, jstring.c_str());
-        sensInfo->serialNumber = j["data"]["serialNumber"];
+        //sensInfo->serialNumber = j["data"]["serialNumber"];
+        temp = j["data"]["serialNumber"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -1032,7 +1035,7 @@ asynStatus drvInficon::parseSensInfo(const char *jsonData, sensInfoStruct *sensI
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-    printf("%s::%s serial:%d name:%s desc:%s\n", driverName, functionName, sensInfo->serialNumber, sensInfo->sensName, sensInfo->sensDesc);
+    printf("%s::%s serial:%d name:%s desc:%s\n", driverName, functionName, temp, sensInfo->sensName, sensInfo->sensDesc);
     return asynSuccess;
 }
 
