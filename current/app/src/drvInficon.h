@@ -119,8 +119,8 @@ typedef enum {
 } commandType_t;
 
 typedef struct {
-    char *ip;
-    char *mac;
+    char ip[32];
+    char mac[32];
 } commParamStruct;
 
 /* Forward declarations */
