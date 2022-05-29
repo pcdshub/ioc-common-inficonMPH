@@ -992,7 +992,7 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *com
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo);
+asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo)
 {
     static const char *functionName = "parseElecInfo";
     //printf("%s::%s JSON data:%s\n", driverName, functionName, jsonData);
