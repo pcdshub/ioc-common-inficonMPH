@@ -88,7 +88,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_GET_FAN_STRING,            asynParamUInt32Digital,  &getFan_);
     createParam(INFICON_SHUTDOWN_STRING,           asynParamUInt32Digital,  &shutdown_);
     //Sensor info parameters
-    createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &getSensInfo_);
+    createParam(INFICON_GET_SENS_INFO_STRING,      asynParamOctet,          &getSensInfo_);
     createParam(INFICON_SENS_NAME_STRING,          asynParamOctet,          &sensName_);
     createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);
     createParam(INFICON_SENS_SN_STRING,            asynParamUInt32Digital,  &sensSn_);
