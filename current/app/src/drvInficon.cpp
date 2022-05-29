@@ -629,9 +629,9 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseElecInfo(data_, &elecInfo_);
-        if (status != asynSuccess) return(status);
-        setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
+        //status = parseElecInfo(data_, &elecInfo_);
+        //if (status != asynSuccess) return(status);
+        //setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
     } else if (function == sensName_) {
         sprintf(request,"GET /mmsp/sensorInfo/name/get\r\n"
         "\r\n");
@@ -1000,7 +1000,7 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
     try {
         json j = json::parse(jsonData);
 		
-		elecInfo->massMax = j["data"]["massRange"];
+		//elecInfo->massMax = j["data"]["massRange"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
