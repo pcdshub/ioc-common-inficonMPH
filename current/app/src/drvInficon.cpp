@@ -631,7 +631,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseElecInfo(data_, &elecInfo_);
         if (status != asynSuccess) return(status);
-        //setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
+        setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
     } else if (function == sensName_) {
         sprintf(request,"GET /mmsp/sensorInfo/name/get\r\n"
         "\r\n");
@@ -989,7 +989,7 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *com
         return asynError;
     }
 
-    printf("%s::%s ip:%s mac:%s\n", driverName, functionName, commParam->ip, commParam->mac);
+    //printf("%s::%s ip:%s mac:%s\n", driverName, functionName, commParam->ip, commParam->mac);
     return asynSuccess;
 }
 
@@ -1014,7 +1014,7 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
         return asynError;
     }
 
-    printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
+    //printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
     return asynSuccess;
 }
 
