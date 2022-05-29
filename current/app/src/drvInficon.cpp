@@ -74,12 +74,13 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     static const char *functionName = "drvInficon";
 
     //Electronics Info
+    createParam(INFICON_GET_ELEC_INFO_STRING,      asynParamOctet,          &getElecInfo_);
     createParam(INFICON_MASS_RANGE_STRING,         asynParamUInt32Digital,  &massRange_);
     //Communication parameters
-    createParam(INFICON_GET_COMM_PARAM_STRING,     asynParamOctet,          &getCommParam);
+    createParam(INFICON_GET_COMM_PARAM_STRING,     asynParamOctet,          &getCommParam_);
     createParam(INFICON_IP_STRING,                 asynParamOctet,          &ip_);
     createParam(INFICON_MAC_STRING,                asynParamOctet,          &mac_);
-    createParam(INFICON_ERROR_LOG_STRING,          asynParamOctet,          &errorLog_);
+    //createParam(INFICON_ERROR_LOG_STRING,          asynParamOctet,          &errorLog_);
     //General control parameters
     createParam(INFICON_SET_EMI_STRING,            asynParamUInt32Digital,  &setEmi_);
     createParam(INFICON_GET_EMI_STRING,            asynParamUInt32Digital,  &getEmi_);
@@ -415,7 +416,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         return asynError;
     }
     //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
-    //callParamCallbacks(chNumber);
+    callParamCallbacks(chNumber);
 	return status;
 }
 
@@ -614,33 +615,23 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
-    if (function == getCommParam) {
+    if (function == getCommParam_) {
         sprintf(request,"GET /mmsp/communication/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseCommParam(data_, &commParams_);
+        if (status != asynSuccess) return(status);
         setStringParam(ip_, commParams_.ip);
         setStringParam(mac_, commParams_.mac);
-    } else if (function == ip_) {
-        /*sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
+    } else if (function == getElecInfo_) {
+        sprintf(request,"GET /mmsp/electronicsInfo/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);*/
-    } else if (function == mac_) {
-        /*sprintf(request,"GET /mmsp/communication/macAddress/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);*/
-    } else if (function == errorLog_) {
-        /*sprintf(request,"GET /mmsp/communication/errorLog/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, errorLogCommand);*/
-        ;
+        status = parseElecInfo(data_, &elecInfo_);
+        if (status != asynSuccess) return(status);
+        setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
     } else if (function == sensName_) {
         sprintf(request,"GET /mmsp/sensorInfo/name/get\r\n"
         "\r\n");
@@ -972,7 +963,7 @@ asynStatus drvInficon::parseString(const char *jsonData, char *value, size_t *va
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *value)
+asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *commParam)
 {
     static const char *functionName = "parseCommParam";
     //printf("%s::%s JSON data:%s\n", driverName, functionName, jsonData);
@@ -982,9 +973,9 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *val
 		std::string jstring;
 		
 		jstring = j["data"]["ipAddress"];
-        strcpy(value->ip, jstring.c_str());
+        strcpy(commParam->ip, jstring.c_str());
 		jstring = j["data"]["macAddress"];
-        strcpy(value->mac, jstring.c_str());
+        strcpy(commParam->mac, jstring.c_str());
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -997,7 +988,32 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *val
         return asynError;
     }
 
-    printf("%s::%s ip:%s mac:%s\n", driverName, functionName, value->ip, value->mac);
+    printf("%s::%s ip:%s mac:%s\n", driverName, functionName, commParam->ip, commParam->mac);
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo);
+{
+    static const char *functionName = "parseElecInfo";
+    //printf("%s::%s JSON data:%s\n", driverName, functionName, jsonData);
+
+    try {
+        json j = json::parse(jsonData);
+		
+		elecInfo->massMax = j["data"]["massRange"];
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+
+    printf("%s::%s maxMass:%s", driverName, functionName, elecInfo->massMax);
     return asynSuccess;
 }
 

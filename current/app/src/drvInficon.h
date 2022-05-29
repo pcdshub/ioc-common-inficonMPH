@@ -27,13 +27,14 @@
  * for that command.
  */
 //Electronics Info
+#define INFICON_GET_ELEC_INFO_STRING      "GET_ELEC_INFO"
 #define INFICON_MASS_RANGE_STRING         "MASS_MAX"
 //Communication
 #define INFICON_GET_COMM_PARAM_STRING     "GET_COMM_PARAM"
 #define INFICON_IP_STRING                 "IP"
 #define INFICON_MAC_STRING                "MAC"
-#define INFICON_LOGIN_STRING              "LOGIN"
-#define INFICON_ERROR_LOG_STRING          "ERROR_LOG"
+//#define INFICON_LOGIN_STRING              "LOGIN"
+//#define INFICON_ERROR_LOG_STRING          "ERROR_LOG"
 //General control
 #define INFICON_SET_EMI_STRING            "SET_EMI"
 #define INFICON_GET_EMI_STRING            "GET_EMI"
@@ -119,9 +120,8 @@ typedef enum {
 } commandType_t;
 
 typedef struct {
-    char ip[32];
-    char mac[32];
-} commParamStruct;
+    unsigned int massMax;
+} elecInfoStruct;
 
 /* Forward declarations */
 class drvInficon;
@@ -170,20 +170,22 @@ public:
     asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
     asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType);
     asynStatus parseString(const char *jsonData, char *value, size_t *dataLen, commandType_t commandType);
-    asynStatus parseCommParam(const char *jsonData, commParamStruct *value);
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
+    asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
+    asynStatus parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
     //Electronics Info
+    int getElecInfo_;
     int massRange_;
     //Communication parameters
-    int getCommParam;
+    int getCommParam_;
     int ip_;
     int mac_;
-    int errorLog_;
+    //int errorLog_;
     //General control parameters
     int setEmi_;
     int getEmi_;
@@ -270,6 +272,7 @@ private:
     int writeOK_;
     int scanChannel_;
     commParamStruct commParams_;
+    elecInfoStruct elecInfo_;
 };
 
 #endif /* drvInficon_H */

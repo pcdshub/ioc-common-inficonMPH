@@ -35,3 +35,18 @@ record(stringin,"$(DEV):GET_COMM_PARAM")
     field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
     field(SCAN, "$(CSCAN) second")
 }
+
+record(stringin,"$(DEV):GET_ELEC_INFO")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_ELEC_INFO")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(longin, "$(DEV):MASS_MAX")
+{
+    field(DESC, "read system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)MASS_MAX")
+    field(SCAN, "I/O Intr")
+}
