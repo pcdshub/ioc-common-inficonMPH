@@ -50,3 +50,32 @@ record(longin, "$(DEV):MASS_MAX")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)MASS_MAX")
     field(SCAN, "I/O Intr")
 }
+
+record(stringin,"$(DEV):GET_SENS_INFO")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_INFO")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin,"$(DEV):SENS_NAME")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))SENS_NAME")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin,"$(DEV):SENS_DESC")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))SENS_DESC")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):SENS_SN")
+{
+    field(DESC, "Sensor SN")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SENS_SN")
+    field(SCAN, "I/O Intr")
+}

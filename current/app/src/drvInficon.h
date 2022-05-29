@@ -33,18 +33,15 @@
 #define INFICON_GET_COMM_PARAM_STRING     "GET_COMM_PARAM"
 #define INFICON_IP_STRING                 "IP"
 #define INFICON_MAC_STRING                "MAC"
-//#define INFICON_LOGIN_STRING              "LOGIN"
 //#define INFICON_ERROR_LOG_STRING          "ERROR_LOG"
 //General control
 #define INFICON_SET_EMI_STRING            "SET_EMI"
-#define INFICON_GET_EMI_STRING            "GET_EMI"
 #define INFICON_SET_EM_STRING             "SET_EM"
-#define INFICON_GET_EM_STRING             "GET_EM"
 #define INFICON_SET_RFGEN_STRING          "SET_RFGEN"
-#define INFICON_GET_RFGEN_STRING          "GET_RFGEN"
 #define INFICON_GET_FAN_STRING            "GET_FAN"
 #define INFICON_SHUTDOWN_STRING           "SHUTDOWN"
 //Sensor info
+#define INFICON_GET_SENS_INFO_STRING      "GET_SENS_INFO"
 #define INFICON_SENS_NAME_STRING          "SENS_NAME"
 #define INFICON_SENS_DESC_STRING          "SENS_DESC"
 #define INFICON_SENS_SN_STRING            "SENS_SN"
@@ -128,6 +125,19 @@ typedef struct {
     char mac[32];
 } commParamStruct;
 
+typedef struct {
+    unsigned int emiSetStatus;
+    unsigned int emSetStatus;
+    unsigned int rfSetGenStatus;
+    unsigned int fanStatus;
+} genCntrlStruct;
+
+typedef struct {
+    char sensName[20];
+    char sensDesc[40];
+    unsigned int serialNumber;
+} sensInfoStruct;
+
 /* Forward declarations */
 class drvInficon;
 
@@ -178,6 +188,7 @@ public:
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
     asynStatus parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo);
+    asynStatus parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
@@ -201,6 +212,7 @@ protected:
     int getFan_;
     int shutdown_;
     //Sensor info parameters
+    int getSensInfo_;
     int sensName_;
     int sensDesc_;
     int sensSn_;
@@ -278,6 +290,8 @@ private:
     int scanChannel_;
     commParamStruct commParams_;
     elecInfoStruct elecInfo_;
+    genCntrlStruct genCntrl_;
+    sensInfoStruct sensInfo_;
 };
 
 #endif /* drvInficon_H */
