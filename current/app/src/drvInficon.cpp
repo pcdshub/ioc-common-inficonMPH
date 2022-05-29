@@ -630,7 +630,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseElecInfo(data_, &elecInfo_);
-        //if (status != asynSuccess) return(status);
+        if (status != asynSuccess) return(status);
         //setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
     } else if (function == sensName_) {
         sprintf(request,"GET /mmsp/sensorInfo/name/get\r\n"
@@ -663,6 +663,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         return asynError;
     }
     printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
+    printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
     callParamCallbacks(chNumber);
     return status;
 }
