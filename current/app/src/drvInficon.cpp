@@ -1032,7 +1032,7 @@ asynStatus drvInficon::parseSensInfo(const char *jsonData, sensInfoStruct *sensI
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-    printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo->serialNumber, sensInfo->sensName, sensInfo->sensDesc);
+    printf("%s::%s serial:%d name:%s desc:%s\n", driverName, functionName, sensInfo->serialNumber, sensInfo->sensName, sensInfo->sensDesc);
     return asynSuccess;
 }
 
