@@ -982,12 +982,9 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct valu
 		std::string jstring;
 		
 		jstring = j["data"]["ipAddress"];
-        strcpy(ipvalue, jstring.c_str());
+        strcpy(value.ip, jstring.c_str());
 		jstring = j["data"]["macAddress"];
-        strcpy(macvalue, jstring.c_str());
-		
-		value.ip = ipvalue;
-		value.mac = macvalue;
+        strcpy(value.mac, jstring.c_str());
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
