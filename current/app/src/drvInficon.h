@@ -123,6 +123,11 @@ typedef struct {
     unsigned int massMax;
 } elecInfoStruct;
 
+typedef struct {
+    char ip[32];
+    char mac[32];
+} commParamStruct;
+
 /* Forward declarations */
 class drvInficon;
 
