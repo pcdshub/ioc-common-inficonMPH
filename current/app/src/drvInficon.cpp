@@ -74,8 +74,9 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     static const char *functionName = "drvInficon";
 
     //Electronics Info
-    createParam(INFICON_MASS_RANGE_STRING,         asynParamInt32,          &massRange_);
+    createParam(INFICON_MASS_RANGE_STRING,         asynParamUInt32Digital,  &massRange_);
     //Communication parameters
+    createParam(INFICON_GET_COMM_PARAM_STRING,     asynParamOctet,          &getCommParam);
     createParam(INFICON_IP_STRING,                 asynParamOctet,          &ip_);
     createParam(INFICON_MAC_STRING,                asynParamOctet,          &mac_);
     createParam(INFICON_ERROR_LOG_STRING,          asynParamOctet,          &errorLog_);
@@ -101,24 +102,24 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_EM_ON_TIME_STRING,         asynParamUInt32Digital,  &emOnTime_);
     createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamUInt32Digital,  &emiCmlOnTime_);
     createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamUInt32Digital,  &emCmlOnTime_);
-    createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamInt32,          &emiPressTrip_);
+    createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamUInt32Digital,  &emiPressTrip_);
     //Diagnostic data parameters
     createParam(INFICON_BOX_TEMP_STRING,           asynParamFloat64,        &boxTemp_);
-    createParam(INFICON_ANODE_POTENTIAL_STRING,    asynParamFloat64,        &anodePotential_);
-    createParam(INFICON_EMI_CURRENT_STRING,        asynParamFloat64,        &emiCurrent_);
-    createParam(INFICON_FOCUS_POTENTIAL_STRING,    asynParamFloat64,        &focusPotential_);
-    createParam(INFICON_ELECT_ENERGY_STRING,       asynParamFloat64,        &electEnergy_);
-    createParam(INFICON_FIL_POTENTIAL_STRING,      asynParamFloat64,        &filPotential_);
-    createParam(INFICON_FIL_CURRENT_STRING,        asynParamFloat64,        &filCurrent_);
-    createParam(INFICON_EM_POTENTIAL_STRING,       asynParamFloat64,        &emPotential_);
+    createParam(INFICON_ANODE_POTENTIAL_STRING,    asynParamUInt32Digital,  &anodePotential_);
+    createParam(INFICON_EMI_CURRENT_STRING,        asynParamUInt32Digital,  &emiCurrent_);
+    createParam(INFICON_FOCUS_POTENTIAL_STRING,    asynParamUInt32Digital,  &focusPotential_);
+    createParam(INFICON_ELECT_ENERGY_STRING,       asynParamUInt32Digital,  &electEnergy_);
+    createParam(INFICON_FIL_POTENTIAL_STRING,      asynParamUInt32Digital,  &filPotential_);
+    createParam(INFICON_FIL_CURRENT_STRING,        asynParamUInt32Digital,  &filCurrent_);
+    createParam(INFICON_EM_POTENTIAL_STRING,       asynParamUInt32Digital,  &emPotential_);
     //Measurement parameters
     createParam(INFICON_GET_PRESS_STRING,          asynParamFloat64,        &getPress_);
     createParam(INFICON_GET_SCAN_STRING,           asynParamFloat32Array,   &getScan_);
     //Scan info parameters
-    createParam(INFICON_FIRST_SCAN_STRING,         asynParamInt32,          &firstScan_);
-    createParam(INFICON_LAST_SCAN_STRING,          asynParamInt32,          &lastScan_);
-    createParam(INFICON_CURRENT_SCAN_STRING,       asynParamInt32,          &currentScan_);
-    createParam(INFICON_PPSCAN_STRING,             asynParamInt32,          &ppscan_);
+    createParam(INFICON_FIRST_SCAN_STRING,         asynParamUInt32Digital,  &firstScan_);
+    createParam(INFICON_LAST_SCAN_STRING,          asynParamUInt32Digital,  &lastScan_);
+    createParam(INFICON_CURRENT_SCAN_STRING,       asynParamUInt32Digital,  &currentScan_);
+    createParam(INFICON_PPSCAN_STRING,             asynParamUInt32Digital,  &ppscan_);
     createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStat);
     //Sensor detector parameters
     createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamInt32,          &emVoltageMax_);
@@ -127,20 +128,20 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
     createParam(INFICON_DWELL_MIN_STRING,          asynParamUInt32Digital,  &dwelMin_);
     //Scan setup parameters
-    createParam(INFICON_SET_START_CH_STRING,       asynParamInt32,          &setStartCh_);
-    createParam(INFICON_GET_START_CH_STRING,       asynParamInt32,          &getStartCh_);
-    createParam(INFICON_SET_STOP_CH_STRING,        asynParamInt32,          &setStopCh_);
-    createParam(INFICON_GET_STOP_CH_STRING,        asynParamInt32,          &getStopCh_);
+    createParam(INFICON_SET_START_CH_STRING,       asynParamUInt32Digital,  &setStartCh_);
+    createParam(INFICON_GET_START_CH_STRING,       asynParamUInt32Digital,  &getStartCh_);
+    createParam(INFICON_SET_STOP_CH_STRING,        asynParamUInt32Digital,  &setStopCh_);
+    createParam(INFICON_GET_STOP_CH_STRING,        asynParamUInt32Digital,  &getStopCh_);
     createParam(INFICON_SET_CH_MODE_STRING,        asynParamOctet,          &setChMode_); //octet
     createParam(INFICON_GET_CH_MODE_STRING,        asynParamOctet,          &getChMode_); //octet
     createParam(INFICON_SET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &setChPpamu_);
     createParam(INFICON_GET_CH_PPAMU_STRING,       asynParamUInt32Digital,  &getChPpamu_);
     createParam(INFICON_SET_CH_DWELL_STRING,       asynParamUInt32Digital,  &setChDwell_);
     createParam(INFICON_GET_CH_DWELL_STRING,       asynParamUInt32Digital,  &getChDwell_);
-    createParam(INFICON_SET_CH_START_MASS_STRING,  asynParamInt32,          &setChStartMass_);
-    createParam(INFICON_GET_CH_START_MASS_STRING,  asynParamInt32,          &getChStartMass_);
-    createParam(INFICON_SET_CH_STOP_MASS_STRING,   asynParamInt32,          &setChStopMass_);
-    createParam(INFICON_GET_CH_STOP_MASS_STRING,   asynParamInt32,          &getChStopMass_);
+    createParam(INFICON_SET_CH_START_MASS_STRING,  asynParamUInt32Digital,  &setChStartMass_);
+    createParam(INFICON_GET_CH_START_MASS_STRING,  asynParamUInt32Digital,  &getChStartMass_);
+    createParam(INFICON_SET_CH_STOP_MASS_STRING,   asynParamUInt32Digital,  &setChStopMass_);
+    createParam(INFICON_GET_CH_STOP_MASS_STRING,   asynParamUInt32Digital,  &getChStopMass_);
     createParam(INFICON_SET_SCAN_COUNT_STRING,     asynParamInt32,          &setScanCount_);
     createParam(INFICON_GET_SCAN_COUNT_STRING,     asynParamInt32,          &getScanCount_);
     createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
@@ -239,7 +240,9 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    if (function == getEmi_) {
+    if (function == massRange_) {
+        ;
+    } else if (function == getEmi_) {
         sprintf(request,"GET /mmsp/generalControl/setEmission/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
@@ -282,37 +285,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseUInt32(data_, value, uint32Command);
-    } else if (function == getChPpamu_) {
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\r\n"
-        "\r\n", chNumber);
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, uint32Command);
-    } else if (function == scanStat) {
-        sprintf(request,"GET /mmsp/scanInfo/scanning/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, scanStatCommand);
-    } else if (function == getChDwell_) {
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/dwell/get\r\n"
-        "\r\n", chNumber);
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, uint32Command);
-    } else if (function == dwelMax_) {
-        sprintf(request,"GET /mmsp/sensorFilter/massMax/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, uint32Command);
-    } else if (function == dwelMin_) {
-        sprintf(request,"GET /mmsp/sensorFilter/massMin/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseUInt32(data_, value, uint32Command);
-    } else if (function == pwrOnTime_) {
+    }  else if (function == pwrOnTime_) {
         sprintf(request,"GET /mmsp/status/powerSupplyPowerOnTime/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
@@ -337,8 +310,104 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseUInt32(data_, value, uint32Command);
     } else if (function == emCmlOnTime_) {
+        sprintf(request,"GET /mmsp/status/emOnTime/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emiPressTrip_) {
+        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == anodePotential_) {
+        sprintf(request,"GET /mmsp/diagnosticData/anodePotential/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emiCurrent_) {
+        sprintf(request,"GET /mmsp/diagnosticData/emissionCurrent/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == focusPotential_) {
+        sprintf(request,"GET /mmsp/diagnosticData/focusPotential/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == electEnergy_) {
+        sprintf(request,"GET /mmsp/diagnosticData/electronEnergy/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == filPotential_) {
+        sprintf(request,"GET /mmsp/diagnosticData/filamentPotential/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == filCurrent_) {
+        sprintf(request,"GET /mmsp/diagnosticData/filamentCurrent/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == emPotential_) {
+        sprintf(request,"GET /mmsp/diagnosticData/electronMultiplierPotential/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == ppscan_) {
+        sprintf(request,"GET /mmsp/scanInfo/pointsPerScan/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == scanStat) {
+        sprintf(request,"GET /mmsp/scanInfo/scanning/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, scanStatCommand);
+    } else if (function == dwelMax_) {
+        sprintf(request,"GET /mmsp/sensorFilter/massMax/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == dwelMin_) {
+        sprintf(request,"GET /mmsp/sensorFilter/massMin/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == getStartCh_) {
         ;
-    } else {
+    } else if (function == getStopCh_) {
+        ;
+    } else if (function == getChPpamu_) {
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == getChDwell_) {
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/dwell/get\r\n"
+        "\r\n", chNumber);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseUInt32(data_, value, uint32Command);
+    } else if (function == getChStartMass_) {
+        ;
+    } else if (function == getChStopMass_) {
+        ;
+	} else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
@@ -365,13 +434,21 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         ;
     } else if (function == shutdown_) {
         ;
+    } else if (function == setStartCh_) {
+		;
+    } else if (function == setStopCh_) {
+		;
     } else if (function == setChPpamu_) {
+        ;
+    } else if (function == setChDwell_) {
+        ;
+    } else if (function == setChStartMass_) {
+        ;
+    } else if (function == setChStopMass_) {
         ;
     } else if (function == scanStart_) {
         ;
     } else if (function == scanStop_) {
-        ;
-    } else if (function == setChDwell_) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -397,47 +474,29 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    if (function == emiPressTrip_) {
-        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
-        "\r\n", chNumber);
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseInt32(data_, value, int32Command);
-    } else if (function == firstScan_) {
-        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+    if (function == firstScan_) {
+        sprintf(request,"GET /mmsp/scanInfo/firstScan/get\r\n"
         "\r\n", chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
     } else if (function == lastScan_) {
-        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        sprintf(request,"GET /mmsp/scanInfo/lastScan/get\r\n"
         "\r\n", chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
     } else if (function == currentScan_) {
-        sprintf(request,"GET /mmsp/status/filaments/%d/emisPressTrip/get\r\n"
+        sprintf(request,"GET mmsp/scanInfo/currentScan/get\r\n"
         "\r\n", chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
-    } else if (function == ppscan_) {
-        ;
-    } else if (function == getStartCh_) {
-        ;
-    } else if (function == getStopCh_) {
-        ;
-    } else if (function == getScanCount_) {
-        ;
-    } else if (function == getChStartMass_) {
-        ;
-    } else if (function == getChStopMass_) {
-        ;
-	} else if (function == emVoltageMax_) {
+    } else if (function == emVoltageMax_) {
         ;
     } else if (function == emVoltageMin_) {
         ;
-    } else if (function == massRange_) {
+    } else if (function == getScanCount_) {
         ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -456,16 +515,8 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
     //int bufferLen;
     static const char *functionName = "writeInt32";
 
-    if (function == setStartCh_) {
+    if (function == setScanCount_) {
 		;
-    } else if (function == setStopCh_) {
-		;
-    } else if (function == setScanCount_) {
-		;
-    } else if (function == setChStartMass_) {
-        ;
-    } else if (function == setChStopMass_) {
-        ;
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -488,20 +539,6 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 
     if (function == boxTemp_) {
         ;
-    } else if (function == anodePotential_) {
-        ;
-    } else if (function == emiCurrent_) {
-        ;
-    } else if (function == focusPotential_) {
-        ;
-    } else if (function == electEnergy_) {
-        ;
-    } else if (function == filPotential_) {
-        ;
-    } else if (function == filCurrent_) {
-        ;
-    } else if (function == emPotential_) {
-        ;
     } else if (function == getPress_) {
         ;
     } else {
@@ -517,8 +554,8 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 
 asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 {
-    int function = pasynUser->reason;
-    static const char *functionName = "writeFloat64";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "writeFloat64";
 
 /*    if (function == setChDwell_) {
         ;
@@ -576,7 +613,14 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
-    if (function == ip_) {
+    
+    if (function == getCommParam) {
+        sprintf(request,"GET /mmsp/communication/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseCommParam(data_, commParams_);
+    } else if (function == ip_) {
         sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
@@ -589,11 +633,12 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseString(data_, value, nactual, stringCommand);
     } else if (function == errorLog_) {
-        sprintf(request,"GET /mmsp/communication/errorLog/get\r\n"
+        /*sprintf(request,"GET /mmsp/communication/errorLog/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, errorLogCommand);
+        status = parseString(data_, value, nactual, errorLogCommand);*/
+        ;
     } else if (function == sensName_) {
         sprintf(request,"GET /mmsp/sensorInfo/name/get\r\n"
         "\r\n");
@@ -624,7 +669,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
+    printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
     //callParamCallbacks(chNumber);
     return status;
 }
@@ -922,6 +967,34 @@ asynStatus drvInficon::parseString(const char *jsonData, char *value, size_t *va
     }
 
     //printf("%s::%s JSON data:%s string:%s, dataLength:%d\n", driverName, functionName, jsonData, value, (int)*dataLen);
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct *value)
+{
+    static const char *functionName = "parseCommParam";
+
+    try {
+        json j = json::parse(jsonData);
+		std::string jstring;
+		
+		jstring = j["data"]["ipAddress"];
+		commParamStruct.ip = jstring;
+		jstring = j["data"]["macAddress"];
+		commParamStruct.mac = jstring;
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+
+    printf("%s::%s JSON data:%s ip:%s mac:%s\n", driverName, functionName, jsonData, commParamStruct.ip, commParamStruct.mac);
     return asynSuccess;
 }
 

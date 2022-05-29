@@ -29,6 +29,7 @@
 //Electronics Info
 #define INFICON_MASS_RANGE_STRING         "MASS_MAX"
 //Communication
+#define INFICON_GET_COMM_PARAM_STRING     "GET_COMM_PARAM"
 #define INFICON_IP_STRING                 "IP"
 #define INFICON_MAC_STRING                "MAC"
 #define INFICON_LOGIN_STRING              "LOGIN"
@@ -117,6 +118,11 @@ typedef enum {
 	errorLogCommand
 } commandType_t;
 
+typedef struct {
+    char *ip;
+    char *mac;
+} commParamStruct;
+
 /* Forward declarations */
 class drvInficon;
 
@@ -160,19 +166,21 @@ public:
 
     /* These are the methods that are new to this class */
     asynStatus inficonReadWrite(const char *request, char *response);
-	asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType);
+    asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType);
     asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
     asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType);
     asynStatus parseString(const char *jsonData, char *value, size_t *dataLen, commandType_t commandType);
+    asynStatus parseCommParam(const char *jsonData, commParamStruct *value);
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
-	asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
+    asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
-	
+
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
     //Electronics Info
     int massRange_;
     //Communication parameters
+    int getCommParam;
     int ip_;
     int mac_;
     int errorLog_;
@@ -247,20 +255,21 @@ private:
     /* Our data */
     bool initialized_;           /* If initialized successfully */
     bool isConnected_;           /* Connection status */
-	char *portName_;             /* asyn port name for the user driver */
+    char *portName_;             /* asyn port name for the user driver */
     char *octetPortName_;        /* asyn port name for the asyn octet port */
-	char *hostInfo_;             /* host info (IP address,connection type, port)*/
+    char *hostInfo_;             /* host info (IP address,connection type, port)*/
     asynUser  *pasynUserOctet_;  /* asynUser for asynOctet interface to asyn octet port */
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
     char *data_;                 /* Memory buffer */
-    //char inficonRequest_[HTTP_REQUEST_SIZE];       /* Inficon request */
+    //char inficonRequest_[HTTP_REQUEST_SIZE];          /* Inficon request */
     //char inficonResponse_[HTTP_RESPONSE_SIZE];        /* Inficon response */
-	asynStatus ioStatus_;
+    asynStatus ioStatus_;
     asynStatus prevIOStatus_;
     int readOK_;
     int writeOK_;
-	int scanChannel_;
+    int scanChannel_;
+    commParamStruct commParams_;
 };
 
 #endif /* drvInficon_H */
