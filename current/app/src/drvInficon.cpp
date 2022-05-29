@@ -620,7 +620,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        //status = parseCommParam(data_, commParams_);
+        status = parseCommParam(data_, commParams_);
     } else if (function == ip_) {
         sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
@@ -982,8 +982,8 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct valu
 		jstring = j["data"]["ipAddress"];
         strcpy(value.ip, jstring.c_str());
 
-		jstring = j["data"]["macAddress"];
-        strcpy(value.mac, jstring.c_str());
+		//jstring = j["data"]["macAddress"];
+        //strcpy(value.mac, jstring.c_str());
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
