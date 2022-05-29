@@ -168,6 +168,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
+    commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
@@ -619,7 +620,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseCommParam(data_, commParams_);
+        //status = parseCommParam(data_, commParams_);
     } else if (function == ip_) {
         sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
