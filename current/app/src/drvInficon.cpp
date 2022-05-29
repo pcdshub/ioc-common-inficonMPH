@@ -1000,7 +1000,7 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
     try {
         json j = json::parse(jsonData);
 		
-		//elecInfo->massMax = j["data"]["massRange"];
+		elecInfo->massMax = j["data"]["massRange"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -1013,7 +1013,7 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
         return asynError;
     }
 
-    printf("%s::%s maxMass:%d", driverName, functionName, elecInfo->massMax);
+    printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
     return asynSuccess;
 }
 
