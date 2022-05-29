@@ -168,7 +168,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
-    commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
+    //commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);

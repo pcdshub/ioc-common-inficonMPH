@@ -174,7 +174,6 @@ public:
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
-    commParamStruct commParams_;
 
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
@@ -270,6 +269,7 @@ private:
     int readOK_;
     int writeOK_;
     int scanChannel_;
+    commParamStruct commParams_;
 };
 
 #endif /* drvInficon_H */
