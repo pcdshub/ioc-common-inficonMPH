@@ -672,7 +672,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         return asynError;
     }
     printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
-    //callParamCallbacks(chNumber);
+    callParamCallbacks(chNumber);
     return status;
 }
 
