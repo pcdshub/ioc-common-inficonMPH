@@ -629,7 +629,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        //status = parseElecInfo(data_, &elecInfo_);
+        status = parseElecInfo(data_, &elecInfo_);
         //if (status != asynSuccess) return(status);
         //setUIntDigitalParam(massRange_, elecInfo_.massMax, 0xFFFFFFFF);
     } else if (function == sensName_) {
@@ -1013,7 +1013,7 @@ asynStatus drvInficon::parseElecInfo(const char *jsonData, elecInfoStruct *elecI
         return asynError;
     }
 
-    printf("%s::%s maxMass:%s", driverName, functionName, elecInfo->massMax);
+    printf("%s::%s maxMass:%d", driverName, functionName, elecInfo->massMax);
     return asynSuccess;
 }
 
