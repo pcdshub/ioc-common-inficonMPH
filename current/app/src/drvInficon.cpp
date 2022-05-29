@@ -365,7 +365,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
         status = parseUInt32(data_, value, uint32Command);
     } else if (function == ppscan_) {
         sprintf(request,"GET /mmsp/scanInfo/pointsPerScan/get\r\n"
-        "\r\n", chNumber);
+        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseUInt32(data_, value, uint32Command);
@@ -476,19 +476,19 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 
     if (function == firstScan_) {
         sprintf(request,"GET /mmsp/scanInfo/firstScan/get\r\n"
-        "\r\n", chNumber);
+        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
     } else if (function == lastScan_) {
         sprintf(request,"GET /mmsp/scanInfo/lastScan/get\r\n"
-        "\r\n", chNumber);
+        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
     } else if (function == currentScan_) {
         sprintf(request,"GET mmsp/scanInfo/currentScan/get\r\n"
-        "\r\n", chNumber);
+        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseInt32(data_, value, int32Command);
