@@ -620,18 +620,20 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseCommParam(data_, &commParams_);
+        setStringParam(ip_, commParams_.ip);
+        setStringParam(mac_, commParams_.mac);
     } else if (function == ip_) {
-        sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
+        /*sprintf(request,"GET /mmsp/communication/ipAddress/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);
+        status = parseString(data_, value, nactual, stringCommand);*/
     } else if (function == mac_) {
-        sprintf(request,"GET /mmsp/communication/macAddress/get\r\n"
+        /*sprintf(request,"GET /mmsp/communication/macAddress/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);
+        status = parseString(data_, value, nactual, stringCommand);*/
     } else if (function == errorLog_) {
         /*sprintf(request,"GET /mmsp/communication/errorLog/get\r\n"
         "\r\n");

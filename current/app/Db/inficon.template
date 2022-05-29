@@ -15,12 +15,19 @@
 #    field(SCAN, "$(CSCAN) second")
 #}
 
-#record(stringin,"$(DEV):IP")
-#{
-#    field(DTYP, "asynOctetRead")
-#    field(INP,  "@asyn($(PORT) 1)IP")
-#    field(SCAN, "$(CSCAN) second")
-#}
+record(stringin,"$(DEV):IP")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))IP")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin,"$(DEV):MAC")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))MAC")
+    field(SCAN, "I/O Intr")
+}
 
 record(stringin,"$(DEV):GET_COMM_PARAM")
 {
