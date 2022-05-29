@@ -980,6 +980,7 @@ asynStatus drvInficon::parseCommParam(const char *jsonData, commParamStruct valu
 		
 		jstring = j["data"]["ipAddress"];
         strcpy(value.ip, jstring.c_str());
+
 		jstring = j["data"]["macAddress"];
         strcpy(value.mac, jstring.c_str());
     }
