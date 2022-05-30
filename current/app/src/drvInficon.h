@@ -196,7 +196,6 @@ typedef struct {
     unsigned int chPpamu;
 } chScanSetupStruct;
 
-chScanSetupStruct chScanSetup[MAX_CHANNELS];
 
 /* Forward declarations */
 class drvInficon;
@@ -248,6 +247,7 @@ public:
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
     asynStatus parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo);
+    asynStatus parseDevStatus(const char *jsonData, devStatusStruct *devStatus);
     asynStatus parseDiagData(const char *jsonData, diagDataStruct *diagData);
     asynStatus parseScanInfo(const char *jsonData, scanInfoStruct *scanInfo);
     asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
@@ -362,6 +362,7 @@ private:
     commParamStruct commParams_;
     genCntrlStruct genCntrl_;
     sensInfoStruct sensInfo_;
+    devStatusStruct devStatus_;
     diagDataStruct diagData_;
     scanInfoStruct scanInfo_;
     sensDetectStruct sensDetect_;

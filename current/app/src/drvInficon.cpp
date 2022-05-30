@@ -1012,6 +1012,29 @@ asynStatus drvInficon::parseSensInfo(const char *jsonData, sensInfoStruct *sensI
     return asynSuccess;
 }
 
+asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *devStatus)
+{
+    static const char *functionName = "parseDevStatus";
+
+    try {
+        json j = json::parse(jsonData);
+
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+
+    //printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
+    return asynSuccess;
+}
+
 asynStatus drvInficon::parseDiagData(const char *jsonData, diagDataStruct *diagData)
 {
     static const char *functionName = "parseDiagData";
@@ -1045,7 +1068,7 @@ asynStatus drvInficon::parseDiagData(const char *jsonData, diagDataStruct *diagD
 
 asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanInfo)
 {
-    static const char *functionName = "parseDiagData";
+    static const char *functionName = "parseScanInfo";
 
     try {
         json j = json::parse(jsonData);
@@ -1075,7 +1098,7 @@ asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanI
 
 asynStatus drvInficon::parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect)
 {
-    static const char *functionName = "parseDiagData";
+    static const char *functionName = "parseSensDetect";
 
     try {
         json j = json::parse(jsonData);
@@ -1103,7 +1126,7 @@ asynStatus drvInficon::parseSensDetect(const char *jsonData, sensDetectStruct *s
 
 asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt)
 {
-    static const char *functionName = "parseDiagData";
+    static const char *functionName = "parseSensFilt";
 
     try {
         json j = json::parse(jsonData);
