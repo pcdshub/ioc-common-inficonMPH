@@ -93,6 +93,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SENS_DESC_STRING,          asynParamOctet,          &sensDesc_);
     createParam(INFICON_SENS_SN_STRING,            asynParamUInt32Digital,  &sensSn_);
     //Status parameters
+    createParam(INFICON_GET_DEV_STAT_STRING,       asynParamOctet,          &getDevStatus_);
     createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
     createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
     createParam(INFICON_HW_WARN_STRING,            asynParamUInt32Digital,  &hwWarn_);
@@ -640,6 +641,12 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setStringParam(sensName_, sensInfo_.sensName);
         setStringParam(sensDesc_, sensInfo_.sensDesc);
         setUIntDigitalParam(sensSn_, sensInfo_.serialNumber, 0xFFFFFFFF);
+    } else if (function == getDevStatus_) {
+        sprintf(request,"GET /mmsp/status/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        printf("%s::%s jsonData:%s\n", driverName, functionName, data_);
     } else if (function == getChMode_) {
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode"
         "\r\n", chNumber);

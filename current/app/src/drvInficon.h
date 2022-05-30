@@ -46,6 +46,7 @@
 #define INFICON_SENS_DESC_STRING          "SENS_DESC"
 #define INFICON_SENS_SN_STRING            "SENS_SN"
 //Status
+#define INFICON_GET_DEV_STAT_STRING       "GET_DEV_STAT"
 #define INFICON_SYST_STAT_STRING          "SYST_STAT"
 #define INFICON_HW_ERROR_STRING           "HW_ERROR"
 #define INFICON_HW_WARN_STRING            "HW_WARN"
@@ -138,6 +139,18 @@ typedef struct {
     unsigned int serialNumber;
 } sensInfoStruct;
 
+typedef struct {
+    unsigned int systStatus;
+    unsigned int hwError;
+    unsigned int hwWarn_;
+    unsigned int pwrOnTime_;
+    unsigned int emiOnTime_;
+    unsigned int emOnTime_;
+    unsigned int emCmlOnTime_;
+    unsigned int emiCmlOnTime_;
+    unsigned int emiPressTrip_;
+} devStatusStruct;
+
 /* Forward declarations */
 class drvInficon;
 
@@ -217,6 +230,7 @@ protected:
     int sensDesc_;
     int sensSn_;
     //Status parameters
+    int getDevStatus_;
     int systStatus_;
     int hwError_;
     int hwWarn_;
