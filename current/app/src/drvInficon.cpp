@@ -101,7 +101,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamUInt32Digital,  &emCmlOnTime_);
     createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamUInt32Digital,  &emiPressTrip_);
     //Diagnostic data parameters
-    createParam(INFICON_GET_DIAG_DATA_STRING,      asynParamOctet,          &getDiagData_)
+    createParam(INFICON_GET_DIAG_DATA_STRING,      asynParamOctet,          &getDiagData_);
     createParam(INFICON_BOX_TEMP_STRING,           asynParamFloat64,        &boxTemp_);
     createParam(INFICON_ANODE_POTENTIAL_STRING,    asynParamUInt32Digital,  &anodePotential_);
     createParam(INFICON_EMI_CURRENT_STRING,        asynParamUInt32Digital,  &emiCurrent_);
@@ -244,9 +244,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    if (function == massRange_) {
-        ;
-    } else if (function == getEmi_) {
+    if (function == getEmi_) {
         sprintf(request,"GET /mmsp/generalControl/setEmission/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
