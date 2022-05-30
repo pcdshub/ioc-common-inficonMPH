@@ -79,10 +79,3 @@ record(longin, "$(DEV):SENS_SN")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SENS_SN")
     field(SCAN, "I/O Intr")
 }
-
-record(stringin, "$(DEV):GET_DEV_STATUS")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_DEV_STAT")
-    field(SCAN, "$(CSCAN) second")
-}

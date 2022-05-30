@@ -642,11 +642,10 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setStringParam(sensDesc_, sensInfo_.sensDesc);
         setUIntDigitalParam(sensSn_, sensInfo_.serialNumber, 0xFFFFFFFF);
     } else if (function == getDevStatus_) {
-        sprintf(request,"GET /mmsp/status/get\r\n"
+        /*sprintf(request,"GET /mmsp/status/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        printf("%s::%s jsonData:%s\n", driverName, functionName, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);*/
     } else if (function == getChMode_) {
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode"
         "\r\n", chNumber);
