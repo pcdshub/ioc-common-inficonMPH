@@ -26,9 +26,6 @@
  * Drivers must return a value in pasynUser->reason that is unique
  * for that command.
  */
-//Electronics Info
-#define INFICON_GET_ELEC_INFO_STRING      "GET_ELEC_INFO"
-#define INFICON_MASS_RANGE_STRING         "MASS_MAX"
 //Communication
 #define INFICON_GET_COMM_PARAM_STRING     "GET_COMM_PARAM"
 #define INFICON_IP_STRING                 "IP"
@@ -57,6 +54,7 @@
 #define INFICON_EM_CML_ON_TIME_STRING     "EM_CML_ON_T"
 #define INFICON_EMI_PRESS_TRIP_STRING     "EMI_PRESS_TRIP"
 //Diagnostic data
+#define INFICON_GET_DIAG_DATA_STRING      "GET_DIAG_DATA"
 #define INFICON_BOX_TEMP_STRING           "BOX_TEMP"
 #define INFICON_ANODE_POTENTIAL_STRING    "ANODE_POTENTIAL"
 #define INFICON_EMI_CURRENT_STRING        "EMI_CURRENT"
@@ -69,15 +67,23 @@
 #define INFICON_GET_PRESS_STRING          "GET_PRESS"
 #define INFICON_GET_SCAN_STRING           "GET_SCAN"
 //Scan info
+#define INFICON_GET_SCAN_INFO_STRING      "GET_SCAN_INFO"
 #define INFICON_FIRST_SCAN_STRING         "FIRST_SCAN"
 #define INFICON_LAST_SCAN_STRING          "LAST_SCAN"
 #define INFICON_CURRENT_SCAN_STRING       "CURRENT_SCAN"
 #define INFICON_PPSCAN_STRING             "PPSCAN"
 #define INFICON_SCAN_STAT_STRING          "SCAN_STAT"
 //Sensor detector
+#define INFICON_GET_SENS_DETECT_STRING    "GET_SENS_DETECT"
+#define INFICON_EM_VOLTAGE_STRING         "EM_V"
 #define INFICON_EM_VOLTAGE_MAX_STRING     "EM_V_MAX"
 #define INFICON_EM_VOLTAGE_MIN_STRING     "EM_V_MIN"
+#define INFICON_EM_GAIN_STRING            "EM_GAIN"
+#define INFICON_EM_GAIN_MASS_STRING       "EM_GAIN_MASS"
 //Sensor filter
+#define INFICON_GET_SENS_FILT_STRING      "GET_SENS_FILT"
+#define INFICON_MASS_MAX_STRING           "MASS_MAX"
+#define INFICON_MASS_MIN_STRING           "MASS_MIN"
 #define INFICON_DWELL_MAX_STRING          "DWELL_MAX"
 #define INFICON_DWELL_MIN_STRING          "DWELL_MIN"
 //Scan setup
@@ -101,6 +107,7 @@
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
 #define MAX_INFICON_COMMAND_TYPES          10
+#define MAX_CHANNELS                       4
 
 typedef enum {
     stringCommand,
@@ -116,10 +123,6 @@ typedef enum {
 	scanStopCommand,
 	errorLogCommand
 } commandType_t;
-
-typedef struct {
-    unsigned int massMax;
-} elecInfoStruct;
 
 typedef struct {
     char ip[32];
@@ -142,14 +145,58 @@ typedef struct {
 typedef struct {
     unsigned int systStatus;
     unsigned int hwError;
-    unsigned int hwWarn_;
-    unsigned int pwrOnTime_;
-    unsigned int emiOnTime_;
-    unsigned int emOnTime_;
-    unsigned int emCmlOnTime_;
-    unsigned int emiCmlOnTime_;
-    unsigned int emiPressTrip_;
+    unsigned int hwWarn;
+    unsigned int pwrOnTime;
+    unsigned int emiOnTime;
+    unsigned int emOnTime;
+    unsigned int emCmlOnTime;
+    unsigned int emiCmlOnTime;
+    unsigned int emiPressTrip;
 } devStatusStruct;
+
+typedef struct {
+    double boxTemp;
+    unsigned int anodePot;
+    unsigned int emiCurrent;
+    unsigned int focusPot;
+    unsigned int electEng;
+    unsigned int filPot;
+    unsigned int filCurrent;
+    unsigned int emPot;
+} diagDataStruct;
+
+typedef struct {
+    unsigned int firstScan;
+    unsigned int lastScan;
+    unsigned int currScan;
+    unsigned int ppScan;
+    unsigned int scanStatus;
+} scanInfoStruct;
+
+typedef struct {
+    unsigned int emVMax;
+    unsigned int emVMin;
+    unsigned int emV;
+    double emGain;
+    unsigned int emGainMass;
+} sensDetectStruct;
+
+typedef struct {
+    double massMax;
+    double massMin;
+    unsigned int dwellMax;
+    unsigned int dwellMin;
+} sensFiltStruct;
+
+typedef struct {
+    char chMode[32];
+    unsigned int chStartMass;
+    unsigned int chStopMass;
+    unsigned int chDwell;
+    unsigned int chPpamu;
+} chScanSetupStruct;
+
+chScanSetupStruct chScanSetup[MAX_CHANNELS];
 
 /* Forward declarations */
 class drvInficon;
@@ -200,16 +247,17 @@ public:
     asynStatus parseString(const char *jsonData, char *value, size_t *dataLen, commandType_t commandType);
     asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
-    asynStatus parseElecInfo(const char *jsonData, elecInfoStruct *elecInfo);
     asynStatus parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo);
+    asynStatus parseDiagData(const char *jsonData, diagDataStruct *diagData);
+    asynStatus parseScanInfo(const char *jsonData, scanInfoStruct *scanInfo);
+    asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
+    asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
+    asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
 protected:
     /* Values used for pasynUser->reason, and indexes into the parameter library. */
-    //Electronics Info
-    int getElecInfo_;
-    int massRange_;
     //Communication parameters
     int getCommParam_;
     int ip_;
@@ -241,6 +289,7 @@ protected:
     int emCmlOnTime_;
     int emiPressTrip_;
     //Diagnostic data parameters
+    int getDiagData_;
     int boxTemp_;
     int anodePotential_;
     int emiCurrent_;
@@ -253,15 +302,23 @@ protected:
     int getPress_;
     int getScan_;
     //Scan info parameters
+    int getScanInfo_;
     int firstScan_;
     int lastScan_;
     int currentScan_;
     int ppscan_;
     int scanStat;
     //Sensor detector parameters
-    int emVoltageMax_;
-    int emVoltageMin_;
+    int getSensDetect_;
+    int emVMax_;
+    int emVMin_;
+    int emV_;
+    int emGain_;
+    int emGainMass_;
     //Sensor filter parameters
+    int getSensFilt_;
+    int massMax_;
+    int massMin_;
     int dwelMax_;
     int dwelMin_;
     //Scan setup parameters
@@ -303,9 +360,13 @@ private:
     int writeOK_;
     int scanChannel_;
     commParamStruct commParams_;
-    elecInfoStruct elecInfo_;
     genCntrlStruct genCntrl_;
     sensInfoStruct sensInfo_;
+    diagDataStruct diagData_;
+    scanInfoStruct scanInfo_;
+    sensDetectStruct sensDetect_;
+    sensFiltStruct sensFilt_;
+    chScanSetupStruct chScanSetup_[MAX_CHANNELS];
 };
 
 #endif /* drvInficon_H */
