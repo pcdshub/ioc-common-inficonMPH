@@ -617,7 +617,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 	int chNumber;
     static const char *functionName = "readOctet";
 
-    //pasynManager->getAddr(pasynUser, &chNumber);
+    pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
     if (function == getCommParam_) {
@@ -647,11 +647,11 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         status = parseDevStatus(data_, &devStatus_);
         if (status != asynSuccess) return(status);
     } else if (function == getChScanSetup_) {
+		//if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         //sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
         //"\r\n", chNumber);
         //ioStatus_ = inficonReadWrite(request, data_);
         //if (ioStatus_ != asynSuccess) return(ioStatus_);
-		//if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         //printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
         //if (status != asynSuccess) return(status);
         //status = parseChScanSetup(data_, &chScanSetup_[chNumber]);

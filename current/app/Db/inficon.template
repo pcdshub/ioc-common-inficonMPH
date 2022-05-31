@@ -32,14 +32,14 @@ record(stringin, "$(DEV):MAC")
 record(stringin, "$(DEV):GET_COMM_PARAM")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
+    field(INP,  "@asyn($(PORT), 0)GET_COMM_PARAM")
     field(SCAN, "$(CSCAN) second")
 }
 
 record(stringin, "$(DEV):GET_SENS_INFO")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SENS_INFO")
+    field(INP,  "@asyn($(PORT), 0)GET_SENS_INFO")
     field(SCAN, "$(CSCAN) second")
 }
 
@@ -68,7 +68,7 @@ record(longin, "$(DEV):SENS_SN")
 record(stringin, "$(DEV):GET_DEV_STATUS")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_DEV_STAT")
+    field(INP,  "@asyn($(PORT), 0)GET_DEV_STAT")
     field(SCAN, "$(CSCAN) second")
 }
 
