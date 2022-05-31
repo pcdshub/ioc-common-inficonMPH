@@ -553,7 +553,7 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    callParamCallbacks();
+    //callParamCallbacks();
     return asynSuccess;
 }
 
@@ -575,7 +575,7 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
                   driverName, functionName, this->portName, function);
         return asynError;
     }*/
-    callParamCallbacks();
+    //callParamCallbacks();
     return asynSuccess;
 }
 
