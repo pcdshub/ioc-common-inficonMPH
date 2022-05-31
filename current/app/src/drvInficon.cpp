@@ -1028,6 +1028,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
         strncpy(substring, tempJsonData, len);
+		substring[len+1] = '\0';
 		len = strlen(substring);
 		strcpy(substring + len, cutTo - 1);
 		len = strlen(substring);
