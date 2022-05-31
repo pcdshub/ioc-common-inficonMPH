@@ -675,7 +675,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //if (status != asynSuccess) return(status);
         status = parseChScanSetup(data_, chScanSetup_[chNumber]);
         //printf("%s::%s status=%d\n", driverName, functionName, status);
-        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber]->chMode, chScanSetup_[chNumber]->chDwell, chScanSetup_[chNumber]->chPpamu, chScanSetup_[chNumber]->chStartMass, chScanSetup_[chNumber]->chStopMass);
+        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1222,7 +1222,7 @@ asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensF
 asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup)
 {
     static const char *functionName = "parseChScanSetup";
-	char *input = "{\"data\":[{\"@id\":4,\"channelType\":\"\",\"startMassRaw\":0,\"stopMassRaw\":0,\"ppamu\":10,\"dwell\":32.000,\"emVoltage\":0,\"focusVoltage\":null,\"ionEnergy\":null,\"extra\":0,\"leadIn\":1,\"enabled\":\"True\",\"scaleFactor\":1,\"relativeRef\":0,\"reportType\":\"Absolute\",\"reportUnits\":\"Current\",\"equivIonFactor\":-1,\"digOutNum\":-1,\"digOutThresUpper\":1,\"digOutThresLower\":-1,\"startMass\":0,\"stopMass\":0,\"channelMode\":\"Sweep\",\"rfEquivAMU\":0,\"dcEquivAMU\":0,\"rfEquivDAC\":0,\"dcEquivDAC\":0,\"aoNum\":-1,\"aoInputLowLimit\":-1e+38,\"aoInputHighLimit\":1e+38,\"aoMode\":0}],\"conditions\":[{\"command\":\"focusVoltage\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]},{\"command\":\"ionEnergy\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]}],\"name\":\"error\",\"origin\":\"/mmsp/scanSetup/channel/4\"}";
+	//char *input = "{\"data\":[{\"@id\":4,\"channelType\":\"\",\"startMassRaw\":0,\"stopMassRaw\":0,\"ppamu\":10,\"dwell\":32.000,\"emVoltage\":0,\"focusVoltage\":null,\"ionEnergy\":null,\"extra\":0,\"leadIn\":1,\"enabled\":\"True\",\"scaleFactor\":1,\"relativeRef\":0,\"reportType\":\"Absolute\",\"reportUnits\":\"Current\",\"equivIonFactor\":-1,\"digOutNum\":-1,\"digOutThresUpper\":1,\"digOutThresLower\":-1,\"startMass\":0,\"stopMass\":0,\"channelMode\":\"Sweep\",\"rfEquivAMU\":0,\"dcEquivAMU\":0,\"rfEquivDAC\":0,\"dcEquivDAC\":0,\"aoNum\":-1,\"aoInputLowLimit\":-1e+38,\"aoInputHighLimit\":1e+38,\"aoMode\":0}],\"conditions\":[{\"command\":\"focusVoltage\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]},{\"command\":\"ionEnergy\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]}],\"name\":\"error\",\"origin\":\"/mmsp/scanSetup/channel/4\"}";
 
     double startMass;
 	double stopMass;
