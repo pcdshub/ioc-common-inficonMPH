@@ -173,7 +173,16 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
     //commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
-    //chScanSetup_ = new chScanSetupStruct[MAX_CHANNELS];
+    commParams_ = new commParamStruct;
+    genCntrl_ = new genCntrlStruct;
+    sensInfo_ = new sensInfoStruct;
+    devStatus_ = new devStatusStruct;
+    diagData_ = new diagDataStruct;
+    scanInfo_ = new scanInfoStruct;
+    sensDetect_ = new sensDetectStruct;
+    sensFilt_ = new sensFiltStruct;
+    chScanSetup_ = new chScanSetupStruct[MAX_CHANNELS];
+	
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
@@ -203,7 +212,15 @@ drvInficon::~drvInficon() {
     pasynManager->freeAsynUser(pasynUserOctet_);
     pasynUserOctet_ = NULL;
 
-	//delete chScanSetup_;
+    delete commParams_;
+    delete genCntrl_;
+    delete sensInfo_;
+    delete devStatus_;
+    delete diagData_;
+    delete scanInfo_;
+    delete sensDetect_;
+    delete sensFilt_;
+	delete chScanSetup_;
 }
 
 /***********************/
@@ -1219,8 +1236,8 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         //chScanSetup->chStopMass = j["data"][0]["stopMass"];
         startMass = j["data"][0]["startMass"];
         stopMass = j["data"][0]["stopMass"];
-        chScanSetup->chStartMass = startMass;
-        chScanSetup->chStopMass = stopMass;
+        //chScanSetup->chStartMass = startMass;
+        //chScanSetup->chStopMass = stopMass;
         //chScanSetup->chDwell = j["data"][0]["dwell"];
         //chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
