@@ -1030,12 +1030,14 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 {
     static const char *functionName = "parseDevStatus";
 
-    char jsonDataSubstring[1500];
+	char jsonDataSubstring[1500];
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
     cutAt = strstr(tempJsonData,"peakfind");
     cutTo = strstr(tempJsonData,"filaments");
+
+	memset(jsonDataSubstring, '\0', 1500);
 
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
@@ -1206,8 +1208,8 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
 
 		jstring = j["data"][0]["channelMode"];
         strcpy(chScanSetup->chMode, jstring.c_str());
-        chScanSetup->chStartMass = j["data"][0]["startMass"];
-        chScanSetup->chStopMass = j["data"][0]["stopMass"];
+        chScanSetup->chStartMass = (double)j["data"][0]["startMass"];
+        chScanSetup->chStopMass = (double)j["data"][0]["stopMass"];
         chScanSetup->chDwell = j["data"][0]["dwell"];
         chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
