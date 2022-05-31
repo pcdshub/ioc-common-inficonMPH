@@ -1031,18 +1031,17 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 		jsonDataSubstring[len] = '\0';
 		len = strlen(jsonDataSubstring);
 		strcpy(jsonDataSubstring + len, cutTo - 1);
-		len = strlen(jsonDataSubstring);
-        printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, jsonDataSubstring);
+		//len = strlen(jsonDataSubstring);
+        //printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, jsonDataSubstring);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s JSON data corrupted\n", driverName, functionName);
         return asynError;
     }
 
-    //printf("%s::%s substring:%s\n", driverName, functionName, substring);
     try {
         json j = json::parse(jsonDataSubstring);
-
+        printf("%s::%s substring:%s\n", driverName, functionName, jsonDataSubstring);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
