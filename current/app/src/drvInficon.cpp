@@ -131,6 +131,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
     createParam(INFICON_DWELL_MIN_STRING,          asynParamUInt32Digital,  &dwelMin_);
     //Scan setup parameters
+    createParam(INFICON_GET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &getChScanSetup_);
     createParam(INFICON_SET_START_CH_STRING,       asynParamUInt32Digital,  &setStartCh_);
     createParam(INFICON_GET_START_CH_STRING,       asynParamUInt32Digital,  &getStartCh_);
     createParam(INFICON_SET_STOP_CH_STRING,        asynParamUInt32Digital,  &setStopCh_);
@@ -642,12 +643,15 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDevStatus(data_, &devStatus_);
         if (status != asynSuccess) return(status);
-    } else if (function == getChMode_) {
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode"
+    } else if (function == getChScanSetup_) {
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
         "\r\n", chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseString(data_, value, nactual, stringCommand);
+		if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        status = parseDevStatus(data_, &chScanSetup_[chNumber]);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1189,8 +1193,15 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
     static const char *functionName = "parseChScanSetup";
 
     try {
-        //json j = json::parse(jsonData);
-        ;
+        json j = json::parse(jsonData);
+        std::string jstring;
+
+		jstring = j["data"]["channelMode"];
+        strcpy(chScanSetup->chMode, jstring.c_str());
+        chScanSetup->chStartMass = j["data"]["startMass"];
+        chScanSetup->chStopMass = j["data"]["stopMass"];
+        chScanSetup->chDwell = j["data"]["dwell"];
+        chScanSetup->chPpamu = j["data"]["ppamu"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 

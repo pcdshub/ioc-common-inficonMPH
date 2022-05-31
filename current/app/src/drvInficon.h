@@ -87,6 +87,7 @@
 #define INFICON_DWELL_MAX_STRING          "DWELL_MAX"
 #define INFICON_DWELL_MIN_STRING          "DWELL_MIN"
 //Scan setup
+#define INFICON_GET_CH_SCAN_SETUP_STRING  "GET_CH_SCAN_SETUP"
 #define INFICON_SET_START_CH_STRING       "SET_START_CH"
 #define INFICON_GET_START_CH_STRING       "GET_START_CH"
 #define INFICON_SET_STOP_CH_STRING        "SET_STOP_CH"
@@ -191,9 +192,9 @@ typedef struct {
 
 typedef struct {
     char chMode[32];
-    unsigned int chStartMass;
-    unsigned int chStopMass;
-    unsigned int chDwell;
+    double chStartMass;
+    double chStopMass;
+    double chDwell;
     unsigned int chPpamu;
 } chScanSetupStruct;
 
@@ -253,7 +254,7 @@ public:
     asynStatus parseScanInfo(const char *jsonData, scanInfoStruct *scanInfo);
     asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
     asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
-    asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
+    asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
@@ -323,6 +324,7 @@ protected:
     int dwelMax_;
     int dwelMin_;
     //Scan setup parameters
+    int getChScanSetup_;
     int setStartCh_;
     int getStartCh_;
     int setStopCh_;
