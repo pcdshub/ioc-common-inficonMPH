@@ -617,7 +617,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 	int chNumber;
     static const char *functionName = "readOctet";
 
-    pasynManager->getAddr(pasynUser, &chNumber);
+    //pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
 
     if (function == getCommParam_) {
@@ -647,8 +647,8 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         status = parseDevStatus(data_, &devStatus_);
         if (status != asynSuccess) return(status);
     } else if (function == getChScanSetup_) {
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
-        "\r\n", chNumber);
+        //sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
+        //"\r\n", chNumber);
         //ioStatus_ = inficonReadWrite(request, data_);
         //if (ioStatus_ != asynSuccess) return(ioStatus_);
 		//if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
@@ -665,7 +665,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
     //printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
     //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
-    callParamCallbacks(chNumber);
+    //callParamCallbacks(chNumber);
     return status;
 }
 
