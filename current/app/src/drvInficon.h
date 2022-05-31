@@ -362,14 +362,14 @@ private:
     int readOK_;
     int writeOK_;
     int scanChannel_;
-    commParamStruct commParams_;
-    genCntrlStruct genCntrl_;
-    sensInfoStruct sensInfo_;
-    devStatusStruct devStatus_;
-    diagDataStruct diagData_;
-    scanInfoStruct scanInfo_;
-    sensDetectStruct sensDetect_;
-    sensFiltStruct sensFilt_;
+    commParamStruct *commParams_;
+    genCntrlStruct *genCntrl_;
+    sensInfoStruct *sensInfo_;
+    devStatusStruct *devStatus_;
+    diagDataStruct *diagData_;
+    scanInfoStruct *scanInfo_;
+    sensDetectStruct *sensDetect_;
+    sensFiltStruct *sensFilt_;
     chScanSetupStruct *chScanSetup_;
 };
 

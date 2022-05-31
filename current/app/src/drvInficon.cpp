@@ -644,26 +644,26 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseCommParam(data_, &commParams_);
+        status = parseCommParam(data_, commParams_);
         if (status != asynSuccess) return(status);
-        setStringParam(ip_, commParams_.ip);
-        setStringParam(mac_, commParams_.mac);
+        setStringParam(ip_, commParams_->ip);
+        setStringParam(mac_, commParams_->mac);
     } else if (function == getSensInfo_) {
         sprintf(request,"GET /mmsp/sensorInfo/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseSensInfo(data_, &sensInfo_);
+        status = parseSensInfo(data_, sensInfo_);
         if (status != asynSuccess) return(status);
-        setStringParam(sensName_, sensInfo_.sensName);
-        setStringParam(sensDesc_, sensInfo_.sensDesc);
-        setUIntDigitalParam(sensSn_, sensInfo_.serialNumber, 0xFFFFFFFF);
+        setStringParam(sensName_, sensInfo_->sensName);
+        setStringParam(sensDesc_, sensInfo_->sensDesc);
+        setUIntDigitalParam(sensSn_, sensInfo_->serialNumber, 0xFFFFFFFF);
     } else if (function == getDevStatus_) {
         sprintf(request,"GET /mmsp/status/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseDevStatus(data_, &devStatus_);
+        status = parseDevStatus(data_, devStatus_);
         if (status != asynSuccess) return(status);
     } else if (function == getChScanSetup_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
@@ -673,9 +673,9 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         //printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
         //if (status != asynSuccess) return(status);
-        status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
+        status = parseChScanSetup(data_, chScanSetup_[chNumber]);
         //printf("%s::%s status=%d\n", driverName, functionName, status);
-        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber]->chMode, chScanSetup_[chNumber]->chDwell, chScanSetup_[chNumber]->chPpamu, chScanSetup_[chNumber]->chStartMass, chScanSetup_[chNumber]->chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
