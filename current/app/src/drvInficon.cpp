@@ -47,7 +47,7 @@ static const char *driverName = "INFICON";
 drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
    : asynPortDriver(portName,
-                    1, /* maxAddr */
+                    MAX_CHANNELS, /* maxAddr */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
                     ASYN_CANBLOCK | ASYN_MULTIDEVICE, /* asynFlags */
@@ -161,7 +161,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 	octetPortName_[len - 1] = '\0';
 	
     // drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect,noProcessEos)
-	ipConfigureStatus = drvAsynIPPortConfigure(octetPortName_, hostInfo_, 0, 0, 0); //I think for the HTTP port the noAutoConnect should be set to 1
+	ipConfigureStatus = drvAsynIPPortConfigure(octetPortName_, hostInfo_, 0, 0, 0);
 
 	if (ipConfigureStatus) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -196,6 +196,8 @@ drvInficon::~drvInficon() {
 		free(portName_);
 	if (octetPortName_)
 		free(octetPortName_);
+	if (data_)
+		free(data_);
 	
 	pasynManager->disconnect(pasynUserOctet_);
     pasynManager->freeAsynUser(pasynUserOctet_);
@@ -666,7 +668,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
     //printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
     //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
-    //callParamCallbacks(chNumber);
+    callParamCallbacks(chNumber);
     return status;
 }
 
@@ -701,6 +703,8 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 	char httpResponse[HTTP_RESPONSE_SIZE];
 
     static const char *functionName = "inficonReadWrite";
+	
+    memset(httpResponse, '\0', HTTP_RESPONSE_SIZE);
   
     /*// If the Octet driver is not set for autoConnect then do connection management ourselves
     status = pasynManager->isAutoConnect(pasynUserOctet_, &autoConnect);
@@ -1215,8 +1219,8 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         //chScanSetup->chStopMass = j["data"][0]["stopMass"];
         startMass = j["data"][0]["startMass"];
         stopMass = j["data"][0]["stopMass"];
-        //chScanSetup->chStartMass = startMass;
-        //chScanSetup->chStopMass = stopMass;
+        chScanSetup->chStartMass = startMass;
+        chScanSetup->chStopMass = stopMass;
         //chScanSetup->chDwell = j["data"][0]["dwell"];
         //chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
