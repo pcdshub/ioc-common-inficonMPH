@@ -654,7 +654,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
         //if (status != asynSuccess) return(status);
-        //status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
+        status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
         //printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
