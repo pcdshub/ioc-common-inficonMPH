@@ -1019,7 +1019,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     static const char *functionName = "parseDevStatus";
 
     char substring[50000];
-    const char tempJsonData = jsonData;
+    const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
     cutAt = strstr (tempJsonData,"peakfind");
