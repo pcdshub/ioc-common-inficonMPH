@@ -650,8 +650,8 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
         "\r\n", chNumber);
-        //ioStatus_ = inficonReadWrite(request, data_);
-        //if (ioStatus_ != asynSuccess) return(ioStatus_);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
         //printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
         //if (status != asynSuccess) return(status);
         //status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
@@ -849,6 +849,9 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
              driverName, functionName, this->portName, responseCode);
     }
 
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+              "%s::%s status=%d\n",
+              driverName, functionName, status);
     done:
     return status;
 }
