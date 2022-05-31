@@ -173,6 +173,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
     //commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
+    chScanSetup_ = new chScanSetupStruct[MAX_CHANNELS];
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
@@ -650,8 +651,8 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
-        //status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
         //if (status != asynSuccess) return(status);
+        //status = parseChScanSetup(data_, &chScanSetup_[chNumber]);
         printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
