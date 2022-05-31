@@ -656,7 +656,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     }
     //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
     //printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
-    printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
+    //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
     callParamCallbacks(chNumber);
     return status;
 }
@@ -1050,7 +1050,8 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->emOnTime = j["data"]["emStretch"];
         devStatus->emCmlOnTime = j["data"]["emOnTime"];
         devStatus->emPressTrip = j["data"]["emPressTrip"];
-        printf("%s::%s systStatus:%d, pwrOnTime:%d\n", driverName, functionName, devStatus->systStatus, devStatus->pwrOnTime);
+        //add emi press trip for every filamenet and cumulative power on time
+        //printf("%s::%s systStatus:%d, pwrOnTime:%d\n", driverName, functionName, devStatus->systStatus, devStatus->pwrOnTime);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
