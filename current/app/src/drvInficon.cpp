@@ -1018,9 +1018,10 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 {
     static const char *functionName = "parseDevStatus";
 
+    char substring[50000];
     int size = strlen(jsonData);
 
-    printf("%s::%s stringlen:%d jsonData:%s\n", driverName, functionName, size, jsonData);
+    //printf("%s::%s stringlen:%d jsonData:%s\n", driverName, functionName, size, jsonData);
     try {
         //json j = json::parse(jsonData);
         ;
