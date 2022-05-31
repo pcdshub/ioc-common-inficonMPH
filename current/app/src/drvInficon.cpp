@@ -1208,7 +1208,9 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
 
 		jstring = j["data"][0]["channelMode"];
         strcpy(chScanSetup->chMode, jstring.c_str());
-        //chScanSetup->chStartMass = (double)j["data"][0]["startMass"];
+        jstring = j["data"][0]["startMass"].get<std::string>();
+        chScanSetup->chStartMass = atof(jstring.c_str());
+        //chScanSetup->chStartMass = (double)j["data"][0]["startMass"].get<std::string>();
         //chScanSetup->chStopMass = (double)j["data"][0]["stopMass"];
         chScanSetup->chDwell = j["data"][0]["dwell"];
         chScanSetup->chPpamu = j["data"][0]["ppamu"];
