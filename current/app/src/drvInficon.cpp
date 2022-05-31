@@ -1020,10 +1020,10 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 
     char substring[50000];
     const char *tempJsonData = jsonData;
-    const char *cutAt;
-    const char *cutTo;
-    cutAt = strstr (tempJsonData,"peakfind");
-    cutTo = strstr (tempJsonData,"filaments");
+    char *cutAt;
+    char *cutTo;
+    cutAt = strstr(tempJsonData,"peakfind");
+    cutTo = strstr(tempJsonData,"filaments");
 
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = tempJsonData - cutAt;
