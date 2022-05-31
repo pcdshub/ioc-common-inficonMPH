@@ -1019,9 +1019,22 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     static const char *functionName = "parseDevStatus";
 
     char substring[50000];
-    int size = strlen(jsonData);
+    const char tempJsonData = jsonData;
+    const char *cutAt;
+    const char *cutTo;
+    cutAt = strstr (tempJsonData,"peakfind");
+    cutTo = strstr (tempJsonData,"filaments");
 
-    //printf("%s::%s stringlen:%d jsonData:%s\n", driverName, functionName, size, jsonData);
+    if(cutAt != NULL && cutTo != NULL) {
+        size_t len = tempJsonData - cutAt;
+        strncat(substring, tempJsonData, len);
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON data corrupted\n", driverName, functionName);
+        return asynError;
+    }
+
+    printf("%s::%s stringlen:%d substring:%s\n", driverName, functionName, (int)len, substring);
     try {
         //json j = json::parse(jsonData);
         ;
