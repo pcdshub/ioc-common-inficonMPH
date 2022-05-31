@@ -18,14 +18,14 @@
 record(stringin, "$(DEV):IP")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))IP")
+    field(INP,  "@asyn($(PORT), 0)IP")
     field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(DEV):MAC")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))MAC")
+    field(INP,  "@asyn($(PORT), 0)MAC")
     field(SCAN, "I/O Intr")
 }
 
@@ -46,14 +46,14 @@ record(stringin, "$(DEV):GET_SENS_INFO")
 record(stringin, "$(DEV):SENS_NAME")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))SENS_NAME")
+    field(INP,  "@asyn($(PORT), 0)SENS_NAME")
     field(SCAN, "I/O Intr")
 }
 
 record(stringin,"$(DEV):SENS_DESC")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))SENS_DESC")
+    field(INP,  "@asyn($(PORT), 0)SENS_DESC")
     field(SCAN, "I/O Intr")
 }
 
