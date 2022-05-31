@@ -1203,16 +1203,18 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
     static const char *functionName = "parseChScanSetup";
 	char *input = "{\"data\":[{\"@id\":4,\"channelType\":\"\",\"startMassRaw\":0,\"stopMassRaw\":0,\"ppamu\":10,\"dwell\":32.000,\"emVoltage\":0,\"focusVoltage\":null,\"ionEnergy\":null,\"extra\":0,\"leadIn\":1,\"enabled\":\"True\",\"scaleFactor\":1,\"relativeRef\":0,\"reportType\":\"Absolute\",\"reportUnits\":\"Current\",\"equivIonFactor\":-1,\"digOutNum\":-1,\"digOutThresUpper\":1,\"digOutThresLower\":-1,\"startMass\":0,\"stopMass\":0,\"channelMode\":\"Sweep\",\"rfEquivAMU\":0,\"dcEquivAMU\":0,\"rfEquivDAC\":0,\"dcEquivDAC\":0,\"aoNum\":-1,\"aoInputLowLimit\":-1e+38,\"aoInputHighLimit\":1e+38,\"aoMode\":0}],\"conditions\":[{\"command\":\"focusVoltage\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]},{\"command\":\"ionEnergy\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]}],\"name\":\"error\",\"origin\":\"/mmsp/scanSetup/channel/4\"}";
 
+    double startMass;
     try {
         json j = json::parse(input);
         std::string jstring;
 
-		jstring = j["data"][0]["channelMode"];
-        strcpy(chScanSetup->chMode, jstring.c_str());
-        chScanSetup->chStartMass = j["data"][0]["startMass"];
-        chScanSetup->chStopMass = j["data"][0]["stopMass"];
-        chScanSetup->chDwell = j["data"][0]["dwell"];
-        chScanSetup->chPpamu = j["data"][0]["ppamu"];
+		//jstring = j["data"][0]["channelMode"];
+        //strcpy(chScanSetup->chMode, jstring.c_str());
+        //chScanSetup->chStartMass = j["data"][0]["startMass"];
+        //chScanSetup->chStopMass = j["data"][0]["stopMass"];
+        startMass = j["data"][0]["startMass"];
+        //chScanSetup->chDwell = j["data"][0]["dwell"];
+        //chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -1225,7 +1227,7 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         return asynError;
     }
 
-    //printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
+    printf("%s::%s startMass:%.2f\n", driverName, functionName, startMass);
     return asynSuccess;
 }
 
