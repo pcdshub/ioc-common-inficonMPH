@@ -636,10 +636,12 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setStringParam(sensDesc_, sensInfo_.sensDesc);
         setUIntDigitalParam(sensSn_, sensInfo_.serialNumber, 0xFFFFFFFF);
     } else if (function == getDevStatus_) {
-        /*sprintf(request,"GET /mmsp/status/get\r\n"
+        sprintf(request,"GET /mmsp/status/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);*/
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseDevStatus(data_, &devStatus_);
+        if (status != asynSuccess) return(status);
     } else if (function == getChMode_) {
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode"
         "\r\n", chNumber);
@@ -1016,9 +1018,12 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 {
     static const char *functionName = "parseDevStatus";
 
-    try {
-        json j = json::parse(jsonData);
+    int size = strlen(jsonData);
 
+    printf("%s::%s stringlen:%d jsonData:%s\n", driverName, functionName, size, jsonData);
+    try {
+        //json j = json::parse(jsonData);
+        ;
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -1135,6 +1140,29 @@ asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensF
         sensFilt->massMin = j["data"]["massMin"];
         sensFilt->dwellMax = j["data"]["dwellMax"];
         sensFilt->dwellMin = j["data"]["dwellMin"];
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+
+    //printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber)
+{
+    static const char *functionName = "parseChScanSetup";
+
+    try {
+        //json j = json::parse(jsonData);
+        ;
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
