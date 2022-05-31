@@ -173,7 +173,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
     //commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
-    chScanSetup_[MAX_CHANNELS] = new chScanSetupStruct[MAX_CHANNELS];
+    *chScanSetup_ = new chScanSetupStruct[MAX_CHANNELS];
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
