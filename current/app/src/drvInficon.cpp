@@ -1188,7 +1188,7 @@ asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensF
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber)
+asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup)
 {
     static const char *functionName = "parseChScanSetup";
 
