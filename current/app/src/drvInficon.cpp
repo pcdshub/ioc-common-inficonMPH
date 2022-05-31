@@ -649,7 +649,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     } else if (function == getChScanSetup_) {
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
         "\r\n", chNumber);
-        ioStatus_ = inficonReadWrite(request, data_);
+        //ioStatus_ = inficonReadWrite(request, data_);
         //if (ioStatus_ != asynSuccess) return(ioStatus_);
 		//if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         //printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
