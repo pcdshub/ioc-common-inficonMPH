@@ -1026,9 +1026,9 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     cutTo = strstr(tempJsonData,"filaments");
 
     if(cutAt != NULL && cutTo != NULL) {
-        size_t len = cutAt - tempJsonData;
-		size_t jsonLen = strlen(tempJsonData);
+        size_t len = cutAt - tempJsonData - 1;
         strncat(substring, tempJsonData, len);
+		strcat(substring, cutTo);
         printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, substring);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
