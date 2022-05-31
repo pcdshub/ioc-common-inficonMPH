@@ -370,7 +370,7 @@ private:
     scanInfoStruct scanInfo_;
     sensDetectStruct sensDetect_;
     sensFiltStruct sensFilt_;
-    chScanSetupStruct *chScanSetup_;
+    chScanSetupStruct chScanSetup_[MAX_CHANNELS];
 };
 
 #endif /* drvInficon_H */
