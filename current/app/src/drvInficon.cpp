@@ -47,7 +47,7 @@ static const char *driverName = "INFICON";
 drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
    : asynPortDriver(portName,
-                    MAX_CHANNELS, /* maxAddr */
+                    5, /* maxAddr */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
                     ASYN_CANBLOCK | ASYN_MULTIDEVICE, /* asynFlags */
@@ -685,7 +685,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_.ip, commParams_.mac);
     //printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
     //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
-    callParamCallbacks(chNumber);
+    //callParamCallbacks(chNumber);
     return status;
 }
 
