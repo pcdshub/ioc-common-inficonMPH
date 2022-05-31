@@ -1018,7 +1018,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 {
     static const char *functionName = "parseDevStatus";
 
-    char substring[50000];
+    char jsonDataSubstring[1500];
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
@@ -1027,12 +1027,12 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
-        strncpy(substring, tempJsonData, len);
-		substring[len] = '\0';
-		len = strlen(substring);
-		strcpy(substring + len, cutTo - 1);
-		len = strlen(substring);
-        printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, substring);
+        strncpy(jsonDataSubstring, tempJsonData, len);
+		jsonDataSubstring[len] = '\0';
+		len = strlen(jsonDataSubstring);
+		strcpy(jsonDataSubstring + len, cutTo - 1);
+		len = strlen(jsonDataSubstring);
+        printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, jsonDataSubstring);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s JSON data corrupted\n", driverName, functionName);
@@ -1041,8 +1041,8 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 
     //printf("%s::%s substring:%s\n", driverName, functionName, substring);
     try {
-        //json j = json::parse(jsonData);
-        ;
+        json j = json::parse(jsonDataSubstring);
+
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
