@@ -150,6 +150,7 @@ typedef struct {
     unsigned int emiOnTime;
     unsigned int emOnTime;
     unsigned int emCmlOnTime;
+    unsigned int emPressTrip;
     unsigned int emiCmlOnTime;
     unsigned int emiPressTrip;
 } devStatusStruct;

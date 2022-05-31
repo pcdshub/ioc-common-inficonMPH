@@ -1041,7 +1041,16 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 
     try {
         json j = json::parse(jsonDataSubstring);
-        printf("%s::%s substring:%s\n", driverName, functionName, jsonDataSubstring);
+
+        devStatus->systStatus = j["data"]["systemStatus"];
+        devStatus->hwError = j["data"]["hardwareErrors"];
+        devStatus->hwWarn = j["data"]["hardwareWarnings"];
+        devStatus->pwrOnTime = j["data"]["powerSupplyPowerOnTime"];
+        devStatus->emiOnTime; = j["data"]["emissionStretch"];
+        devStatus->emOnTime = j["data"]["emStretch"];
+        devStatus->emCmlOnTime = j["data"]["emOnTime"];
+        devStatus->emPressTrip = j["data"]["emPressTrip"];
+        printf("%s::%s systStatus:%d, pwrOnTime:%d\n", driverName, functionName, devStatus->systStatus, devStatus->pwrOnTime);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
