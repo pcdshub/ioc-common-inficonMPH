@@ -1034,7 +1034,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         return asynError;
     }
 
-    printf("%s::%s stringlen:%d substring:%s\n", driverName, functionName, (int)len, substring);
+    printf("%s::%s substring:%s\n", driverName, functionName, substring);
     try {
         //json j = json::parse(jsonData);
         ;
