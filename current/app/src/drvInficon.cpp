@@ -1046,7 +1046,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->hwError = j["data"]["hardwareErrors"];
         devStatus->hwWarn = j["data"]["hardwareWarnings"];
         devStatus->pwrOnTime = j["data"]["powerSupplyPowerOnTime"];
-        devStatus->emiOnTime; = j["data"]["emissionStretch"];
+        devStatus->emiOnTime = j["data"]["emissionStretch"];
         devStatus->emOnTime = j["data"]["emStretch"];
         devStatus->emCmlOnTime = j["data"]["emOnTime"];
         devStatus->emPressTrip = j["data"]["emPressTrip"];
