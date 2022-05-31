@@ -254,7 +254,7 @@ public:
     asynStatus parseScanInfo(const char *jsonData, scanInfoStruct *scanInfo);
     asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
     asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
-    asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup);
+    asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct chScanSetup);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
