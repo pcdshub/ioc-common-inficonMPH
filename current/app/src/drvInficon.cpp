@@ -622,7 +622,6 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
-    float temp[2501];
 	
     if (function == getScan_) {
         sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
@@ -633,9 +632,9 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
         if (status != asynSuccess) return(status);
 		*nactual = scanData_->actualScanSize;
 		//data = scanData_->scanValues;
-		temp[0] = 2;
-		temp[1] = 3;
-		data = temp;
+        doubletemp_[0] = 2;
+        doubletemp_[1] = 3;
+        data = doubletemp_;
         printf("%s::%s array0:%e array1:%e array2:%e nElements:%d scanNum:%d\n", driverName, functionName, scanData_->scanValues[0], scanData_->scanValues[1], scanData_->scanValues[2], scanData_->actualScanSize, scanData_->scanNumber);
         //doCallbacksFloat32Array(scanData_->scanValues, scanData_->actualScanSize, getScan_, 0);
     } else {

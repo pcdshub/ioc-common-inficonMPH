@@ -379,6 +379,7 @@ private:
     sensFiltStruct *sensFilt_;
     chScanSetupStruct *chScanSetup_;
     scanDataStruct *scanData_;
+	double doubletemp_[2501];
 };
 
 #endif /* drvInficon_H */
