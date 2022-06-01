@@ -673,7 +673,15 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-        printf("%s::%s chNumber:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        //printf("%s::%s chNumber:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+    } else if (function == getDiagData_) {
+        sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseDiagData(data_, diagData_);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",

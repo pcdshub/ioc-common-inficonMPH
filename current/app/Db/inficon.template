@@ -85,3 +85,10 @@ record(stringin, "$(DEV):GET_CH_SCAN_SETUP_4")
     field(INP,  "@asyn($(PORT), 4)GET_CH_SCAN_SETUP")
     field(SCAN, "$(CSCAN) second")
 }
+
+record(stringin, "$(DEV):GET_DIAG_DATA")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_DIAG_DATA")
+    field(SCAN, "$(CSCAN) second")
+}
