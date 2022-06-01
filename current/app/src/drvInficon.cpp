@@ -620,13 +620,15 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
+    int scanNum = 0;
 
     if (function == getScan_) {
         sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        printf("%s::%s json:%s\n", driverName, functionName, data_);
+		status = parseScan(data_, data, nactual, &scanNum);
+        printf("%s::%s array0:%f array1:%f array2:%f nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], data[2], nactual, scanNum);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1319,6 +1321,24 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
 asynStatus drvInficon::parseScan(const char *jsonData, double *data, int *scanSize, int *scannum)
 {
     static const char *functionName = "parseScan";
+
+    try {
+        json j = json::parse(jsonData);
+
+        *scanSize = j["data"]["scansize"];
+        *scannum = j["data"]["scannum"];
+        *data = j["data"]["values"];
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
 	
     return asynSuccess;
 }
