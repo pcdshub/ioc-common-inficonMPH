@@ -47,7 +47,7 @@ static const char *driverName = "INFICON";
 drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
    : asynPortDriver(portName,
-                    5, /* maxAddr */
+                    MAX_CHANNELS, /* maxAddr */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
                     ASYN_CANBLOCK | ASYN_MULTIDEVICE, /* asynFlags */
