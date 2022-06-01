@@ -99,3 +99,10 @@ record(stringin, "$(DEV):GET_SCAN_INFO")
     field(INP,  "@asyn($(PORT))GET_SCAN_INFO")
     field(SCAN, "$(CSCAN) second")
 }
+
+record(stringin, "$(DEV):GET_SENS_DETECT")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_DETECT")
+    field(SCAN, "$(CSCAN) second")
+}

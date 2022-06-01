@@ -121,6 +121,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_PPSCAN_STRING,             asynParamUInt32Digital,  &ppscan_);
     createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStat);
     //Sensor detector parameters
+    createParam(INFICON_GET_SENS_DETECT_STRING,    asynParamOctet,          &getSensDetect_);
     createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamUInt32Digital,  &emVMax_);
     createParam(INFICON_EM_VOLTAGE_MIN_STRING,     asynParamUInt32Digital,  &emVMin_);
     createParam(INFICON_EM_VOLTAGE_STRING,         asynParamUInt32Digital,  &emV_);
@@ -690,7 +691,15 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseScanInfo(data_, scanInfo_);
         if (status != asynSuccess) return(status);
-        printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
+        //printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
+    } else if (function == getSensDetect_) {
+        sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseSensDetect(data_, sensDetect_);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
