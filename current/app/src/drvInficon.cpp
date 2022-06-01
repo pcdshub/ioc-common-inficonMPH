@@ -633,7 +633,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 		status = parseScan(data_, data, &scanSize, &scanNum);
         if (status != asynSuccess) return(status);
 		*nactual = scanSize;
-        printf("%s::%s array0:%f array1:%f array2:%f nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], data[2], scanSize, scanNum);
+        printf("%s::%s array0:%e array1:%e array2:%e nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], data[2], scanSize, scanNum);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1330,15 +1330,12 @@ asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSiz
     try {
         json j = json::parse(jsonData);
 
-        //*scanSize = j["data"]["scansize"];
-        //*scannum = j["data"]["scannum"];
-        //auto values = j["data"]["values"];
-        //std::vector <float> *values = new std::vector <float> (j["data"]["values"].get<std::vector<float>>());
+        *scanSize = j["data"]["scansize"];
+        *scannum = j["data"]["scannum"];
         std::vector <float> values(16384);
 		values = j["data"]["values"].get<std::vector<float>>();
-        //std::vector <float> *values = j["data"]["values"].get<std::vector<float>>();
-        //data = &values[0];
-        printf("%s::%s value0:%e value1:%e\n", driverName, functionName, values[0], values[1]);
+        data = &values[0];
+        //printf("%s::%s value0:%e value1:%e\n", driverName, functionName, values[0], values[1]);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
