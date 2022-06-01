@@ -673,7 +673,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-        printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        printf("%s::%s chNumber:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1226,11 +1226,11 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         std::string jstring;
 
 		jstring = j["data"][0]["channelMode"];
-        strcpy(chScanSetup->chMode, jstring.c_str());
-        chScanSetup->chStartMass = j["data"][0]["startMass"];
-        chScanSetup->chStopMass = j["data"][0]["stopMass"];
-        chScanSetup->chDwell = j["data"][0]["dwell"];
-        chScanSetup->chPpamu = j["data"][0]["ppamu"];
+        strcpy(chScanSetup[chNumber].chMode, jstring.c_str());
+        chScanSetup[chNumber].chStartMass = j["data"][0]["startMass"];
+        chScanSetup[chNumber].chStopMass = j["data"][0]["stopMass"];
+        chScanSetup[chNumber].chDwell = j["data"][0]["dwell"];
+        chScanSetup[chNumber].chPpamu = j["data"][0]["ppamu"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
