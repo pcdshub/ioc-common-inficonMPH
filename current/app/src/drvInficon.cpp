@@ -565,10 +565,14 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 
     *value = 0;
 
-    if (function == boxTemp_) {
-        ;
-    } else if (function == getPress_) {
-        ;
+    if (function == getPress_) {
+        sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseFloat64(data_, value, float64Command);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s pressure:%f\n", driverName, functionName, *value);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -708,7 +712,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensFilt(data_, sensFilt_);
         if (status != asynSuccess) return(status);
-        printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
+        //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -983,6 +987,31 @@ asynStatus drvInficon::parseUInt32(const char *jsonData, epicsUInt32 *value, com
 asynStatus drvInficon::parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType)
 {
     static const char *functionName = "parseFloat64";
+
+    try {
+        json j = json::parse(jsonData);
+		
+        switch (commandType) {
+            case float64Command:
+                *value = j["data"];
+                break;
+            default:
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                        "%s::%s, unknown command type %d\n",
+                        driverName, functionName, commandType);
+                return asynError;
+        }
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
 
     return asynSuccess;
 }

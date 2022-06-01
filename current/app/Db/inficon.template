@@ -113,3 +113,10 @@ record(stringin, "$(DEV):GET_SENS_FILT")
     field(INP,  "@asyn($(PORT))GET_SENS_FILT")
     field(SCAN, "$(CSCAN) second")
 }
+
+record(stringin, "$(DEV):GET_PRESS")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))GET_PRESS")
+    field(SCAN, "$(DSCAN) second")
+}
