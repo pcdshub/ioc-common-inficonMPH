@@ -632,8 +632,8 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
         if (status != asynSuccess) return(status);
 		*nactual = scanData_->actualScanSize;
 		data = scanData_->scanValues;
-		data[0] = 2;
         printf("%s::%s array0:%e array1:%e array2:%e nElements:%d scanNum:%d\n", driverName, functionName, scanData_->scanValues[0], scanData_->scanValues[1], scanData_->scanValues[2], scanData_->actualScanSize, scanData_->scanNumber);
+        doCallbacksFloat32Array(scanData_->scanValues, scanData_->actualScanSize, getScan_, 0);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
