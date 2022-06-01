@@ -616,6 +616,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 {
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
+    char request[HTTP_REQUEST_SIZE];
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
