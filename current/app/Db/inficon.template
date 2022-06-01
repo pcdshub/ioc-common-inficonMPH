@@ -122,8 +122,9 @@ record(ai, "$(DEV):GET_PRESS")
 }
 
 record(waveform,"$(DEV):GET_SCAN") {
-    field(DTYP,"asynFloat32ArrayIn")
-    field(INP,"@asyn($(PORT))GET_SCAN")
-    field(SCAN,"$(CSCAN) second")
-    field(FTVL,"FLOAT")
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(SCAN, "$(CSCAN) second")
+    field(FTVL, "FLOAT")
+    field(NELM, "3000")
 }
