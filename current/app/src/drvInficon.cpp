@@ -1323,7 +1323,7 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSize, int *scannum, scanDataStruct *scanData)
+asynStatus drvInficon::parseScan(const char *jsonData, float *scanValues, int *scanSize, int *scannum, scanDataStruct *scanData)
 {
     static const char *functionName = "parseScan";
 
@@ -1335,8 +1335,8 @@ asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSiz
         std::vector <float> values(16384);
 		values = j["data"]["values"].get<std::vector<float>>();
         //scanData->scanData = values[0];
-		data = &values[0];
-        printf("%s::%s value0:%e value1:%e\n", driverName, functionName, data[0], data[1]);
+		scanValues = &values[0];
+        printf("%s::%s value0:%e value1:%e\n", driverName, functionName, scanValues[0], scanValues[1]);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
