@@ -1336,7 +1336,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
         std::vector <float> values(MAX_SCAN_SIZE);
 		values = j["data"]["values"].get<std::vector<float>>();
 		memcpy(scanData->scanValues, &values[0], scanData->actualScanSize);
-        printf("%s::%s value0:%e value1:%e\n", driverName, functionName, scanValues[0], scanValues[2500]);
+        printf("%s::%s value0:%e value1:%e\n", driverName, functionName, values[0], values[2500]);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
