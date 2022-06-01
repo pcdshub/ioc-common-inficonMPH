@@ -109,6 +109,7 @@
 
 #define MAX_INFICON_COMMAND_TYPES          10
 #define MAX_CHANNELS                       4
+#define MAX_SCAN_SIZE                      16384
 
 typedef enum {
     stringCommand,
@@ -202,7 +203,7 @@ typedef struct {
     unsigned int scanSize;
     unsigned int actualScanSize;
     unsigned int scanNumber;
-	float scanData[16384];
+	float scanValues[MAX_SCAN_SIZE];
 } scanDataStruct;
 
 /* Forward declarations */
