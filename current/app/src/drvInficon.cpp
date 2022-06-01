@@ -685,7 +685,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_->ip, commParams_->mac);
     //printf("%s::%s status:%d massMax:%d\n", driverName, functionName, status, elecInfo_.massMax);
     //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_.serialNumber, sensInfo_.sensName, sensInfo_.sensDesc);
-    //callParamCallbacks(chNumber);
+    callParamCallbacks(chNumber);
     return status;
 }
 
@@ -1236,8 +1236,8 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         //chScanSetup->chStopMass = j["data"][0]["stopMass"];
         startMass = j["data"][0]["startMass"];
         stopMass = j["data"][0]["stopMass"];
-        chScanSetup[chNumber]->chStartMass = startMass;
-        chScanSetup[chNumber]->chStopMass = stopMass;
+        //chScanSetup[chNumber].chStartMass = startMass;
+        //chScanSetup[chNumber].chStopMass = stopMass;
         //chScanSetup->chDwell = j["data"][0]["dwell"];
         //chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
