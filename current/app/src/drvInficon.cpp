@@ -128,6 +128,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_EM_GAIN_STRING,            asynParamFloat64,        &emGain_);
     createParam(INFICON_EM_GAIN_MASS_STRING,       asynParamUInt32Digital,  &emGainMass_);
     //Sensor filter parameters
+    createParam(INFICON_GET_SENS_FILT_STRING,      asynParamOctet,          &getSensFilt_);
     createParam(INFICON_MASS_MAX_STRING,           asynParamFloat64,        &massMax_);
     createParam(INFICON_MASS_MIN_STRING,           asynParamFloat64,        &massMin_);
     createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
@@ -699,7 +700,15 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensDetect(data_, sensDetect_);
         if (status != asynSuccess) return(status);
-        printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
+        //printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
+    } else if (function == getSensFilt_) {
+        sprintf(request,"GET /mmsp/sensorFilter/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseSensFilt(data_, sensFilt_);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
