@@ -120,3 +120,11 @@ record(ai, "$(DEV):GET_PRESS")
     field(INP,  "@asyn($(PORT))GET_PRESS")
     field(SCAN, "$(DSCAN) second")
 }
+
+record(waveform,"$(DEV):GET_SCAN") {
+    field(DTYP,"asynFloat32ArrayIn")
+    field(INP,"@asyn($(PORT))GET_SCAN")
+    field(SCAN,"$(CSCAN) second")
+    field(FTVL,"FLOAT")
+#    field(NELM,"$(NELM)")
+}

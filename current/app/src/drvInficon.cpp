@@ -574,7 +574,7 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseFloat64(data_, value, float64Command);
         if (status != asynSuccess) return(status);
-        printf("%s::%s pressure:%f json:%s\n", driverName, functionName, *value, data_);
+        //printf("%s::%s pressure:%f json:%s\n", driverName, functionName, *value, data_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -615,21 +615,23 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans, size_t *nactual)
 {
     int function = pasynUser->reason;
-	size_t i;
+    asynStatus status = asynSuccess;
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
 
     if (function == getScan_) {
-        ;
+        sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        printf("%s::%s json:%s\n", driverName, functionName, data_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-
-    *nactual = i;
     return asynSuccess;
 }
 
