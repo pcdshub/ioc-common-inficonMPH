@@ -1330,7 +1330,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSiz
 
         *scanSize = j["data"]["scansize"];
         *scannum = j["data"]["scannum"];
-        *data = j["data"]["values"];
+        //*data = j["data"]["values"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
