@@ -246,7 +246,7 @@ public:
     asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
     asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType);
     asynStatus parseString(const char *jsonData, char *value, size_t *dataLen, commandType_t commandType);
-    asynStatus parseScan(const char *jsonData, double *scanValues, int *scanSize, int *scannum);
+    asynStatus parseScan(const char *jsonData, float *scanValues, int *scanSize, int *scannum);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
     asynStatus parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo);
     asynStatus parseDevStatus(const char *jsonData, devStatusStruct *devStatus);

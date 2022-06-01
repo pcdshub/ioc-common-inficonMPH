@@ -620,6 +620,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
+	int scanSize = 0;
     int scanNum = 0;
 
     if (function == getScan_) {
@@ -627,8 +628,10 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
         "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-		status = parseScan(data_, data, nactual, &scanNum);
-        printf("%s::%s array0:%f array1:%f array2:%f nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], data[2], nactual, scanNum);
+		status = parseScan(data_, data, &scanSize, &scanNum);
+        if (status != asynSuccess) return(status);
+		*nactual = scanSize;
+        printf("%s::%s array0:%f array1:%f array2:%f nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], data[2], scanSize, scanNum);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -1318,7 +1321,7 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseScan(const char *jsonData, double *data, int *scanSize, int *scannum)
+asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSize, int *scannum)
 {
     static const char *functionName = "parseScan";
 
