@@ -198,6 +198,12 @@ typedef struct {
     unsigned int chPpamu;
 } chScanSetupStruct;
 
+typedef struct {
+    unsigned int scanSize;
+    unsigned int actualScanSize;
+    unsigned int scanNumber;
+	float scanData[16384];
+} scanDataStruct;
 
 /* Forward declarations */
 class drvInficon;
@@ -371,6 +377,7 @@ private:
     sensDetectStruct *sensDetect_;
     sensFiltStruct *sensFilt_;
     chScanSetupStruct *chScanSetup_;
+    scanDataStruct *scanData_;
 };
 
 #endif /* drvInficon_H */

@@ -175,7 +175,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
     /*Allocate memory*/
     data_ = (char*)callocMustSucceed(HTTP_RESPONSE_SIZE, sizeof(char), functionName);
-    //commParams_ = (commParamStruct *) callocMustSucceed(1, sizeof(commParamStruct), functionName);
+
     commParams_ = new commParamStruct;
     genCntrl_ = new genCntrlStruct;
     sensInfo_ = new sensInfoStruct;
@@ -185,6 +185,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     sensDetect_ = new sensDetectStruct;
     sensFilt_ = new sensFiltStruct;
     chScanSetup_ = new chScanSetupStruct[5];
+	scanData_ = new scanDataStruct;
 	
 
     /* Connect to asyn octet port with asynOctetSyncIO */
@@ -224,6 +225,7 @@ drvInficon::~drvInficon() {
     delete sensDetect_;
     delete sensFilt_;
 	delete chScanSetup_;
+	delete scanData_;
 }
 
 /***********************/
@@ -1331,9 +1333,9 @@ asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSiz
         *scanSize = j["data"]["scansize"];
         *scannum = j["data"]["scannum"];
         //auto values = j["data"]["values"];
-        std::vector <float> *values = new std::vector <float> (j["data"]["values"].get<std::vector<float>>());
+        //std::vector <float> *values = new std::vector <float> (j["data"]["values"].get<std::vector<float>>());
         //std::vector <float> *values = j["data"]["values"].get<std::vector<float>>();
-        data = &values[0];
+        //data = &values[0];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
