@@ -561,6 +561,8 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 {
     int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
+    char request[HTTP_REQUEST_SIZE];
     static const char *functionName = "readFloat64";
 
     *value = 0;
