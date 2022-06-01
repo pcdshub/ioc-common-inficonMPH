@@ -673,7 +673,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         //printf("%s::%s chNumber:%d\n", driverName, functionName, chNumber);
         //if (status != asynSuccess) return(status);
-        status = parseChScanSetup(data_, chScanSetup_[chNumber]);
+        status = parseChScanSetup(data_, chScanSetup_, chNumber);
         //printf("%s::%s status=%d\n", driverName, functionName, status);
         printf("%s::%s status:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, status, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
@@ -1219,7 +1219,7 @@ asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensF
     return asynSuccess;
 }
 
-asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup)
+asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber)
 {
     static const char *functionName = "parseChScanSetup";
 	//char *input = "{\"data\":[{\"@id\":4,\"channelType\":\"\",\"startMassRaw\":0,\"stopMassRaw\":0,\"ppamu\":10,\"dwell\":32.000,\"emVoltage\":0,\"focusVoltage\":null,\"ionEnergy\":null,\"extra\":0,\"leadIn\":1,\"enabled\":\"True\",\"scaleFactor\":1,\"relativeRef\":0,\"reportType\":\"Absolute\",\"reportUnits\":\"Current\",\"equivIonFactor\":-1,\"digOutNum\":-1,\"digOutThresUpper\":1,\"digOutThresLower\":-1,\"startMass\":0,\"stopMass\":0,\"channelMode\":\"Sweep\",\"rfEquivAMU\":0,\"dcEquivAMU\":0,\"rfEquivDAC\":0,\"dcEquivDAC\":0,\"aoNum\":-1,\"aoInputLowLimit\":-1e+38,\"aoInputHighLimit\":1e+38,\"aoMode\":0}],\"conditions\":[{\"command\":\"focusVoltage\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]},{\"command\":\"ionEnergy\",\"code\":71,\"id\":\"notImplemented\",\"level\":\"error.hardware\",\"message\":\"Not implemented\",\"index\":[4]}],\"name\":\"error\",\"origin\":\"/mmsp/scanSetup/channel/4\"}";
@@ -1236,8 +1236,8 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
         //chScanSetup->chStopMass = j["data"][0]["stopMass"];
         startMass = j["data"][0]["startMass"];
         stopMass = j["data"][0]["stopMass"];
-        chScanSetup->chStartMass = startMass;
-        chScanSetup->chStopMass = stopMass;
+        chScanSetup[chNumber].chStartMass = startMass;
+        chScanSetup[chNumber].chStopMass = stopMass;
         //chScanSetup->chDwell = j["data"][0]["dwell"];
         //chScanSetup->chPpamu = j["data"][0]["ppamu"];
     }
