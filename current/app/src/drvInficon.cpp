@@ -1349,7 +1349,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, float *data, int *scanSiz
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-	
+    printf("%s::%s value0:%f value1:%f\n", driverName, functionName, values[0], values[1]);
     return asynSuccess;
 }
 
