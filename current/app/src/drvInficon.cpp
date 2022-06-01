@@ -631,7 +631,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 		status = parseScan(data_, scanData_);
         if (status != asynSuccess) return(status);
 		*nactual = scanData_->actualScanSize;
-		memcpy(data, scanData_->scanValues, scanData_->actualScanSize);
+		memcpy(data, scanData_->scanValues, scanData_->actualScanSize * sizeof(float));
         printf("%s::%s array0:%e array1:%e array2:%e nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], scanData_->scanValues[2500], scanData_->actualScanSize, scanData_->scanNumber);
         //doCallbacksFloat32Array(scanData_->scanValues, scanData_->actualScanSize, getScan_, 0);
     } else {
@@ -1335,7 +1335,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
         scanData->scanNumber = j["data"]["scannum"];
         std::vector <float> values(MAX_SCAN_SIZE);
 		values = j["data"]["values"].get<std::vector<float>>();
-		memcpy(scanData->scanValues, &values[0], 2501);
+		memcpy(scanData->scanValues, &values[0], scanData->actualScanSize * sizeof(float));
         printf("%s::%s value0:%e value1:%e copysize:%d\n", driverName, functionName, values[0], scanData->scanValues[2500], scanData->actualScanSize);
     }
 	catch (const json::parse_error& e) {
