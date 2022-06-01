@@ -114,6 +114,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_GET_PRESS_STRING,          asynParamFloat64,        &getPress_);
     createParam(INFICON_GET_SCAN_STRING,           asynParamFloat32Array,   &getScan_);
     //Scan info parameters
+    createParam(INFICON_GET_SCAN_INFO_STRING,      asynParamOctet,          &getScanInfo_);
     createParam(INFICON_FIRST_SCAN_STRING,         asynParamUInt32Digital,  &firstScan_);
     createParam(INFICON_LAST_SCAN_STRING,          asynParamUInt32Digital,  &lastScan_);
     createParam(INFICON_CURRENT_SCAN_STRING,       asynParamUInt32Digital,  &currentScan_);
@@ -681,7 +682,15 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDiagData(data_, diagData_);
         if (status != asynSuccess) return(status);
-        printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
+        //printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
+    } else if (function == getScanInfo_) {
+        sprintf(request,"GET /mmsp/scanInfo/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseScanInfo(data_, scanInfo_);
+        if (status != asynSuccess) return(status);
+        printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
