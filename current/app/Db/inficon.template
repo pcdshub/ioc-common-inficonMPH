@@ -126,5 +126,6 @@ record(waveform,"$(DEV):GET_SCAN") {
     field(INP,  "@asyn($(PORT))GET_SCAN")
     field(SCAN, "$(CSCAN) second")
     field(FTVL, "FLOAT")
-    field(PREC, "4")
+    field(NELM, "3000")
+    field(PREC, "20")
 }
