@@ -387,7 +387,7 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
-
+    }
     //callParamCallbacks();
     return asynSuccess;
 }
