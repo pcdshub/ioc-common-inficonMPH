@@ -139,7 +139,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &setChScanSetup_);
     createParam(INFICON_START_STOP_CH_STRING,      asynParamUInt32Digital,  &startStopCh_);
     createParam(INFICON_CH_MODE_STRING,            asynParamOctet,          &chMode_);
-    createParam(INFICON_CH_PPAMU_STRING,           aynParamUInt32Digital,   &chPpamu_);
+    createParam(INFICON_CH_PPAMU_STRING,           asynParamUInt32Digital,  &chPpamu_);
     createParam(INFICON_CH_DWELL_STRING,           asynParamUInt32Digital,  &chDwell_);
     createParam(INFICON_CH_START_MASS_STRING,      asynParamFloat64,        &chStartMass_);
     createParam(INFICON_CH_STOP_MASS_STRING,       asynParamFloat64,        &chStopMass_);
@@ -997,7 +997,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
     return asynSuccess;
 }
 
-asynStatus drvInficon::parsePressure(const char *jsonData, float *value)
+asynStatus drvInficon::parsePressure(const char *jsonData, double *value)
 {
     static const char *functionName = "parsePressure";
 

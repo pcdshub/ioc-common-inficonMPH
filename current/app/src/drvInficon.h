@@ -238,7 +238,7 @@ public:
     asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
     asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
     asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
-    asynStatus parsePressure(const char *jsonData, float *value);
+    asynStatus parsePressure(const char *jsonData, double *value);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
