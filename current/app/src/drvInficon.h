@@ -32,10 +32,10 @@
 #define INFICON_MAC_STRING                "MAC"
 //#define INFICON_ERROR_LOG_STRING          "ERROR_LOG"
 //General control
-#define INFICON_SET_EMI_STRING            "SET_EMI"
-#define INFICON_SET_EM_STRING             "SET_EM"
-#define INFICON_SET_RFGEN_STRING          "SET_RFGEN"
-#define INFICON_GET_FAN_STRING            "GET_FAN"
+#define INFICON_EMI_ON_STRING             "EMI_ON"
+#define INFICON_EM_ON_STRING              "EM_ON"
+#define INFICON_RFGEN_ON_STRING           "RFGEN_ON"
+#define INFICON_FAN_CNTRL_STRING          "FAN_CNTRL"
 #define INFICON_SHUTDOWN_STRING           "SHUTDOWN"
 //Sensor info
 #define INFICON_GET_SENS_INFO_STRING      "GET_SENS_INFO"
@@ -53,6 +53,7 @@
 #define INFICON_EMI_CML_ON_TIME_STRING    "EMI_CML_ON_T"
 #define INFICON_EM_CML_ON_TIME_STRING     "EM_CML_ON_T"
 #define INFICON_EMI_PRESS_TRIP_STRING     "EMI_PRESS_TRIP"
+#define INFICON_EM_PRESS_TRIP_STRING      "EM_PRESS_TRIP"
 //Diagnostic data
 #define INFICON_GET_DIAG_DATA_STRING      "GET_DIAG_DATA"
 #define INFICON_BOX_TEMP_STRING           "BOX_TEMP"
@@ -88,43 +89,22 @@
 #define INFICON_DWELL_MIN_STRING          "DWELL_MIN"
 //Scan setup
 #define INFICON_GET_CH_SCAN_SETUP_STRING  "GET_CH_SCAN_SETUP"
-#define INFICON_SET_START_CH_STRING       "SET_START_CH"
-#define INFICON_GET_START_CH_STRING       "GET_START_CH"
-#define INFICON_SET_STOP_CH_STRING        "SET_STOP_CH"
-#define INFICON_GET_STOP_CH_STRING        "GET_STOP_CH"
-#define INFICON_SET_CH_MODE_STRING        "SET_CH_MODE"
-#define INFICON_GET_CH_MODE_STRING        "GET_CH_MODE"
-#define INFICON_SET_CH_PPAMU_STRING       "SET_CH_PPAMU"
-#define INFICON_GET_CH_PPAMU_STRING       "GET_CH_PPAMU"
-#define INFICON_SET_CH_DWELL_STRING       "SET_CH_DWELL"
-#define INFICON_GET_CH_DWELL_STRING       "GET_CH_DWELL"
-#define INFICON_SET_CH_START_MASS_STRING  "SET_CH_START_MASS"
-#define INFICON_GET_CH_START_MASS_STRING  "GET_CH_START_MASS"
-#define INFICON_SET_CH_STOP_MASS_STRING   "SET_CH_STOP_MASS"
-#define INFICON_GET_CH_STOP_MASS_STRING   "GET_CH_STOP_MASS"
-#define INFICON_SET_SCAN_COUNT_STRING     "SET_SCAN_COUNT"
-#define INFICON_GET_SCAN_COUNT_STRING     "GET_SCAN_COUNT"
+#define INFICON_SET_CH_SCAN_SETUP_STRING  "SET_CH_SCAN_SETUP"
+#define INFICON_START_STOP_CH_STRING      "START_STOP_CH"
+#define INFICON_CH_MODE_STRING            "CH_MODE"
+#define INFICON_CH_PPAMU_STRING           "CH_PPAMU"
+#define INFICON_CH_DWELL_STRING           "CH_DWELL"
+#define INFICON_CH_DWELL_STRING           "CH_DWELL"
+#define INFICON_CH_START_MASS_STRING      "CH_START_MASS"
+#define INFICON_CH_STOP_MASS_STRING       "CH_STOP_MASS"
+#define INFICON_SCAN_COUNT_STRING         "SCAN_COUNT"
+#define INFICON_SCAN_MODE_STRING          "SCAN_MODE"
 #define INFICON_SCAN_START_STRING         "SCAN_START"
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
 #define MAX_INFICON_COMMAND_TYPES          10
 #define MAX_CHANNELS                       4
 #define MAX_SCAN_SIZE                      16384
-
-typedef enum {
-    stringCommand,
-    uint32Command,
-    int32Command,
-	float64Command,
-	setEmiCommand,
-	setEmCommand,
-	shutdownCommand,
-	scanStatCommand,
-	setChModeCommand,
-	scanStartCommand,
-	scanStopCommand,
-	errorLogCommand
-} commandType_t;
 
 typedef struct {
     char ip[32];
@@ -141,7 +121,7 @@ typedef struct {
 typedef struct {
     char sensName[20];
     char sensDesc[40];
-    unsigned int serialNumber;
+    unsigned int sensSN;
 } sensInfoStruct;
 
 typedef struct {
@@ -249,10 +229,6 @@ public:
 
     /* These are the methods that are new to this class */
     asynStatus inficonReadWrite(const char *request, char *response);
-    asynStatus parseInt32(const char *jsonData, epicsInt32 *value, commandType_t commandType);
-    asynStatus parseUInt32(const char *jsonData, epicsUInt32 *value, commandType_t commandType);
-    asynStatus parseFloat64(const char *jsonData, epicsFloat64 *value, commandType_t commandType);
-    asynStatus parseString(const char *jsonData, char *value, size_t *dataLen, commandType_t commandType);
     asynStatus parseScan(const char *jsonData, scanDataStruct *scanData);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
     asynStatus parseSensInfo(const char *jsonData, sensInfoStruct *sensInfo);
@@ -262,6 +238,7 @@ public:
     asynStatus parseSensDetect(const char *jsonData, sensDetectStruct *sensDetect);
     asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
     asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
+    asynStatus parsePressure(const char *jsonData, float *value);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
@@ -273,13 +250,10 @@ protected:
     int mac_;
     //int errorLog_;
     //General control parameters
-    int setEmi_;
-    int getEmi_;
-    int setEm_;
-    int getEm_;
-    int setRfGen_;
-    int getRfGen_;
-    int getFan_;
+    int emiOn_;
+    int emOn_;
+    int rfGenOn_;
+    int fanCntrl_;
     int shutdown_;
     //Sensor info parameters
     int getSensInfo_;
@@ -297,6 +271,7 @@ protected:
     int emiCmlOnTime_;
     int emCmlOnTime_;
     int emiPressTrip_;
+    int emPressTrip_;
     //Diagnostic data parameters
     int getDiagData_;
     int boxTemp_;
@@ -316,7 +291,7 @@ protected:
     int lastScan_;
     int currentScan_;
     int ppscan_;
-    int scanStat;
+    int scanStatus_;
     //Sensor detector parameters
     int getSensDetect_;
     int emVMax_;
@@ -332,22 +307,15 @@ protected:
     int dwelMin_;
     //Scan setup parameters
     int getChScanSetup_;
-    int setStartCh_;
-    int getStartCh_;
-    int setStopCh_;
-    int getStopCh_;
-    int setChMode_;
-    int getChMode_;
-    int setChPpamu_;
-    int getChPpamu_;
-    int setChDwell_;
-    int getChDwell_;
-    int setChStartMass_;
-    int getChStartMass_;
-    int setChStopMass_;
-    int getChStopMass_;
-    int setScanCount_;
-    int getScanCount_;
+    int setChScanSetup_;
+    int startStopCh_;
+    int chMode_;
+    int chPpamu_;
+    int chDwell_;
+    int chStartMass_;
+    int chStopMass_;
+    int scanCount_;
+    int scanMode_;
     int scanStart_;
     int scanStop_;
 
@@ -379,6 +347,7 @@ private:
     sensFiltStruct *sensFilt_;
     chScanSetupStruct *chScanSetup_;
     scanDataStruct *scanData_;
+	float totalPressure_;
 };
 
 #endif /* drvInficon_H */
