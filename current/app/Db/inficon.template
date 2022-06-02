@@ -15,8 +15,9 @@
 #    field(SCAN, "$(CSCAN) second")
 #}
 
-record(mbbi, "$(DEV):INFICON_STATE")
+record(mbbo, "$(DEV):INFICON_STATE")
 {
+#    field(PINI, "YES")
     field(DESC, "Current state")
     field(ZRVL, "0")
     field(ONVL, "1")
@@ -146,7 +147,7 @@ record(waveform,"$(DEV):GET_SCAN")
 
 record(stringout, "$(DEV):CH1_MODE")
 {
-    field(DESC, "Set P units CH1")
+    field(DESC, "Ch1 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT), 1)CH_MODE")
 	field(VAL,  "Sweep")
@@ -154,7 +155,7 @@ record(stringout, "$(DEV):CH1_MODE")
 
 record(stringout, "$(DEV):CH4_MODE")
 {
-    field(DESC, "Set P units CH1")
+    field(DESC, "Ch4 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT), 4)CH_MODE")
 	field(VAL,  "Single")
