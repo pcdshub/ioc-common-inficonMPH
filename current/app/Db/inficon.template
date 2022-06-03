@@ -219,9 +219,9 @@ record(longin, "$(DEV):EM_PRESS_TRIP")
 
 record(ai, "$(DEV):DEVICE_TEMP")
 {
-    field(DESC, "Device internal Temp")
+    field(DESC, "Device internal Temp.")
     field(DTYP, "asynFloat64")
-    field(INP,  "@asynMask($(PORT))BOX_TEMP")
+    field(INP,  "@asyn($(PORT))BOX_TEMP")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "C")
