@@ -216,3 +216,77 @@ record(longin, "$(DEV):EM_PRESS_TRIP")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_PRESS_TRIP")
     field(SCAN, "I/O Intr")
 }
+
+record(ai, "$(DEV):DEVICE_TEMP")
+{
+    field(DESC, "Device internal Temperature")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asynMask($(PORT))BOX_TEMP")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(longin, "$(DEV):ANODE_POTENTIAL")
+{
+    field(DESC, "Ion Source Anode Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)ANODE_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):EMI_CURRENT")
+{
+    field(DESC, "Ion Source Emi Current")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_CURRENT")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "uA")
+}
+
+record(longin, "$(DEV):FOCUS_POTENTIAL")
+{
+    field(DESC, "Ion Source Focus Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FOCUS_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):ELECTRON_ENERGY")
+{
+    field(DESC, "Ion Source Electron Energy")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)ELECT_ENERGY")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):FILAMENT_POTENTIAL")
+{
+    field(DESC, "Ion Source Filamet Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mV")
+}
+
+record(longin, "$(DEV):FIL_CURRENT")
+{
+    field(DESC, "Ion Source Filamet Current")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL_CURRENT")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mA")
+}
+
+record(longin, "$(DEV):EM_POTENTIAL")
+{
+    field(DESC, "Sens. Detect. EM Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mA")
+}
+
