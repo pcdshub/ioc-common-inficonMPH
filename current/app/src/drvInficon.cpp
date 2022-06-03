@@ -539,8 +539,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-		const char *chModeTemp = chScanSetup_[chNumber].chMode;
-        setStringParam(chNumber, chMode_, chModeTemp);
+        setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
         setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
         setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
         setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
