@@ -94,7 +94,6 @@
 #define INFICON_CH_MODE_STRING            "CH_MODE"
 #define INFICON_CH_PPAMU_STRING           "CH_PPAMU"
 #define INFICON_CH_DWELL_STRING           "CH_DWELL"
-#define INFICON_CH_DWELL_STRING           "CH_DWELL"
 #define INFICON_CH_START_MASS_STRING      "CH_START_MASS"
 #define INFICON_CH_STOP_MASS_STRING       "CH_STOP_MASS"
 #define INFICON_SCAN_COUNT_STRING         "SCAN_COUNT"
@@ -175,7 +174,7 @@ typedef struct {
     char chMode[32];
     double chStartMass;
     double chStopMass;
-    double chDwell;
+    unsigned int chDwell;
     unsigned int chPpamu;
 } chScanSetupStruct;
 

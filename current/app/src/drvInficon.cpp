@@ -484,7 +484,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDiagData(data_, diagData_);
         if (status != asynSuccess) return(status);
-        setDoubleParam(boxTemp_,diagData_->boxTemp);
+        setDoubleParam(boxTemp_, diagData_->boxTemp);
         setUIntDigitalParam(anodePotential_, diagData_->anodePot, 0xFFFFFFFF);
         setUIntDigitalParam(emiCurrent_, diagData_->emiCurrent, 0xFFFFFFFF);
         setUIntDigitalParam(focusPotential_, diagData_->focusPot, 0xFFFFFFFF);
@@ -516,7 +516,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(emVMax_, sensDetect_->emVMax, 0xFFFFFFFF);
         setUIntDigitalParam(emVMin_, sensDetect_->emVMin, 0xFFFFFFFF);
         setUIntDigitalParam(emV_, sensDetect_->emV, 0xFFFFFFFF);
-        setDoubleParam(emGain_,sensDetect_->emGain);
+        setDoubleParam(emGain_, sensDetect_->emGain);
         setUIntDigitalParam(emGainMass_, sensDetect_->emGainMass, 0xFFFFFFFF);
         //printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
     } else if (function == getSensFilt_) {
@@ -526,8 +526,8 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensFilt(data_, sensFilt_);
         if (status != asynSuccess) return(status);
-        setDoubleParam(massMax_,sensFilt_->massMax);
-        setDoubleParam(massMin_,sensFilt_->massMin);
+        setDoubleParam(massMax_, sensFilt_->massMax);
+        setDoubleParam(massMin_, sensFilt_->massMin);
         setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
         setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
         //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
@@ -539,7 +539,13 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-        //printf("%s::%s chNumber:%d chMode:%s chDwel:%f chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
+        setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
+        setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
+        //setDoubleParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell);
+        setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
+        setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
+        printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
