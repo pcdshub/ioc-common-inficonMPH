@@ -526,6 +526,10 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensFilt(data_, sensFilt_);
         if (status != asynSuccess) return(status);
+        setDoubleParam(massMax_,sensFilt_->massMax);
+        setDoubleParam(massMin_,sensFilt_->massMin);
+        setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
+        setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
         //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
     } else if (function == getChScanSetup_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;

@@ -378,12 +378,41 @@ record(longin, "$(DEV):EM_GAIN_MASS")
     field(EGU,  "cAMU")
 }
 
+record(ai, "$(DEV):MASS_MAX")
+{
+    field(DESC, "Max mass")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))MASS_MAX")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "AMU")
+}
 
+record(ai, "$(DEV):MASS_MIN")
+{
+    field(DESC, "Min mass")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))MASS_MIN")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "AMU")
+}
 
+record(longin, "$(DEV):DWELL_MAX")
+{
+    field(DESC, "Max Dwell supported")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)DWELL_MAX")
+    field(SCAN, "I/O Intr")
+}
 
-
-
-
+record(longin, "$(DEV):DWELL_MIN")
+{
+    field(DESC, "Min Dwell supported")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)DWELL_MIN")
+    field(SCAN, "I/O Intr")
+}
 
 
 
