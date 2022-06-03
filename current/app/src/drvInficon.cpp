@@ -513,6 +513,11 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensDetect(data_, sensDetect_);
         if (status != asynSuccess) return(status);
+        setUIntDigitalParam(emVMax_, sensDetect_->emVMax, 0xFFFFFFFF);
+        setUIntDigitalParam(emVMin_, sensDetect_->emVMin, 0xFFFFFFFF);
+        setUIntDigitalParam(emV_, sensDetect_->emV, 0xFFFFFFFF);
+        setDoubleParam(emGain_,sensDetect_->emGain);
+        setUIntDigitalParam(emGainMass_, sensDetect_->emGainMass, 0xFFFFFFFF);
         //printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
     } else if (function == getSensFilt_) {
         sprintf(request,"GET /mmsp/sensorFilter/get\r\n"
