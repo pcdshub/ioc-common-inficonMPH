@@ -23,16 +23,35 @@ record(mbbo, "$(DEV):INFICON_STATE")
 	field(VAL,  "0")
 }
 
+record(bi, "$(DEV):START_MONITORING")
+{
+    field(DESC, "Start monitoring")
+	field(FLNK, "$(DEV):SET_READ_STATE")
+}
+
 record(bi, "$(DEV):START_CYCLE_READ")
 {
     field(DESC, "Start cycle read")
 	field(FLNK, "$(DEV):SET_READ_STATE")
 }
 
-record(bi, "$(DEV):STOP_CYCLE_READ")
+record(bi, "$(DEV):START_LEAKCHECK")
 {
-    field(DESC, "Stop cycle read")
+    field(DESC, "Start leakcheck")
+	field(FLNK, "$(DEV):SET_READ_STATE")
+}
+
+record(bi, "$(DEV):STOP_SCAN")
+{
+    field(DESC, "Stop scanning")
 	field(FLNK, "$(DEV):SET_IDLE_STATE")
+}
+
+record(longout, "$(DEV):SET_MONITORING_STATE")
+{
+    field(DESC, "Set monitoring state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL")
+	field(VAL,  "1")
 }
 
 record(longout, "$(DEV):SET_READ_STATE")
@@ -40,6 +59,13 @@ record(longout, "$(DEV):SET_READ_STATE")
     field(DESC, "Set read in cylcles state")
     field(OUT,  "$(DEV):INFICON_STATE.VAL")
 	field(VAL,  "2")
+}
+
+record(longout, "$(DEV):SET_LEAKCHECK_STATE")
+{
+    field(DESC, "Set leakcheck state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL")
+	field(VAL,  "3")
 }
 
 record(longout, "$(DEV):SET_IDLE_STATE")
