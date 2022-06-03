@@ -500,6 +500,11 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseScanInfo(data_, scanInfo_);
         if (status != asynSuccess) return(status);
+        setUIntDigitalParam(firstScan_, scanInfo_->firstScan, 0xFFFFFFFF);
+        setUIntDigitalParam(lastScan_, scanInfo_->lastScan, 0xFFFFFFFF);
+        setUIntDigitalParam(currentScan_, scanInfo_->currScan, 0xFFFFFFFF);
+        setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
+        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0xFFFFFFFF);
         //printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
     } else if (function == getSensDetect_) {
         sprintf(request,"GET /mmsp/sensorDetector/get\r\n"

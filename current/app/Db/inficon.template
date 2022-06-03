@@ -290,3 +290,55 @@ record(longin, "$(DEV):EM_POTENTIAL")
     field(EGU,  "mA")
 }
 
+record(longin, "$(DEV):FIRST_SCAN")
+{
+    field(DESC, "First scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIRST_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):LAST_SCAN")
+{
+    field(DESC, "Last complete scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)LAST_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):CURRENT_SCAN")
+{
+    field(DESC, "Current scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)CURRENT_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):PPSCAN")
+{
+    field(DESC, "Points per scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PPSCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(bi, "$(DEV):PPSCAN")
+{
+    field(DESC, "Points per scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")
+    field(ZNAM, "STOP")
+    field(ONAM, "RUNNING")
+    field(SCAN, "I/O Intr")
+}
+
+
+
+
+
+
+
+
+
+
+
