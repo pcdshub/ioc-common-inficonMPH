@@ -267,7 +267,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
     *value = 0;
 
     //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
-    callParamCallbacks(chNumber);
+    //callParamCallbacks(chNumber);
 	return status;
 }
 
