@@ -17,8 +17,22 @@ record(mbbo, "$(DEV):INFICON_STATE")
     field(THVL, "3")
     field(ZRST, "IDLE")
     field(ONST, "MONITORING")
-    field(TWST, "READ IN CYCLES")
+    field(TWST, "READ_IN_CYCLES")
     field(THST, "LEAKCHEK")
+}
+
+record(longout, "$(DEV):START_CYCLE_READ")
+{
+    field(DESC, "Start cycle read")
+    field(OUT,  "$(DEV):INFICON_STATE.RVAL")
+	field(VAL,  "4")
+}
+
+record(longout, "$(DEV):STOP_CYCLE_READ")
+{
+    field(DESC, "Stop cycle read")
+    field(OUT,  "$(DEV):INFICON_STATE.RVAL")
+	field(VAL,  "0")
 }
 
 record(stringin, "$(DEV):GET_COMM_PARAM")
@@ -85,18 +99,36 @@ record(stringin, "$(DEV):GET_SENS_FILT")
     field(SCAN, "$(CSCAN) second")
 }
 
-record(ai, "$(DEV):GET_PRESS")
+record(ai, "$(DEV):TOTAL_PRESS_RBV")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))GET_PRESS")
     field(SCAN, "$(DSCAN) second")
 }
 
-record(waveform,"$(DEV):GET_SCAN")
+record(waveform,"$(DEV):MONITORING_SCAN")
 {
     field(DTYP, "asynFloat32ArrayIn")
     field(INP,  "@asyn($(PORT))GET_SCAN")
     field(SCAN, "$(CSCAN) second")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+    field(PREC, "4")
+}
+
+record(waveform,"$(DEV):CYCLE_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+    field(PREC, "4")
+}
+
+record(waveform,"$(DEV):LEAKCHECK_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
     field(PREC, "4")
@@ -156,7 +188,7 @@ record(longin, "$(DEV):SENS_SN")
     field(SCAN, "I/O Intr")
 }
 
-record(mbbiDirect, "$(DEV):SYST_STAT")
+record(mbbiDirect, "$(DEV):SYST_STAT_RBV")
 {
     field(DESC, "Get system status")
     field(DTYP, "asynUInt32Digital")
@@ -164,7 +196,7 @@ record(mbbiDirect, "$(DEV):SYST_STAT")
     field(SCAN, "I/O Intr")
 }
 
-record(mbbiDirect, "$(DEV):HW_ERRORS")
+record(mbbiDirect, "$(DEV):HW_ERR_RBV")
 {
     field(DESC, "Get hw errors")
     field(DTYP, "asynUInt32Digital")
@@ -172,7 +204,7 @@ record(mbbiDirect, "$(DEV):HW_ERRORS")
     field(SCAN, "I/O Intr")
 }
 
-record(mbbiDirect, "$(DEV):HW_WARNINGS")
+record(mbbiDirect, "$(DEV):HW_WARN_RBV")
 {
     field(DESC, "Get system status")
     field(DTYP, "asynUInt32Digital")
@@ -180,7 +212,7 @@ record(mbbiDirect, "$(DEV):HW_WARNINGS")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):PWR_ON_TIME")
+record(longin, "$(DEV):PWR_ON_TIME_RBV")
 {
     field(DESC, "Pwr on time")
     field(DTYP, "asynUInt32Digital")
@@ -188,7 +220,7 @@ record(longin, "$(DEV):PWR_ON_TIME")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):EMI_ON_TIME")
+record(longin, "$(DEV):EMI_ON_TIME_RBV")
 {
     field(DESC, "Emi on time")
     field(DTYP, "asynUInt32Digital")
@@ -196,7 +228,7 @@ record(longin, "$(DEV):EMI_ON_TIME")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):EM_ON_TIME")
+record(longin, "$(DEV):EM_ON_TIME_RBV")
 {
     field(DESC, "Em on time")
     field(DTYP, "asynUInt32Digital")
@@ -204,7 +236,7 @@ record(longin, "$(DEV):EM_ON_TIME")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):EM_CML_ON_TIME")
+record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
 {
     field(DESC, "Em cumulative on time")
     field(DTYP, "asynUInt32Digital")
@@ -212,7 +244,7 @@ record(longin, "$(DEV):EM_CML_ON_TIME")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):EM_PRESS_TRIP")
+record(longin, "$(DEV):EM_PRESS_TRIP_RBV")
 {
     field(DESC, "Em press. trip counter")
     field(DTYP, "asynUInt32Digital")
@@ -220,7 +252,7 @@ record(longin, "$(DEV):EM_PRESS_TRIP")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(DEV):DEVICE_TEMP")
+record(ai, "$(DEV):DEVICE_TEMP_RBV")
 {
     field(DESC, "Device internal Temp.")
     field(DTYP, "asynFloat64")
@@ -230,7 +262,7 @@ record(ai, "$(DEV):DEVICE_TEMP")
     field(EGU,  "C")
 }
 
-record(longin, "$(DEV):ANODE_POTENTIAL")
+record(longin, "$(DEV):ANODE_POT_RBV")
 {
     field(DESC, "Ion Source Anode Potential")
     field(DTYP, "asynUInt32Digital")
@@ -239,7 +271,7 @@ record(longin, "$(DEV):ANODE_POTENTIAL")
     field(EGU,  "cV")
 }
 
-record(longin, "$(DEV):EMI_CURRENT")
+record(longin, "$(DEV):EMI_CURR_RBV")
 {
     field(DESC, "Ion Source Emi Current")
     field(DTYP, "asynUInt32Digital")
@@ -248,7 +280,7 @@ record(longin, "$(DEV):EMI_CURRENT")
     field(EGU,  "uA")
 }
 
-record(longin, "$(DEV):FOCUS_POTENTIAL")
+record(longin, "$(DEV):FOCUS_POT_RBV")
 {
     field(DESC, "Ion Source Focus Potential")
     field(DTYP, "asynUInt32Digital")
@@ -257,7 +289,7 @@ record(longin, "$(DEV):FOCUS_POTENTIAL")
     field(EGU,  "cV")
 }
 
-record(longin, "$(DEV):ELECT_ENERGY")
+record(longin, "$(DEV):ELECT_ENG_RBV")
 {
     field(DESC, "Ion Source Electron Energy")
     field(DTYP, "asynUInt32Digital")
@@ -266,7 +298,7 @@ record(longin, "$(DEV):ELECT_ENERGY")
     field(EGU,  "cV")
 }
 
-record(longin, "$(DEV):FIL_POTENTIAL")
+record(longin, "$(DEV):FIL_POT_RBV")
 {
     field(DESC, "Ion Source Filamet Potential")
     field(DTYP, "asynUInt32Digital")
@@ -275,7 +307,7 @@ record(longin, "$(DEV):FIL_POTENTIAL")
     field(EGU,  "mV")
 }
 
-record(longin, "$(DEV):FIL_CURRENT")
+record(longin, "$(DEV):FIL_CURR_RBV")
 {
     field(DESC, "Ion Source Filamet Current")
     field(DTYP, "asynUInt32Digital")
@@ -284,7 +316,7 @@ record(longin, "$(DEV):FIL_CURRENT")
     field(EGU,  "mA")
 }
 
-record(longin, "$(DEV):EM_POTENTIAL")
+record(longin, "$(DEV):EM_POT_RBV")
 {
     field(DESC, "Sens. Detect. EM Potential")
     field(DTYP, "asynUInt32Digital")
@@ -335,7 +367,7 @@ record(bi, "$(DEV):SCAN_STAT")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):EM_V")
+record(longin, "$(DEV):EM_V_RBV")
 {
     field(DESC, "Elect. Multiplier Voltage")
     field(DTYP, "asynUInt32Digital")
@@ -344,7 +376,7 @@ record(longin, "$(DEV):EM_V")
     field(EGU,  "V")
 }
 
-record(longin, "$(DEV):EM_V_MAX")
+record(longin, "$(DEV):EM_V_MAX_RBV")
 {
     field(DESC, "EM Max Voltage")
     field(DTYP, "asynUInt32Digital")
@@ -353,7 +385,7 @@ record(longin, "$(DEV):EM_V_MAX")
     field(EGU,  "V")
 }
 
-record(longin, "$(DEV):EM_V_MIN")
+record(longin, "$(DEV):EM_V_MIN_RBV")
 {
     field(DESC, "EM Min Voltage")
     field(DTYP, "asynUInt32Digital")
@@ -362,7 +394,7 @@ record(longin, "$(DEV):EM_V_MIN")
     field(EGU,  "V")
 }
 
-record(ai, "$(DEV):EM_GAIN")
+record(ai, "$(DEV):EM_GAIN_RBV")
 {
     field(DESC, "EM Gain")
     field(DTYP, "asynFloat64")
@@ -371,7 +403,7 @@ record(ai, "$(DEV):EM_GAIN")
     field(PREC, "2")
 }
 
-record(longin, "$(DEV):EM_GAIN_MASS")
+record(longin, "$(DEV):EM_GAIN_MASS_RBV")
 {
     field(DESC, "EM Gain Mass")
     field(DTYP, "asynUInt32Digital")
@@ -380,7 +412,7 @@ record(longin, "$(DEV):EM_GAIN_MASS")
     field(EGU,  "cAMU")
 }
 
-record(ai, "$(DEV):MASS_MAX")
+record(ai, "$(DEV):MASS_MAX_RBV")
 {
     field(DESC, "Max mass")
     field(DTYP, "asynFloat64")
@@ -390,7 +422,7 @@ record(ai, "$(DEV):MASS_MAX")
     field(EGU,  "AMU")
 }
 
-record(ai, "$(DEV):MASS_MIN")
+record(ai, "$(DEV):MASS_MIN_RBV")
 {
     field(DESC, "Min mass")
     field(DTYP, "asynFloat64")
@@ -400,7 +432,7 @@ record(ai, "$(DEV):MASS_MIN")
     field(EGU,  "AMU")
 }
 
-record(longin, "$(DEV):DWELL_MAX")
+record(longin, "$(DEV):DWELL_MAX_RBV")
 {
     field(DESC, "Max Dwell supported")
     field(DTYP, "asynUInt32Digital")
@@ -408,7 +440,7 @@ record(longin, "$(DEV):DWELL_MAX")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):DWELL_MIN")
+record(longin, "$(DEV):DWELL_MIN_RBV")
 {
     field(DESC, "Min Dwell supported")
     field(DTYP, "asynUInt32Digital")
