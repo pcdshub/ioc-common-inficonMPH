@@ -11,6 +11,7 @@ record(mbbo, "$(DEV):INFICON_STATE")
 {
 #    field(PINI, "YES")
     field(DESC, "Current state")
+    field(DTYP, "Raw Soft Channel")
     field(ZRVL, "0")
     field(ONVL, "1")
     field(TWVL, "2")
@@ -25,7 +26,7 @@ record(longout, "$(DEV):START_CYCLE_READ")
 {
     field(DESC, "Start cycle read")
     field(OUT,  "$(DEV):INFICON_STATE.RVAL")
-	field(VAL,  "4")
+	field(VAL,  "2")
 }
 
 record(longout, "$(DEV):STOP_CYCLE_READ")
