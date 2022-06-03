@@ -322,9 +322,9 @@ record(longin, "$(DEV):PPSCAN")
     field(SCAN, "I/O Intr")
 }
 
-record(bi, "$(DEV):PPSCAN")
+record(bi, "$(DEV):SCAN_STAT")
 {
-    field(DESC, "Points per scan number")
+    field(DESC, "Scan running status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")
     field(ZNAM, "STOP")
