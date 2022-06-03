@@ -26,7 +26,7 @@ record(mbbo, "$(DEV):INFICON_STATE")
 record(bi, "$(DEV):START_MONITORING")
 {
     field(DESC, "Start monitoring")
-	field(FLNK, "$(DEV):SET_READ_STATE")
+	field(FLNK, "$(DEV):SET_MONITOR_STATE")
 }
 
 record(bi, "$(DEV):START_CYCLE_READ")
@@ -38,7 +38,7 @@ record(bi, "$(DEV):START_CYCLE_READ")
 record(bi, "$(DEV):START_LEAKCHECK")
 {
     field(DESC, "Start leakcheck")
-	field(FLNK, "$(DEV):SET_READ_STATE")
+	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
 }
 
 record(bi, "$(DEV):STOP_SCAN")
@@ -47,7 +47,7 @@ record(bi, "$(DEV):STOP_SCAN")
 	field(FLNK, "$(DEV):SET_IDLE_STATE")
 }
 
-record(longout, "$(DEV):SET_MONITORING_STATE")
+record(longout, "$(DEV):SET_MONITOR_STATE")
 {
     field(DESC, "Set monitoring state")
     field(OUT,  "$(DEV):INFICON_STATE.VAL")
@@ -61,7 +61,7 @@ record(longout, "$(DEV):SET_READ_STATE")
 	field(VAL,  "2")
 }
 
-record(longout, "$(DEV):SET_LEAKCHECK_STATE")
+record(longout, "$(DEV):SET_LEAKCHK_STATE")
 {
     field(DESC, "Set leakcheck state")
     field(OUT,  "$(DEV):INFICON_STATE.VAL")
