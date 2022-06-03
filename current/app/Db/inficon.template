@@ -7,14 +7,6 @@
 ##
 ##
 
-#record(mbbiDirect, "$(DEV):SYST_STAT")
-#{
-#    field(DESC, "read system status")
-#    field(DTYP, "asynUInt32Digital")
-#    field(INP,  "@asynMask($(PORT) 0 0xFFFFFFFF)SYST_STAT")
-#    field(SCAN, "$(CSCAN) second")
-#}
-
 record(mbbo, "$(DEV):INFICON_STATE")
 {
 #    field(PINI, "YES")
@@ -159,4 +151,68 @@ record(stringout, "$(DEV):CH4_MODE")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT), 4)CH_MODE")
 	field(VAL,  "Single")
+}
+
+record(mbbiDirect, "$(DEV):SYST_STAT")
+{
+    field(DESC, "Get system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SYST_STAT")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbiDirect, "$(DEV):HW_ERRORS")
+{
+    field(DESC, "Get hw errors")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_ERROR")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbiDirect, "$(DEV):HW_WARNINGS")
+{
+    field(DESC, "Get system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_WARN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):PWR_ON_TIME")
+{
+    field(DESC, "Pwr on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PWR_ON_T")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):EMI_ON_TIME")
+{
+    field(DESC, "Emi on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_ON_T")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):EM_ON_TIME")
+{
+    field(DESC, "Em on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_ON_T")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):EM_CML_ON_TIME")
+{
+    field(DESC, "Em cumulative on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_CML_ON_T")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):EM_PRESS_TRIP")
+{
+    field(DESC, "Em pressure trip counter")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_PRESS_TRIP")
+    field(SCAN, "I/O Intr")
 }

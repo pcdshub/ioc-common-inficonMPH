@@ -469,6 +469,14 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDevStatus(data_, devStatus_);
         if (status != asynSuccess) return(status);
+        setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
+        setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
+        setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
+        setUIntDigitalParam(pwrOnTime_, devStatus_->pwrOnTime, 0xFFFFFFFF);
+        setUIntDigitalParam(emiOnTime_, devStatus_->emiOnTime, 0xFFFFFFFF);
+        setUIntDigitalParam(emOnTime_, devStatus_->emOnTime, 0xFFFFFFFF);
+        setUIntDigitalParam(emCmlOnTime_, devStatus_->emCmlOnTime, 0xFFFFFFFF);
+        setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
     } else if (function == getDiagData_) {
         sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
         "\r\n");
