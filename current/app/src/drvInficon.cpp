@@ -492,7 +492,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(filPotential_, diagData_->filPot, 0xFFFFFFFF);
         setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
         setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
-        //printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
+        printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
     } else if (function == getScanInfo_) {
         sprintf(request,"GET /mmsp/scanInfo/get\r\n"
         "\r\n");
