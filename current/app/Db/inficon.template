@@ -276,7 +276,7 @@ record(longin, "$(DEV):FIL_CURRENT")
 {
     field(DESC, "Ion Source Filamet Current")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asyn($(PORT),0,0xFFFFFFFF)FIL_CURRENT")
+    field(INP,  "@asynMask($(PORT))FIL_CURRENT")
     field(SCAN, "I/O Intr")
     field(EGU,  "mA")
 }
