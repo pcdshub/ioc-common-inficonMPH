@@ -20,7 +20,7 @@ record(mbbo, "$(DEV):INFICON_STATE")
     field(ONST, "MONITORING")
     field(TWST, "READ_IN_CYCLES")
     field(THST, "LEAKCHEK")
-    field(SCAN, "$1 second")
+    field(SCAN, "1 second")
 }
 
 record(bi, "$(DEV):START_CYCLE_READ")
