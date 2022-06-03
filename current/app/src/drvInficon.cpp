@@ -275,6 +275,8 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask)
 {
     int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
+    char request[HTTP_REQUEST_SIZE];
     static const char *functionName = "writeUInt32D";
 
     if (function == emiOn_) {
@@ -294,7 +296,10 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     } else if (function == scanStart_) {
         ;
     } else if (function == scanStop_) {
-        ;
+        sprintf(request,"GET /mmsp/scanSetup/scanStop/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",

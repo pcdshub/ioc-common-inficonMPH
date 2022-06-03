@@ -41,10 +41,21 @@ record(bi, "$(DEV):START_LEAKCHECK")
 	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
 }
 
-record(bi, "$(DEV):STOP_SCAN")
+#record(bi, "$(DEV):STOP_SCAN")
+#{
+#    field(DESC, "Stop scanning")
+#	field(FLNK, "$(DEV):SET_IDLE_STATE")
+#}
+
+record(bo, "$(DEV):STOP_SCAN")
 {
-    field(DESC, "Stop scanning")
+    field(DESC, "Stop scanning command")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
+    field(ZNAM, "IMMEDIATELLY")
+    field(ONAM, "END_OF_SCAN")
 	field(FLNK, "$(DEV):SET_IDLE_STATE")
+	field(VAL,  "0")
 }
 
 record(longout, "$(DEV):SET_MONITOR_STATE")
