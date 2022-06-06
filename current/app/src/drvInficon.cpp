@@ -306,7 +306,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     } else if (function == startStopCh_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         sprintf(request,"GET /mmsp/scanSetup/set?startChannel=%d&stopChannel=%d\r\n"
-        "\r\n", chNumber, value);
+        "\r\n", chNumber, chNumber);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chPpamu_) {
@@ -413,19 +413,30 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 {
     int function = pasynUser->reason;
+    char request[HTTP_REQUEST_SIZE];
+	int chNumber;
     static const char *functionName = "writeFloat64";
+	
+    pasynManager->getAddr(pasynUser, &chNumber);
 
     if (function == chStartMass_) {
-        ;
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/startMass/set?%.2f\r\n"
+        "\r\n", chNumber, value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chStopMass_) {
-        ;
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/stopMass/set?%.2f\r\n"
+        "\r\n", chNumber, value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    //callParamCallbacks();
     return asynSuccess;
 }
 
@@ -445,8 +456,9 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     *nactual = 0;
 	
     if (function == getScan_) {
-        sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
-        "\r\n");
+        getIntegerParam(scanMode_, &scanMode)
+        sprintf(request,"GET /mmsp/measurement/scans/%d/get\r\n"
+        "\r\n", scanMode);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
 		status = parseScan(data_, scanData_);
@@ -598,10 +610,28 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual)
 {
     int function = pasynUser->reason;
+    char request[HTTP_REQUEST_SIZE];
+	int chNumber;
+	std::string chMode;
+	double startMass;
+	double stopMass;
+	unsigned int ppamu;
+	unsigned int dwell;
     static const char *functionName = "writeOctet";
 
-    if (function == chMode_) {
-        ;
+    pasynManager->getAddr(pasynUser, &chNumber);
+
+    if (function == setChScanSetup_) {
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        getStringParam(chNumber, chMode_, chMode);
+        getDoubleParam(chNumber, chStartMass_, &startMass);
+        getDoubleParam(chNumber, chStopMass_, &stopMass);
+        getUIntDigitalParam(chNumber, chPpamu_, &ppamu, 0xFFFFFFFF);
+        getUIntDigitalParam(chNumber, chDwell_, &dwell, 0xFFFFFFFF);
+        sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
+        "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
