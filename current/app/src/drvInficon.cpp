@@ -269,7 +269,7 @@ asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value
 asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask)
 {
     int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
+    //asynStatus status = asynSuccess;
     char request[HTTP_REQUEST_SIZE];
 	int chNumber;
     static const char *functionName = "writeUInt32D";
@@ -646,7 +646,7 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
 {
     asynStatus status = asynSuccess;
     int eomReason;
-    int autoConnect;
+    //int autoConnect;
     size_t nwrite, nread;
     int requestSize = 0;
 	//int responseSize = 0;
