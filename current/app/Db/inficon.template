@@ -187,11 +187,11 @@ record(longout, "$(DEV):SET_CH1_ASINPUT")
 }
 
 # SET CH DWELL
-record(mbbi, "$(DEV):CH1_DWELL")
+record(mbbo, "$(DEV):CH1_DWELL")
 {
     field(DESC, "Set CH1 dwell")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_DWELL")
+    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -226,11 +226,11 @@ record(mbbi, "$(DEV):CH1_DWELL")
     field(FFST, "16384")
 }
 
-record(mbbi, "$(DEV):CH4_DWELL")
+record(mbbo, "$(DEV):CH4_DWELL")
 {
     field(DESC, "Set CH4 dwell")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
+    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -267,11 +267,11 @@ record(mbbi, "$(DEV):CH4_DWELL")
 
 
 # SET CH PPAMU
-record(mbbi, "$(DEV):CH1_PPAMU")
+record(mbbo, "$(DEV):CH1_PPAMU")
 {
     field(DESC, "Set CH1 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_PPAMU")
+    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_PPAMU")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -292,11 +292,11 @@ record(mbbi, "$(DEV):CH1_PPAMU")
     field(EIST, "100")
 }
 
-record(mbbi, "$(DEV):CH4_PPAMU")
+record(mbbo, "$(DEV):CH4_PPAMU")
 {
     field(DESC, "Set CH4 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_PPAMU")
+    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_PPAMU")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -364,7 +364,7 @@ record(stringout, "$(DEV):CH1_MODE")
     field(DESC, "Ch1 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),1)CH_MODE")
-	field(VAL,  "Sweep")
+#    field(VAL,  "Sweep")
 }
 
 record(stringout, "$(DEV):CH4_MODE")
@@ -372,7 +372,7 @@ record(stringout, "$(DEV):CH4_MODE")
     field(DESC, "Ch4 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),4)CH_MODE")
-	field(VAL,  "Single")
+#    field(VAL,  "Single")
 }
 
 # SET SCAN SETUP FOR CH
