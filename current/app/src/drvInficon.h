@@ -17,7 +17,7 @@
 //User defines
 #define PORT_PREFIX "PORT_"
 #define HTTP_OK_CODE "200"
-#define DEVICE_RW_TIMEOUT 0.2
+#define DEVICE_RW_TIMEOUT 0.25
 #define HTTP_REQUEST_SIZE 512
 #define HTTP_RESPONSE_SIZE 150000
 

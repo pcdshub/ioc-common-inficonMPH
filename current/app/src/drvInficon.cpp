@@ -179,7 +179,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     sensDetect_ = new sensDetectStruct;
     sensFilt_ = new sensFiltStruct;
     chScanSetup_ = new chScanSetupStruct[5];
-	scanData_ = new scanDataStruct;
+    scanData_ = new scanDataStruct;
 	
 
     /* Connect to asyn octet port with asynOctetSyncIO */
@@ -218,8 +218,8 @@ drvInficon::~drvInficon() {
     delete scanInfo_;
     delete sensDetect_;
     delete sensFilt_;
-	delete chScanSetup_;
-	delete scanData_;
+    delete chScanSetup_;
+    delete scanData_;
 }
 
 /***********************/
@@ -277,24 +277,55 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
     char request[HTTP_REQUEST_SIZE];
+	int chNumber;
     static const char *functionName = "writeUInt32D";
+	
+    pasynManager->getAddr(pasynUser, &chNumber);
 
     if (function == emiOn_) {
-        ;
+        sprintf(request,"GET /mmsp/generalControl/setEmission/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+//maybe add emissionStandby command? This target puts the ion source filament in standby, a warm but not emitting state.
     } else if (function == emOn_) {
-        ;
+        sprintf(request,"GET /mmsp/generalControl/setEM/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == rfGenOn_) {
-        ;
+        sprintf(request,"GET /mmsp/generalControl/rfGeneratorSet/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == shutdown_) {
-        ;
+        sprintf(request,"GET /mmsp/generalControl/shutdown/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startStopCh_) {
-		;
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        sprintf(request,"GET /mmsp/scanSetup/set?startChannel=%d&stopChannel=%d\r\n"
+        "\r\n", chNumber, value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chPpamu_) {
-        ;
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/set?%d\r\n"
+        "\r\n", chNumber, value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chDwell_) {
-        ;
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/dwell/set?%d\r\n"
+        "\r\n", chNumber, value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == scanStart_) {
-        ;
+        sprintf(request,"GET /mmsp/scanSetup/scanStart/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == scanStop_) {
         sprintf(request,"GET /mmsp/scanSetup/scanStop/set?%d\r\n"
         "\r\n", value);
@@ -331,12 +362,14 @@ asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
     int function = pasynUser->reason;
-    //epicsUInt16 buffer[4];
-    //int bufferLen;
+    char request[HTTP_REQUEST_SIZE];
     static const char *functionName = "writeInt32";
 
     if (function == scanCount_) {
-		;
+        sprintf(request,"GET /mmsp/scanSetup/scanCount/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -373,7 +406,6 @@ asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    //callParamCallbacks();
     return asynSuccess;
 }
 
@@ -407,6 +439,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
     char request[HTTP_REQUEST_SIZE];
+	int chMode;
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
