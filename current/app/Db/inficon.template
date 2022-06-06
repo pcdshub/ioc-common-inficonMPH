@@ -524,14 +524,6 @@ record(stringin, "$(DEV):CH1_MODE_RBV")
     field(SCAN, "I/O Intr")
 }
 
-record(stringin, "$(DEV):CH0_MODE_RBV")
-{
-    field(DESC, "Ch1 mode")
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT),0)CH_MODE")
-    field(SCAN, "I/O Intr")
-}
-
 record(mbbi, "$(DEV):CH1_DWELL_RBV")
 {
     field(DESC, "CH1 dwell")
