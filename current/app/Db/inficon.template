@@ -82,7 +82,7 @@ record(calcout, "$(DEV):CYCLE_READ_TRIG")
 {
     field(DESC, "Set N of scans per hour")
     field(SCAN, "1 second")
-    field(CALC, "(A+1)%(3600/B)=0?1:0")
+    field(CALC, "((A+1)%(3600/B))=0?1:0")
     field(INPB, "$(DEV):N_SCANS_PER_HOUR.VAL")
     field(OUT,  "$(DEV):CYCLE_TEST.PROC")
 }
