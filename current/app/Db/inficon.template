@@ -68,6 +68,31 @@ record(longout, "$(DEV):SET_IDLE_STATE")
 	field(VAL,  "0")
 }
 
+# N OF SCANS PER HOUR for CYCLE READ
+record(longout, "$(DEV):N_SCANS_PER_HOUR")
+{
+    field(PINI, "YES")
+    field(DESC, "Set N of scans per hour")
+    field(DRVH, "1")
+    field(DRVL, "60")
+	field(VAL,  "4")
+}
+
+record(calcout, "$(DEV):CYCLE_READ_TRIG")
+{
+    field(DESC, "Set N of scans per hour")
+    field(SCAN, "1 second")
+    field(CALC, "(A+1)%(3600/B)=0?1:0")
+    field(INPB, "$(DEV):N_SCANS_PER_HOUR.VAL")
+    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
+}
+
+record(bi, "$(DEV):CYCLE_TEST")
+{
+    field(DESC, "Test")
+	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+}
+
 # SCAN STOP IMMEDIATELLY
 record(bi, "$(DEV):STOP_SCAN")
 {
@@ -307,8 +332,8 @@ record(ao, "$(DEV):SET_CH1_START_MASS")
     field(DESC, "Set Ch1 start Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
-    field(HOPR, "200.0")
-    field(LOPR, "0.0")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
     field(PREC, "2")
 }
 
@@ -317,8 +342,8 @@ record(ao, "$(DEV):SET_CH4_START_MASS")
     field(DESC, "Set Ch4 start Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
-    field(HOPR, "200.0")
-    field(LOPR, "0.0")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
     field(PREC, "2")
 }
 
@@ -328,8 +353,8 @@ record(ao, "$(DEV):SET_CH1_STOP_MASS")
     field(DESC, "Set Ch1 stop Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
-    field(HOPR, "200.0")
-    field(LOPR, "0.0")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
     field(PREC, "2")
 }
 
