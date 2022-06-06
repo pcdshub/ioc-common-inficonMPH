@@ -439,7 +439,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
     char request[HTTP_REQUEST_SIZE];
-	int chMode;
+	int scanMode;
     static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
@@ -580,9 +580,11 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
         setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
         setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
-        setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
-        setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
-        //printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        //setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
+        //setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
+        setUIntDigitalParam(chNumber, chDwell_, 128, 0xFFFFFFFF);
+        setUIntDigitalParam(chNumber, chPpamu_, 50, 0xFFFFFFFF);
+        printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
