@@ -630,8 +630,13 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
         getDoubleParam(chNumber, chStopMass_, &stopMass);
         getUIntDigitalParam(chNumber, chPpamu_, &ppamu, 0xFFFFFFFF);
         getUIntDigitalParam(chNumber, chDwell_, &dwell, 0xFFFFFFFF);
-        sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
-        "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
+		if (strcmp(chMode, "Single") == 0) {
+            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
+            "\r\n", chNumber, chMode, startMass, ppamu, dwell);
+        } else {
+            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
+            "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
+        }
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
