@@ -41,13 +41,13 @@ record(bi, "$(DEV):START_LEAKCHECK")
 	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
 }
 
-#record(bi, "$(DEV):STOP_SCAN")
-#{
-#    field(DESC, "Stop scanning")
-#	field(FLNK, "$(DEV):SET_IDLE_STATE")
-#}
+record(bi, "$(DEV):STOP_SCAN")
+{
+    field(DESC, "Stop scanning")
+	field(FLNK, "$(DEV):SET_STOP_SCAN")
+}
 
-record(bo, "$(DEV):STOP_SCAN")
+record(bo, "$(DEV):SET_STOP_SCAN")
 {
     field(DESC, "Stop scanning command")
     field(DTYP, "asynUInt32Digital")
@@ -86,6 +86,23 @@ record(longout, "$(DEV):SET_IDLE_STATE")
 	field(VAL,  "0")
 }
 
+## EMI ON/OFF
+
+
+## EM ON/OFF
+
+
+## RF GEN ON/OFF
+
+
+## SHUTDOWN
+
+
+## 
+
+
+
+## Pulling data PVs 
 record(stringin, "$(DEV):GET_COMM_PARAM")
 {
     field(DTYP, "asynOctetRead")
