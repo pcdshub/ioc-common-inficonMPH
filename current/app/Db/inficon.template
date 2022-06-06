@@ -147,16 +147,16 @@ record(stringin, "$(DEV):GET_DEV_STATUS")
 #    field(SCAN, "$(CSCAN) second")
 #}
 
-record(stringin, "$(DEV):GET_CH1_SCAN_SETUP")
+record(longin, "$(DEV):GET_CH1_SCAN_SETUP")
 {
-    field(DTYP, "asynOctetRead")
+    field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),1,0xFFFFFFFF)GET_CH_SCAN_SETUP")
     field(SCAN, "$(CSCAN) second")
 }
 
-record(stringin, "$(DEV):GET_CH4_SCAN_SETUP")
+record(longin, "$(DEV):GET_CH4_SCAN_SETUP")
 {
-    field(DTYP, "asynOctetRead")
+    field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)GET_CH_SCAN_SETUP")
     field(SCAN, "$(CSCAN) second")
 }
