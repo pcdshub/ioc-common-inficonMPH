@@ -257,17 +257,11 @@ asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
 */
 asynStatus drvInficon::readUInt32Digital(asynUser *pasynUser, epicsUInt32 *value, epicsUInt32 mask)
 {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    char request[HTTP_REQUEST_SIZE];
-	int chNumber;
-    static const char *functionName = "readUInt32D";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "readUInt32D";
 	
-	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    //printf("%s::%s status:%d chNumber:%d\n", driverName, functionName, status, chNumber);
-    //callParamCallbacks(chNumber);
 	return asynSuccess;
 }
 
@@ -346,16 +340,12 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 */
 asynStatus drvInficon::readInt32 (asynUser *pasynUser, epicsInt32 *value)
 {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    char request[HTTP_REQUEST_SIZE];
-	int chNumber;
-    static const char *functionName = "readInt32";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "readInt32";
 
-	pasynManager->getAddr(pasynUser, &chNumber);
     *value = 0;
 
-    return status;
+    return asynSuccess;
 }
 
 
