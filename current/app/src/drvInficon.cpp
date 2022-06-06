@@ -456,7 +456,7 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
     *nactual = 0;
 	
     if (function == getScan_) {
-        getIntegerParam(scanMode_, &scanMode)
+        getIntegerParam(scanMode_, &scanMode);
         sprintf(request,"GET /mmsp/measurement/scans/%d/get\r\n"
         "\r\n", scanMode);
         ioStatus_ = inficonReadWrite(request, data_);
@@ -612,7 +612,8 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
     int function = pasynUser->reason;
     char request[HTTP_REQUEST_SIZE];
 	int chNumber;
-	std::string chMode;
+	std::string tempChMode;
+    char chMode[32];
 	double startMass;
 	double stopMass;
 	unsigned int ppamu;
@@ -623,7 +624,8 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
 
     if (function == setChScanSetup_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
-        getStringParam(chNumber, chMode_, chMode);
+        getStringParam(chNumber, chMode_, tempChMode);
+        strcpy(chMode, tempChMode.c_str());
         getDoubleParam(chNumber, chStartMass_, &startMass);
         getDoubleParam(chNumber, chStopMass_, &stopMass);
         getUIntDigitalParam(chNumber, chPpamu_, &ppamu, 0xFFFFFFFF);
