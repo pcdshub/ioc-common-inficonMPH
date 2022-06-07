@@ -340,36 +340,36 @@ record(longout, "$(DEV):SET_SWEEP_N")
 }
 
 # SET CH START MASS
-record(ao, "$(DEV):CH1_START_MASS")
-{
-    field(DESC, "Set Ch1 start Mass")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
-    field(PREC, "2")
-}
+#record(ao, "$(DEV):CH1_START_MASS")
+#{
+#    field(DESC, "Set Ch1 start Mass")
+#    field(DTYP, "asynFloat64")
+#    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
+#    field(PREC, "2")
+#}
 
-record(ao, "$(DEV):CH4_START_MASS")
-{
-    field(DESC, "Set Ch4 start Mass")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
-    field(PREC, "2")
-}
+#record(ao, "$(DEV):CH4_START_MASS")
+#{
+#    field(DESC, "Set Ch4 start Mass")
+#    field(DTYP, "asynFloat64")
+#    field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
+#    field(PREC, "2")
+#}
 
 # SET CH STOP MASS
-record(ao, "$(DEV):CH1_STOP_MASS")
-{
-    field(DESC, "Set Ch1 stop Mass")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
-    field(PREC, "2")
-}
+#record(ao, "$(DEV):CH1_STOP_MASS")
+#{
+#    field(DESC, "Set Ch1 stop Mass")
+#    field(DTYP, "asynFloat64")
+#    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
+#    field(PREC, "2")
+#}
 
 # CH MODE STATIC
 record(stringout, "$(DEV):CH1_MODE")
