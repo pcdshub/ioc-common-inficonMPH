@@ -736,7 +736,6 @@ record(longin, "$(DEV):EM_V_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
-    field(PREC, "0")
 }
 
 record(longin, "$(DEV):EM_V_MAX_RBV")
@@ -772,7 +771,6 @@ record(longin, "$(DEV):EM_GAIN_MASS_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_GAIN_MASS")
     field(SCAN, "I/O Intr")
-    field(PREC, "0")
     field(EGU,  "cAMU")
 }
 
