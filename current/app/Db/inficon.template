@@ -78,20 +78,20 @@ record(longout, "$(DEV):N_SCANS_PER_HOUR")
 	field(VAL,  "4")
 }
 
-record(calcout, "$(DEV):CYCLE_READ_TRIG")
-{
-    field(DESC, "Set N of scans per hour")
-    field(SCAN, "1 second")
-    field(CALC, "((A+1)%(3600/B))=0?1:0")
-    field(INPB, "$(DEV):N_SCANS_PER_HOUR.VAL")
-    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
-}
+#record(calcout, "$(DEV):CYCLE_READ_TRIG")
+#{
+#    field(DESC, "Set N of scans per hour")
+#    field(SCAN, "1 second")
+#    field(CALC, "((A+1)%(3600/B))=0?1:0")
+#    field(INPB, "$(DEV):N_SCANS_PER_HOUR.VAL")
+#    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
+#}
 
-record(bi, "$(DEV):CYCLE_TEST")
-{
-    field(DESC, "Test")
-	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
-}
+#record(bi, "$(DEV):CYCLE_TEST")
+#{
+#    field(DESC, "Test")
+#	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+#}
 
 # SCAN STOP IMMEDIATELLY
 record(bi, "$(DEV):STOP_SCAN")
@@ -422,7 +422,6 @@ record(stringin, "$(DEV):GET_COMM_PARAM")
 
 record(stringin, "$(DEV):GET_SENS_INFO")
 {
-    field(PINI, "YES")
     field(DTYP, "asynOctetRead")
     field(INP,  "@asyn($(PORT))GET_SENS_INFO")
     field(SCAN, "$(CSCAN) second")
@@ -491,7 +490,6 @@ record(waveform,"$(DEV):MONITORING_SCAN")
     field(SCAN, "$(CSCAN) second")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
-    field(PREC, "4")
 }
 
 record(waveform,"$(DEV):CYCLE_SCAN")
@@ -500,7 +498,6 @@ record(waveform,"$(DEV):CYCLE_SCAN")
     field(INP,  "@asyn($(PORT))GET_SCAN")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
-    field(PREC, "4")
 }
 
 record(waveform,"$(DEV):LEAKCHECK_SCAN")
@@ -509,7 +506,6 @@ record(waveform,"$(DEV):LEAKCHECK_SCAN")
     field(INP,  "@asyn($(PORT))GET_SCAN")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
-    field(PREC, "4")
 }
 
 record(stringin, "$(DEV):IP")
@@ -914,7 +910,7 @@ record(stringin, "$(DEV):CH4_MODE_RBV")
 
 record(mbbi, "$(DEV):CH4_DWELL_RBV")
 {
-    field(DESC, "CH1 dwell")
+    field(DESC, "CH4 dwell")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
@@ -954,7 +950,7 @@ record(mbbi, "$(DEV):CH4_DWELL_RBV")
 
 record(mbbi, "$(DEV):CH4_PPAMU_RBV")
 {
-    field(DESC, "CH1 Points Per AMU")
+    field(DESC, "CH4 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_PPAMU")
     field(SCAN, "I/O Intr")
@@ -980,7 +976,7 @@ record(mbbi, "$(DEV):CH4_PPAMU_RBV")
 
 record(ai, "$(DEV):CH4_START_MASS_RBV")
 {
-    field(DESC, "CH1 start mass")
+    field(DESC, "CH4 start mass")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),4)CH_START_MASS")
     field(SCAN, "I/O Intr")
@@ -990,7 +986,7 @@ record(ai, "$(DEV):CH4_START_MASS_RBV")
 
 record(ai, "$(DEV):CH4_STOP_MASS_RBV")
 {
-    field(DESC, "CH1 start mass")
+    field(DESC, "CH4 start mass")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),4)CH_STOP_MASS")
     field(SCAN, "I/O Intr")
