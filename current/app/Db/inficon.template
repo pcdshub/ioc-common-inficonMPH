@@ -18,7 +18,7 @@ record(mbbo, "$(DEV):INFICON_STATE")
     field(ZRST, "IDLE")
     field(ONST, "MONITORING")
     field(TWST, "READ_IN_CYCLES")
-    field(THST, "LEAKCHEK")
+    field(THST, "LEAKCHECK")
 	field(VAL,  "0")
 }
 
@@ -361,7 +361,7 @@ record(ao, "$(DEV):CH4_START_MASS")
 }
 
 # SET CH STOP MASS
-record(ao, "$(DEV):SET_CH1_STOP_MASS")
+record(ao, "$(DEV):CH1_STOP_MASS")
 {
     field(DESC, "Set Ch1 stop Mass")
     field(DTYP, "asynFloat64")
