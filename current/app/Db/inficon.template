@@ -132,6 +132,52 @@ record(bo, "$(DEV):SET_EMI_ON")
     field(ONAM, "ON")
 }
 
+record(bi, "$(DEV):EMI_IMODE")
+{
+    field(DESC, "Emi current mode ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B31")
+	field(FLNK, "$(DEV):EMI_PMODE")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EMI_PMODE")
+{
+    field(DESC, "Emi power mode ON/OFF")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B30")
+	field(FLNK, "$(DEV):EMI_DEGAS_MODE")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EMI_DEGAS_MODE")
+{
+    field(DESC, "Emi degas mode ON/OFF")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B29")
+	field(FLNK, "$(DEV):EMI_STATUS_CALC")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(calcout, "$(DEV):EMI_STATUS_CALC")
+{
+    field(DESC, "Emi status OR")
+    field(CALC, "(A||B||C)=1?1:0")
+    field(INPA, "$(DEV):EMI_IMODE.VAL")
+    field(INPB, "$(DEV):EMI_PMODE.VAL")
+    field(INPC, "$(DEV):EMI_DEGAS_MODE.VAL")
+    field(OUT,  "$(DEV):EMI_STATUS.VAL PP")
+}
+
+record(bi, "$(DEV):EMI_STATUS")
+{
+    field(DESC, "Emi status ON/OFF")
+#    field(SCAN, "$(DSCAN) second")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
 # EM ON/OFF
 record(bo, "$(DEV):SET_EM_ON")
 {
@@ -142,12 +188,30 @@ record(bo, "$(DEV):SET_EM_ON")
     field(ONAM, "ON")
 }
 
+record(bi, "$(DEV):EM_STATUS")
+{
+    field(DESC, "Em status ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B23")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
 # RF GEN ON/OFF
 record(bo, "$(DEV):SET_RFGEN_ON")
 {
     field(DESC, "RF generator on_off")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0x1)RFGEN_ON")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):RFGEN_STATUS")
+{
+    field(DESC, "RFgen status ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B5")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
 }
@@ -340,36 +404,36 @@ record(longout, "$(DEV):SET_SWEEP_N")
 }
 
 # SET CH START MASS
-#record(ao, "$(DEV):CH1_START_MASS")
-#{
-#    field(DESC, "Set Ch1 start Mass")
-#    field(DTYP, "asynFloat64")
-#    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
-#    field(DRVH, "200.0")
-#    field(DRVL, "0.0")
-#    field(PREC, "2")
-#}
+record(ao, "$(DEV):CH1_START_MASS")
+{
+    field(DESC, "Set Ch1 start Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
 
-#record(ao, "$(DEV):CH4_START_MASS")
-#{
-#    field(DESC, "Set Ch4 start Mass")
-#    field(DTYP, "asynFloat64")
-#    field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
-#    field(DRVH, "200.0")
-#    field(DRVL, "0.0")
-#    field(PREC, "2")
-#}
+record(ao, "$(DEV):CH4_START_MASS")
+{
+    field(DESC, "Set Ch4 start Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
 
 # SET CH STOP MASS
-#record(ao, "$(DEV):CH1_STOP_MASS")
-#{
-#    field(DESC, "Set Ch1 stop Mass")
-#    field(DTYP, "asynFloat64")
-#    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
-#    field(DRVH, "200.0")
-#    field(DRVL, "0.0")
-#    field(PREC, "2")
-#}
+record(ao, "$(DEV):CH1_STOP_MASS")
+{
+    field(DESC, "Set Ch1 stop Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
 
 # CH MODE STATIC
 record(stringout, "$(DEV):CH1_MODE")
