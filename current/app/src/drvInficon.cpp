@@ -297,6 +297,11 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else if (function == emV_) {
+        sprintf(request,"GET /mmsp/sensorDetector/emVoltage/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startStopCh_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         sprintf(request,"GET /mmsp/scanSetup/set?startChannel=%d&stopChannel=%d\r\n"

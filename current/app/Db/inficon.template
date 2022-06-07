@@ -73,8 +73,8 @@ record(longout, "$(DEV):N_SCANS_PER_HOUR")
 {
     field(PINI, "YES")
     field(DESC, "Set N of scans per hour")
-    field(DRVH, "1")
-    field(DRVL, "60")
+    field(DRVH, "60")
+    field(DRVL, "1")
 	field(VAL,  "4")
 }
 
@@ -167,6 +167,17 @@ record(bo, "$(DEV):SET_SHUTDOWN")
     field(ZNAM, "OFF")
     field(ONAM, "OFF")
 	field(VAL,  "1")
+}
+
+# SET EM Voltage
+record(longout, "$(DEV):EM_V")
+{
+    field(DESC, "Set em voltage")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)START_STOP_CH")
+    field(DRVH, "2000")
+    field(DRVL, "600")
+	field(VAL,  "815")
 }
 
 # SET START AND STOP CHANNEL
@@ -317,17 +328,19 @@ record(mbbo, "$(DEV):CH4_PPAMU")
     field(EIST, "100")
 }
 
-# SET NUMBER OF SCANS for Cycle Read
-record(longout, "$(DEV):SET_SCAN_N")
+# SET NUMBER OF SWEEPS for every Cycle Read
+record(longout, "$(DEV):SET_SWEEP_N")
 {
-    field(DESC, "Set N of Scans")
+    field(DESC, "Set N of Sweeps per Scan")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT))SCAN_COUNT")
+    field(DRVH, "5")
+    field(DRVL, "1")
 	field(VAL,  "2")
 }
 
 # SET CH START MASS
-record(ao, "$(DEV):SET_CH1_START_MASS")
+record(ao, "$(DEV):CH1_START_MASS")
 {
     field(DESC, "Set Ch1 start Mass")
     field(DTYP, "asynFloat64")
@@ -337,7 +350,7 @@ record(ao, "$(DEV):SET_CH1_START_MASS")
     field(PREC, "2")
 }
 
-record(ao, "$(DEV):SET_CH4_START_MASS")
+record(ao, "$(DEV):CH4_START_MASS")
 {
     field(DESC, "Set Ch4 start Mass")
     field(DTYP, "asynFloat64")
@@ -364,7 +377,7 @@ record(stringout, "$(DEV):CH1_MODE")
     field(DESC, "Ch1 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),1)CH_MODE")
-#    field(VAL,  "Sweep")
+    field(VAL,  "Sweep")
 }
 
 record(stringout, "$(DEV):CH4_MODE")
@@ -372,7 +385,7 @@ record(stringout, "$(DEV):CH4_MODE")
     field(DESC, "Ch4 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),4)CH_MODE")
-#    field(VAL,  "Single")
+    field(VAL,  "Single")
 }
 
 # SET SCAN SETUP FOR CH
@@ -723,6 +736,7 @@ record(longin, "$(DEV):EM_V_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
+    field(PREC, "0")
 }
 
 record(longin, "$(DEV):EM_V_MAX_RBV")
@@ -758,6 +772,7 @@ record(longin, "$(DEV):EM_GAIN_MASS_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_GAIN_MASS")
     field(SCAN, "I/O Intr")
+    field(PREC, "0")
     field(EGU,  "cAMU")
 }
 
