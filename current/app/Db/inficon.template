@@ -174,7 +174,7 @@ record(longout, "$(DEV):EM_V")
 {
     field(DESC, "Set em voltage")
     field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)START_STOP_CH")
+    field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
     field(DRVH, "2000")
     field(DRVL, "600")
 	field(VAL,  "815")
@@ -335,7 +335,7 @@ record(longout, "$(DEV):SET_SWEEP_N")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT))SCAN_COUNT")
     field(DRVH, "5")
-    field(DRVL, "1")
+    field(DRVL, "-1")
 	field(VAL,  "2")
 }
 
