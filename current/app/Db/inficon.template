@@ -7,8 +7,498 @@
 ##
 ##
 
+record(mbbo, "$(DEV):INFICON_STATE")
+{
+    field(PINI, "YES")
+    field(DESC, "Current device state")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(ZRST, "IDLE")
+    field(ONST, "MONITORING")
+    field(TWST, "READ_IN_CYCLES")
+    field(THST, "LEAKCHECK")
+	field(VAL,  "0")
+}
+
+record(bo, "$(DEV):START_MONITORING")
+{
+    field(DESC, "Start monitoring button")
+	field(FLNK, "$(DEV):SET_MONITOR_STATE")
+}
+
+record(bo, "$(DEV):START_CYCLE_READ")
+{
+    field(DESC, "Start cycle read button")
+	field(FLNK, "$(DEV):SET_READ_STATE")
+}
+
+record(bo, "$(DEV):START_LEAKCHECK")
+{
+    field(DESC, "Start leakcheck button")
+	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+}
+
+record(longout, "$(DEV):SET_MONITOR_STATE")
+{
+    field(DESC, "Set monitoring state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL PP")
+	field(VAL,  "1")
+}
+
+record(longout, "$(DEV):SET_READ_STATE")
+{
+    field(DESC, "Set read in cylcles state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL PP")
+	field(VAL,  "2")
+}
+
+record(longout, "$(DEV):SET_LEAKCHK_STATE")
+{
+    field(DESC, "Set leakcheck state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL PP")
+	field(VAL,  "3")
+}
+
+record(longout, "$(DEV):SET_IDLE_STATE")
+{
+    field(DESC, "Set Idle state")
+    field(OUT,  "$(DEV):INFICON_STATE.VAL PP")
+	field(VAL,  "0")
+}
+
+# N OF SCANS PER HOUR for CYCLE READ
+record(longout, "$(DEV):N_SCANS_PER_HOUR")
+{
+    field(PINI, "YES")
+    field(DESC, "Set N of scans per hour")
+    field(DRVH, "60")
+    field(DRVL, "1")
+	field(VAL,  "4")
+}
+
+#record(calcout, "$(DEV):CYCLE_READ_TRIG")
+#{
+#    field(DESC, "Set N of scans per hour")
+#    field(SCAN, "1 second")
+#    field(CALC, "((A+1)%(3600/B))=0?1:0")
+#    field(INPB, "$(DEV):N_SCANS_PER_HOUR.VAL")
+#    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
+#}
+
+#record(bi, "$(DEV):CYCLE_TEST")
+#{
+#    field(DESC, "Test")
+#	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+#}
+
+# SCAN STOP IMMEDIATELLY
+record(bo, "$(DEV):STOP_SCAN")
+{
+    field(DESC, "Stop scanning button")
+	field(FLNK, "$(DEV):SET_STOP_SCAN")
+}
+
+record(bo, "$(DEV):SET_STOP_SCAN")
+{
+    field(PINI, "YES")
+    field(DESC, "Stop scanning command")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
+    field(ZNAM, "IMMEDIATELLY")
+    field(ONAM, "END_OF_SCAN")
+	field(FLNK, "$(DEV):SET_IDLE_STATE")
+	field(VAL,  "0")
+}
+
+# SCAN START
+record(bo, "$(DEV):SET_START_SCAN")
+{
+    field(DESC, "Start scan command")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_START")
+    field(ZNAM, "START_SCAN")
+    field(ONAM, "START_SCAN")
+	field(VAL,  "1")
+}
+
+# EMI ON/OFF
+record(bo, "$(DEV):SET_EMI_ON")
+{
+    field(DESC, "EMI on_off")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)EMI_ON")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EMI_IMODE")
+{
+    field(DESC, "Emi current mode ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B1F")
+	field(FLNK, "$(DEV):EMI_PMODE")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EMI_PMODE")
+{
+    field(DESC, "Emi power mode ON/OFF")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B1E")
+	field(FLNK, "$(DEV):EMI_DEGAS_MODE")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EMI_DEGAS_MODE")
+{
+    field(DESC, "Emi degas mode ON/OFF")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B1D")
+	field(FLNK, "$(DEV):EMI_STATUS_CALC")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(calcout, "$(DEV):EMI_STATUS_CALC")
+{
+    field(DESC, "Emi status OR")
+    field(CALC, "(A||B||C)=1?1:0")
+    field(INPA, "$(DEV):EMI_IMODE.VAL")
+    field(INPB, "$(DEV):EMI_PMODE.VAL")
+    field(INPC, "$(DEV):EMI_DEGAS_MODE.VAL")
+    field(OUT,  "$(DEV):EMI_STATUS.VAL PP")
+}
+
+record(bi, "$(DEV):EMI_STATUS")
+{
+    field(DESC, "Emi status ON/OFF")
+#    field(SCAN, "$(DSCAN) second")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+# EM ON/OFF
+record(bo, "$(DEV):SET_EM_ON")
+{
+    field(DESC, "EM on_off")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)EM_ON")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):EM_STATUS")
+{
+    field(DESC, "Em status ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B17")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+# RF GEN ON/OFF
+record(bo, "$(DEV):SET_RFGEN_ON")
+{
+    field(DESC, "RF generator on_off")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)RFGEN_ON")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(DEV):RFGEN_STATUS")
+{
+    field(DESC, "RFgen status ON/OFF")
+    field(SCAN, "$(DSCAN) second")
+    field(INP,  "$(DEV):SYST_STAT_RBV.B19")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+# SHUTDOWN
+record(bi, "$(DEV):SHUTDOWN")
+{
+    field(DESC, "Shutdown device button")
+	field(FLNK, "$(DEV):SET_SHUTDOWN")
+}
+
+record(bo, "$(DEV):SET_SHUTDOWN")
+{
+    field(DESC, "Shuts down EMI,RF,Heaters,Valves")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)SHUTDOWN")
+    field(ZNAM, "OFF")
+    field(ONAM, "OFF")
+	field(VAL,  "1")
+}
+
+# SET EM Voltage
+record(longout, "$(DEV):EM_V")
+{
+    field(DESC, "Set em voltage")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
+    field(DRVH, "2000")
+    field(DRVL, "600")
+	field(VAL,  "815")
+}
+
+# SET START AND STOP CHANNEL
+record(longout, "$(DEV):SET_CH4_ASINPUT")
+{
+    field(DESC, "Set start_stop ch comm. leakchk")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)START_STOP_CH")
+	field(VAL,  "4")
+}
+
+record(longout, "$(DEV):SET_CH1_ASINPUT")
+{
+    field(DESC, "Set start_stop ch comm. cycle read")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)START_STOP_CH")
+	field(VAL,  "1")
+}
+
+# SET CH DWELL
+record(mbbo, "$(DEV):CH1_DWELL")
+{
+    field(DESC, "Set CH1 dwell")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_DWELL")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(TWVL, "4")
+    field(THVL, "8")
+    field(FRVL, "16")
+    field(FVVL, "32")
+    field(SXVL, "48")
+    field(SVVL, "64")
+    field(EIVL, "128")
+    field(NIVL, "256")
+    field(TEVL, "512")
+    field(ELVL, "1024")
+    field(TVVL, "2048")
+    field(TTVL, "4096")
+    field(FTVL, "8192")
+    field(FFVL, "16384")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "4")
+    field(THST, "8")
+    field(FRST, "16")
+    field(FVST, "32")
+    field(SXST, "48")
+    field(SVST, "64")
+    field(EIST, "128")
+    field(NIST, "256")
+    field(TEST, "512")
+    field(ELST, "1024")
+    field(TVST, "2048")
+    field(TTST, "4096")
+    field(FTST, "8192")
+    field(FFST, "16384")
+}
+
+record(mbbo, "$(DEV):CH4_DWELL")
+{
+    field(DESC, "Set CH4 dwell")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(TWVL, "4")
+    field(THVL, "8")
+    field(FRVL, "16")
+    field(FVVL, "32")
+    field(SXVL, "48")
+    field(SVVL, "64")
+    field(EIVL, "128")
+    field(NIVL, "256")
+    field(TEVL, "512")
+    field(ELVL, "1024")
+    field(TVVL, "2048")
+    field(TTVL, "4096")
+    field(FTVL, "8192")
+    field(FFVL, "16384")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "4")
+    field(THST, "8")
+    field(FRST, "16")
+    field(FVST, "32")
+    field(SXST, "48")
+    field(SVST, "64")
+    field(EIST, "128")
+    field(NIST, "256")
+    field(TEST, "512")
+    field(ELST, "1024")
+    field(TVST, "2048")
+    field(TTST, "4096")
+    field(FTST, "8192")
+    field(FFST, "16384")
+}
+
+
+# SET CH PPAMU
+record(mbbo, "$(DEV):CH1_PPAMU")
+{
+    field(DESC, "Set CH1 Points Per AMU")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_PPAMU")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(TWVL, "4")
+    field(THVL, "5")
+    field(FRVL, "10")
+    field(FVVL, "20")
+    field(SXVL, "25")
+    field(SVVL, "50")
+    field(EIVL, "100")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "4")
+    field(THST, "5")
+    field(FRST, "10")
+    field(FVST, "20")
+    field(SXST, "25")
+    field(SVST, "50")
+    field(EIST, "100")
+}
+
+record(mbbo, "$(DEV):CH4_PPAMU")
+{
+    field(DESC, "Set CH4 Points Per AMU")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_PPAMU")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(TWVL, "4")
+    field(THVL, "5")
+    field(FRVL, "10")
+    field(FVVL, "20")
+    field(SXVL, "25")
+    field(SVVL, "50")
+    field(EIVL, "100")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "4")
+    field(THST, "5")
+    field(FRST, "10")
+    field(FVST, "20")
+    field(SXST, "25")
+    field(SVST, "50")
+    field(EIST, "100")
+}
+
+# SET NUMBER OF SWEEPS
+record(longout, "$(DEV):SET_SWEEP_N")
+{
+    field(DESC, "Set N of Sweeps per Scan")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT))SCAN_COUNT")
+    field(DRVH, "5")
+    field(DRVL, "-1")
+	field(VAL,  "2")
+}
+
+# SET CH START MASS
+record(ao, "$(DEV):CH1_START_MASS")
+{
+    field(DESC, "Set Ch1 start Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
+
+record(ao, "$(DEV):CH4_START_MASS")
+{
+    field(DESC, "Set Ch4 start Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
+
+# SET CH STOP MASS
+record(ao, "$(DEV):CH1_STOP_MASS")
+{
+    field(DESC, "Set Ch1 stop Mass")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
+    field(DRVH, "200.0")
+    field(DRVL, "0.0")
+    field(PREC, "2")
+}
+
+# CH MODE STATIC
+record(stringout, "$(DEV):CH1_MODE")
+{
+    field(DESC, "Ch1 measurement mode")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asyn($(PORT),1)CH_MODE")
+    field(VAL,  "Sweep")
+}
+
+record(stringout, "$(DEV):CH4_MODE")
+{
+    field(DESC, "Ch4 measurement mode")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asyn($(PORT),4)CH_MODE")
+    field(VAL,  "Single")
+}
+
+# SET SCAN SETUP FOR CH
+record(stringout, "$(DEV):SET_CH1_SCAN_SETUP")
+{
+    field(DESC, "CH1 scan setup")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asyn($(PORT),1)SET_CH_SCAN_SETUP")
+}
+
+record(stringout, "$(DEV):SET_CH4_SCAN_SETUP")
+{
+    field(DESC, "CH4 scan setup")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asyn($(PORT),4)SET_CH_SCAN_SETUP")
+}
+
+# SCAN MODE
+record(longout, "$(DEV):SCAN_MODE")
+{
+    field(DESC, "Scan Mode")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT))SCAN_MODE")
+	field(VAL,  "-1")
+}
 
 # Pulling data PVs 
+record(stringin, "$(DEV):GET_COMM_PARAM")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_SENS_INFO")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_INFO")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_DEV_STATUS")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_DEV_STAT")
+    field(SCAN, "$(CSCAN) second")
+}
+
 record(stringin, "$(DEV):GET_CH1_SCAN_SETUP")
 {
     field(DTYP, "asynOctetRead")
@@ -21,6 +511,368 @@ record(stringin, "$(DEV):GET_CH4_SCAN_SETUP")
     field(DTYP, "asynOctetRead")
     field(INP,  "@asyn($(PORT),4)GET_CH_SCAN_SETUP")
     field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_DIAG_DATA")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_DIAG_DATA")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_SCAN_INFO")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SCAN_INFO")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_SENS_DETECT")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_DETECT")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_SENS_FILT")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_FILT")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(ai, "$(DEV):TOTAL_PRESS_RBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))GET_PRESS")
+    field(SCAN, "$(DSCAN) second")
+}
+
+record(waveform,"$(DEV):MONITORING_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(SCAN, "$(CSCAN) second")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+record(waveform,"$(DEV):CYCLE_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+record(waveform,"$(DEV):LEAKCHECK_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+record(stringin, "$(DEV):IP")
+{
+    field(DESC, "IP address")
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))IP")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(DEV):MAC")
+{
+    field(DESC, "MAC address")
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))MAC")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(DEV):SENS_NAME")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))SENS_NAME")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin,"$(DEV):SENS_DESC")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))SENS_DESC")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):SENS_SN")
+{
+    field(DESC, "Sensor SN")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SENS_SN")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbiDirect, "$(DEV):SYST_STAT_RBV")
+{
+    field(DESC, "Get system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SYST_STAT")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbiDirect, "$(DEV):HW_ERR_RBV")
+{
+    field(DESC, "Get hw errors")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_ERROR")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbiDirect, "$(DEV):HW_WARN_RBV")
+{
+    field(DESC, "Get system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_WARN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):PWR_ON_TIME_RBV")
+{
+    field(DESC, "Pwr on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PWR_ON_T")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "s")
+}
+
+record(longin, "$(DEV):EMI_ON_TIME_RBV")
+{
+    field(DESC, "Emi on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_ON_T")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "s")
+}
+
+record(longin, "$(DEV):EM_ON_TIME_RBV")
+{
+    field(DESC, "Em on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_ON_T")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "s")
+}
+
+record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
+{
+    field(DESC, "Em cumulative on time")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_CML_ON_T")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "s")
+}
+
+record(longin, "$(DEV):EM_PRESS_TRIP_RBV")
+{
+    field(DESC, "Em press. trip counter")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_PRESS_TRIP")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(DEV):DEVICE_TEMP_RBV")
+{
+    field(DESC, "Device internal Temp.")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))BOX_TEMP")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(longin, "$(DEV):ANODE_POT_RBV")
+{
+    field(DESC, "Ion Source Anode Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)ANODE_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):EMI_CURR_RBV")
+{
+    field(DESC, "Ion Source Emi Current")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_CURRENT")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "uA")
+}
+
+record(longin, "$(DEV):FOCUS_POT_RBV")
+{
+    field(DESC, "Ion Source Focus Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FOCUS_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):ELECT_ENG_RBV")
+{
+    field(DESC, "Ion Source Electron Energy")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)ELECT_ENERGY")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cV")
+}
+
+record(longin, "$(DEV):FIL_POT_RBV")
+{
+    field(DESC, "Ion Source Filamet Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mV")
+}
+
+record(longin, "$(DEV):FIL_CURR_RBV")
+{
+    field(DESC, "Ion Source Filamet Current")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL_CURRENT")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mA")
+}
+
+record(longin, "$(DEV):EM_POT_RBV")
+{
+    field(DESC, "Sens. Detect. EM Potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_POTENTIAL")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "mA")
+}
+
+record(longin, "$(DEV):FIRST_SCAN")
+{
+    field(DESC, "First scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIRST_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):LAST_SCAN")
+{
+    field(DESC, "Last complete scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)LAST_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):CURRENT_SCAN")
+{
+    field(DESC, "Current scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)CURRENT_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):PPSCAN")
+{
+    field(DESC, "Points per scan number")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PPSCAN")
+    field(SCAN, "I/O Intr")
+}
+
+record(bi, "$(DEV):SCAN_STAT")
+{
+    field(DESC, "Scan running status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")
+    field(ZNAM, "STOP")
+    field(ONAM, "RUNNING")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):EM_V_RBV")
+{
+    field(DESC, "Elect. Multiplier Voltage")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "V")
+}
+
+record(longin, "$(DEV):EM_V_MAX_RBV")
+{
+    field(DESC, "EM Max Voltage")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MAX")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "V")
+}
+
+record(longin, "$(DEV):EM_V_MIN_RBV")
+{
+    field(DESC, "EM Min Voltage")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MIN")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "V")
+}
+
+record(ai, "$(DEV):EM_GAIN_RBV")
+{
+    field(DESC, "EM Gain")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))EM_GAIN")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+}
+
+record(longin, "$(DEV):EM_GAIN_MASS_RBV")
+{
+    field(DESC, "EM Gain Mass")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_GAIN_MASS")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "cAMU")
+}
+
+record(ai, "$(DEV):MASS_MAX_RBV")
+{
+    field(DESC, "Max mass")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))MASS_MAX")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "AMU")
+}
+
+record(ai, "$(DEV):MASS_MIN_RBV")
+{
+    field(DESC, "Min mass")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))MASS_MIN")
+    field(SCAN, "I/O Intr")
+    field(PREC, "2")
+    field(EGU,  "AMU")
+}
+
+record(longin, "$(DEV):DWELL_MAX_RBV")
+{
+    field(DESC, "Max Dwell supported")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)DWELL_MAX")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(DEV):DWELL_MIN_RBV")
+{
+    field(DESC, "Min Dwell supported")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)DWELL_MIN")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(DEV):CH1_MODE_RBV")
