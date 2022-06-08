@@ -22,19 +22,19 @@ record(mbbo, "$(DEV):INFICON_STATE")
 	field(VAL,  "0")
 }
 
-record(bi, "$(DEV):START_MONITORING")
+record(bo, "$(DEV):START_MONITORING")
 {
     field(DESC, "Start monitoring button")
 	field(FLNK, "$(DEV):SET_MONITOR_STATE")
 }
 
-record(bi, "$(DEV):START_CYCLE_READ")
+record(bo, "$(DEV):START_CYCLE_READ")
 {
     field(DESC, "Start cycle read button")
 	field(FLNK, "$(DEV):SET_READ_STATE")
 }
 
-record(bi, "$(DEV):START_LEAKCHECK")
+record(bo, "$(DEV):START_LEAKCHECK")
 {
     field(DESC, "Start leakcheck button")
 	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
@@ -94,7 +94,7 @@ record(longout, "$(DEV):N_SCANS_PER_HOUR")
 #}
 
 # SCAN STOP IMMEDIATELLY
-record(bi, "$(DEV):STOP_SCAN")
+record(bo, "$(DEV):STOP_SCAN")
 {
     field(DESC, "Stop scanning button")
 	field(FLNK, "$(DEV):SET_STOP_SCAN")
@@ -102,6 +102,7 @@ record(bi, "$(DEV):STOP_SCAN")
 
 record(bo, "$(DEV):SET_STOP_SCAN")
 {
+    field(PINI, "YES")
     field(DESC, "Stop scanning command")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
