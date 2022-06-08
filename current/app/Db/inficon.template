@@ -640,6 +640,7 @@ record(longin, "$(DEV):PWR_ON_TIME_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PWR_ON_T")
     field(SCAN, "I/O Intr")
+    field(EGU,  "s")
 }
 
 record(longin, "$(DEV):EMI_ON_TIME_RBV")
@@ -648,6 +649,7 @@ record(longin, "$(DEV):EMI_ON_TIME_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_ON_T")
     field(SCAN, "I/O Intr")
+    field(EGU,  "s")
 }
 
 record(longin, "$(DEV):EM_ON_TIME_RBV")
@@ -656,6 +658,7 @@ record(longin, "$(DEV):EM_ON_TIME_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_ON_T")
     field(SCAN, "I/O Intr")
+    field(EGU,  "s")
 }
 
 record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
@@ -664,6 +667,7 @@ record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_CML_ON_T")
     field(SCAN, "I/O Intr")
+    field(EGU,  "s")
 }
 
 record(longin, "$(DEV):EM_PRESS_TRIP_RBV")

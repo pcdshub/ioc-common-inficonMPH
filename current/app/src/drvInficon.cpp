@@ -599,6 +599,9 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         return asynError;
     }
     callParamCallbacks(chNumber);
+    if (function == getChScanSetup_) {
+        printf("%s::%s chNumber:%d \n", driverName, functionName, chNumber);
+    }
     return status;
 }
 
