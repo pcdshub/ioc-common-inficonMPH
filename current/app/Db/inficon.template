@@ -218,7 +218,7 @@ record(bi, "$(DEV):RFGEN_STATUS")
 }
 
 # SHUTDOWN
-record(bi, "$(DEV):SHUTDOWN")
+record(bo, "$(DEV):SHUTDOWN")
 {
     field(DESC, "Shutdown device button")
 	field(FLNK, "$(DEV):SET_SHUTDOWN")
@@ -300,6 +300,7 @@ record(mbbo, "$(DEV):CH1_DWELL")
     field(TTST, "4096")
     field(FTST, "8192")
     field(FFST, "16384")
+	field(VAL,  "16")
 }
 
 record(mbbo, "$(DEV):CH4_DWELL")
@@ -339,6 +340,7 @@ record(mbbo, "$(DEV):CH4_DWELL")
     field(TTST, "4096")
     field(FTST, "8192")
     field(FFST, "16384")
+	field(VAL,  "16")
 }
 
 # SET CH PPAMU
@@ -365,6 +367,7 @@ record(mbbo, "$(DEV):CH1_PPAMU")
     field(SXST, "25")
     field(SVST, "50")
     field(EIST, "100")
+	field(VAL,  "10")
 }
 
 record(mbbo, "$(DEV):CH4_PPAMU")
@@ -390,6 +393,7 @@ record(mbbo, "$(DEV):CH4_PPAMU")
     field(SXST, "25")
     field(SVST, "50")
     field(EIST, "100")
+	field(VAL,  "10")
 }
 
 # SET NUMBER OF SWEEPS
@@ -419,8 +423,8 @@ record(ao, "$(DEV):CH4_START_MASS")
     field(DESC, "Set Ch4 start Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),4)CH_START_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
     field(PREC, "2")
 }
 
@@ -430,9 +434,32 @@ record(ao, "$(DEV):CH1_STOP_MASS")
     field(DESC, "Set Ch1 stop Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
     field(PREC, "2")
+}
+
+# SET MAX AND MIN FOR CH START AND STOP MASS
+record(dfanout, "$(DEV):SET_MASS_MAX")
+{
+    field(DESC, "Set DRVH field for Mass")
+    field(DOL,  "$(DEV):MASS_MAX_RBV")
+    field(OMSL, "closed_loop")
+    field(SELM, "All")
+    field(OUTA, "$(DEV):CH1_START_MASS.DRVH")
+    field(OUTB, "$(DEV):CH4_START_MASS.DRVH")
+    field(OUTC, "$(DEV):CH1_STOP_MASS.DRVH")
+}
+
+record(dfanout, "$(DEV):SET_MASS_MIN")
+{
+    field(DESC, "Set DRVL field for Mass")
+    field(DOL,  "$(DEV):MASS_MIN_RBV")
+    field(OMSL, "closed_loop")
+    field(SELM, "All")
+    field(OUTA, "$(DEV):CH1_START_MASS.DRVL")
+    field(OUTB, "$(DEV):CH4_START_MASS.DRVL")
+    field(OUTC, "$(DEV):CH1_STOP_MASS.DRVL")
 }
 
 # CH MODE STATIC
@@ -848,6 +875,7 @@ record(ai, "$(DEV):MASS_MAX_RBV")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")
+	field(FLNK, "$(DEV):SET_MASS_MAX")
 }
 
 record(ai, "$(DEV):MASS_MIN_RBV")
@@ -858,6 +886,7 @@ record(ai, "$(DEV):MASS_MIN_RBV")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")
+	field(FLNK, "$(DEV):SET_MASS_MIN")
 }
 
 record(longin, "$(DEV):DWELL_MAX_RBV")
