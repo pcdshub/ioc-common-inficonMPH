@@ -246,7 +246,7 @@ record(longout, "$(DEV):EM_V")
 }
 
 # SET EM Gain
-record(longout, "$(DEV):EM_GAIN")
+record(ao, "$(DEV):EM_GAIN")
 {
     field(DESC, "Set em gain")
     field(DTYP, "asynFloat64")
