@@ -535,12 +535,24 @@ record(stringout, "$(DEV):SET_CH4_SCAN_SETUP")
 }
 
 # SCAN MODE
+record(sel, "$(DEV):SCAN_MODE_SEL")
+{
+    field(DESC, "Select N of Sweeps")
+    field(SELM, "Specified")
+    field(NVL,  "$(DEV):INFICON_STATE.VAL")
+    field(INPA, "-1")
+    field(INPB, "0")
+    field(INPC, "-1")
+    field(INPD, "0")
+}
+
 record(longout, "$(DEV):SCAN_MODE")
 {
     field(DESC, "Scan Mode")
     field(DTYP, "asynInt32")
+    field(OMSL, "closed_loop")
+    field(DOL,  "$(DEV):SCAN_MODE_SEL.VAL PP")
     field(OUT,  "@asyn($(PORT))SCAN_MODE")
-	field(VAL,  "-1")
 }
 
 # Pulling data PVs 
