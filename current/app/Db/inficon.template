@@ -28,9 +28,8 @@ record(bo, "$(DEV):START_MONITORING")
 	field(FLNK, "$(DEV):CALC_MONITOR")
 }
 
-record(calcout, "$(DEV):CALC_MONITOR")
+record(calcout, "$(DEV):CALC_MONITOR_STATE")
 {
-    field(DESC, "Set N of scans per hour")
     field(CALC, "A=0?1:0")
     field(INPA, "$(DEV):INFICON_STATE.VAL")
     field(OOPT, "When Non-zero")
@@ -40,13 +39,29 @@ record(calcout, "$(DEV):CALC_MONITOR")
 record(bo, "$(DEV):START_CYCLE_READ")
 {
     field(DESC, "Start cycle read button")
-	field(FLNK, "$(DEV):SET_READ_STATE")
+	field(FLNK, "$(DEV):CALC_READ_STATE")
+}
+
+record(calcout, "$(DEV):CALC_READ_STATE")
+{
+    field(CALC, "A=0?1:0")
+    field(INPA, "$(DEV):INFICON_STATE.VAL")
+    field(OOPT, "When Non-zero")
+    field(OUT,  "$(DEV):SET_READ_STATE.PROC")
 }
 
 record(bo, "$(DEV):START_LEAKCHECK")
 {
     field(DESC, "Start leakcheck button")
-	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+	field(FLNK, "$(DEV):CALC_LEAKCHECK_STATE")
+}
+
+record(calcout, "$(DEV):CALC_LEAKCHECK_STATE")
+{
+    field(CALC, "A=0?1:0")
+    field(INPA, "$(DEV):INFICON_STATE.VAL")
+    field(OOPT, "When Non-zero")
+    field(OUT,  "$(DEV):SET_LEAKCHK_STATE.PROC")
 }
 
 record(longout, "$(DEV):SET_MONITOR_STATE")
