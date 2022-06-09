@@ -601,21 +601,26 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-        setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
-        setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
-        setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
-        setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
-        setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
+        //setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
+        //setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
+        //setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
+        //setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
+        //setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
+        setStringParam(chMode_, chScanSetup_[chNumber].chMode);
+        setDoubleParam(chStartMass_, chScanSetup_[chNumber].chStartMass);
+        setDoubleParam(chStopMass_, chScanSetup_[chNumber].chStopMass);	
+        setUIntDigitalParam(chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
+        setUIntDigitalParam(chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
         //setUIntDigitalParam(chNumber, chDwell_, 128, 0xFFFFFFFF);
         //setUIntDigitalParam(chNumber, chPpamu_, 50, 0xFFFFFFFF);
-        printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        //printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    callParamCallbacks(1,chNumber);
+    callParamCallbacks(chNumber);
     return status;
 }
 
