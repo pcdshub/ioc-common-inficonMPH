@@ -25,7 +25,7 @@ record(mbbo, "$(DEV):INFICON_STATE")
 record(bo, "$(DEV):START_MONITORING")
 {
     field(DESC, "Start monitoring button")
-	field(FLNK, "$(DEV):SET_MONITOR_STATE")
+	field(FLNK, "$(DEV):CALC_MONITOR")
 }
 
 record(calcout, "$(DEV):CALC_MONITOR")
