@@ -615,7 +615,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    callParamCallbacks(0, chNumber);
+    callParamCallbacks(1,chNumber);
     return status;
 }
 
