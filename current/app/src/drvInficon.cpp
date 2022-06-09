@@ -337,6 +337,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
                   driverName, functionName, this->portName, function);
         return asynError;
     }
+    callParamCallbacks(chNumber);
     return asynSuccess;
 }
 
@@ -602,7 +603,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
         //setUIntDigitalParam(chNumber, chDwell_, 128, 0xFFFFFFFF);
         //setUIntDigitalParam(chNumber, chPpamu_, 50, 0xFFFFFFFF);
-        //printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
+        printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
