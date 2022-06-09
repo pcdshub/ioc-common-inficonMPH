@@ -199,7 +199,7 @@ public:
 
     /* These functions are in the asynCommon interface */
     virtual void report(FILE *fp, int details);
-    //virtual asynStatus connect(asynUser *pasynUser);
+    virtual asynStatus connect(asynUser *pasynUser);
     //virtual asynStatus getAddress(asynUser *pasynUser, int *address);
 
     /* These functions are in the asynUInt32Digital interface */
