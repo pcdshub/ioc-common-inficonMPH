@@ -555,6 +555,33 @@ record(longout, "$(DEV):SCAN_MODE")
     field(OUT,  "@asyn($(PORT))SCAN_MODE")
 }
 
+## GET SCAN data
+record(waveform,"$(DEV):MONITORING_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(SCAN, "$(CSCAN) second")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+record(waveform,"$(DEV):CYCLE_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+record(waveform,"$(DEV):LEAKCHECK_SCAN")
+{
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_SCAN")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+}
+
+
 # Pulling data PVs 
 record(stringin, "$(DEV):GET_COMM_PARAM")
 {
@@ -624,31 +651,6 @@ record(ai, "$(DEV):TOTAL_PRESS_RBV")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))GET_PRESS")
     field(SCAN, "$(DSCAN) second")
-}
-
-record(waveform,"$(DEV):MONITORING_SCAN")
-{
-    field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT))GET_SCAN")
-    field(SCAN, "$(CSCAN) second")
-    field(FTVL, "FLOAT")
-    field(NELM, "16384")
-}
-
-record(waveform,"$(DEV):CYCLE_SCAN")
-{
-    field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT))GET_SCAN")
-    field(FTVL, "FLOAT")
-    field(NELM, "16384")
-}
-
-record(waveform,"$(DEV):LEAKCHECK_SCAN")
-{
-    field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT))GET_SCAN")
-    field(FTVL, "FLOAT")
-    field(NELM, "16384")
 }
 
 record(stringin, "$(DEV):IP")

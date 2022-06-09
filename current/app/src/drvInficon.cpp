@@ -992,6 +992,7 @@ asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanI
         scanInfo->ppScan = j["data"]["pointsPerScan"];
         btemp = j["data"]["scanning"];		
         scanInfo->scanStatus = (btemp != false) ? 1 : 0;
+        printf("%s::%s scanStatus:%d\n", driverName, functionName, btemp);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
@@ -1003,8 +1004,6 @@ asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanI
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
-
-    //printf("%s::%s maxMass:%d\n", driverName, functionName, elecInfo->massMax);
     return asynSuccess;
 }
 
