@@ -84,6 +84,7 @@ record(calcout, "$(DEV):CYCLE_READ_TIMER")
     field(SCAN, "1 second")
     field(CALC, "(VAL+1)%(3600/A)")
     field(INPA, "$(DEV):N_SCANS_PER_HOUR.VAL")
+    field(OOPT, "When Zero")
     field(OUT,  "$(DEV):CYCLE_TEST.PROC")
 }
 
