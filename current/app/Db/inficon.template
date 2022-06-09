@@ -341,7 +341,6 @@ record(mbbo, "$(DEV):CH4_DWELL")
     field(FFST, "16384")
 }
 
-
 # SET CH PPAMU
 record(mbbo, "$(DEV):CH1_PPAMU")
 {

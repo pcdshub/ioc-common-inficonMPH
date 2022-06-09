@@ -276,6 +276,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 	
     pasynManager->getAddr(pasynUser, &chNumber);
 
+    setUIntDigitalParam(chNumber, function, value, mask);
     if (function == emiOn_) {
         sprintf(request,"GET /mmsp/generalControl/setEmission/set?%d\r\n"
         "\r\n", value);
@@ -358,8 +359,12 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
     int function = pasynUser->reason;
     char request[HTTP_REQUEST_SIZE];
+	int chNumber;
     static const char *functionName = "writeInt32";
+	
+    pasynManager->getAddr(pasynUser, &chNumber);
 
+    setIntegerParam(chNumber, function, value);
     if (function == scanCount_) {
         sprintf(request,"GET /mmsp/scanSetup/scanCount/set?%d\r\n"
         "\r\n", value);
@@ -414,6 +419,7 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 	
     pasynManager->getAddr(pasynUser, &chNumber);
 
+    setDoubleParam(chNumber, function, value);
     if (function == chStartMass_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/startMass/set?%.2f\r\n"
@@ -617,6 +623,7 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
 
     pasynManager->getAddr(pasynUser, &chNumber);
 
+    *nActual = strlen(value);
     setStringParam(chNumber, function, value);
     if (function == chMode_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
