@@ -246,11 +246,12 @@ void drvInficon::report(FILE *fp, int details)
     asynPortDriver::report(fp, details);
 }
 
-asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
+/*asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
 {
     *address = 0;
     return asynSuccess;
 }
+*/
 
 /*
 **  asynUInt32D support
@@ -591,28 +592,21 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
     } else if (function == getChScanSetup_) {
 		
         if (chNumber < 1 || chNumber > MAX_CHANNELS) 
-			return asynError;
+            return asynError;
 
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
-						"\r\n", 
-						chNumber);
-						
+                        "\r\n", 
+                        chNumber);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
         if (status != asynSuccess) return(status);
-        //setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
-        //setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
-        //setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
-        //setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
-        //setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
-        setStringParam(1, chMode_, chScanSetup_[chNumber].chMode);
-        setDoubleParam(1, chStartMass_, chScanSetup_[chNumber].chStartMass);
-        setDoubleParam(1, chStopMass_, chScanSetup_[chNumber].chStopMass);	
-        setUIntDigitalParam(1, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
-        setUIntDigitalParam(1, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
-        //setUIntDigitalParam(chNumber, chDwell_, 128, 0xFFFFFFFF);
-        //setUIntDigitalParam(chNumber, chPpamu_, 50, 0xFFFFFFFF);
+        setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
+        setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
+        setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
+        setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
+        setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
         //printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
