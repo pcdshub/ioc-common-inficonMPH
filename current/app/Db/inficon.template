@@ -413,8 +413,8 @@ record(ao, "$(DEV):CH1_START_MASS")
     field(DESC, "Set Ch1 start Mass")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
-    field(DRVH, "200.0")
-    field(DRVL, "0.0")
+#    field(DRVH, "200.0")
+#    field(DRVL, "0.0")
     field(PREC, "2")
 }
 
