@@ -432,6 +432,11 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
         "\r\n", chNumber, value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else if (function == emGain_) {
+        sprintf(request,"GET /mmsp/sensorDetector/emGain/set?%.2f\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",

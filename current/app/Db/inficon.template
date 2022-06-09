@@ -240,10 +240,20 @@ record(longout, "$(DEV):EM_V")
     field(DESC, "Set em voltage")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
-    field(DRVH, "2000")
-    field(DRVL, "600")
+#    field(DRVH, "2000")
+#    field(DRVL, "600")
 	field(VAL,  "815")
 }
+
+# SET EM Gain
+record(longout, "$(DEV):EM_GAIN")
+{
+    field(DESC, "Set em gain")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT))EM_GAIN")
+    field(PREC, "2")
+}
+
 
 # SET START AND STOP CHANNEL
 record(longout, "$(DEV):SET_CH4_ASINPUT")
@@ -838,6 +848,7 @@ record(longin, "$(DEV):EM_V_MAX_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MAX")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
+	field(FLNK, "$(DEV):EM_V.DRVH")
 }
 
 record(longin, "$(DEV):EM_V_MIN_RBV")
@@ -847,6 +858,7 @@ record(longin, "$(DEV):EM_V_MIN_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MIN")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
+	field(FLNK, "$(DEV):EM_V.DRVL")
 }
 
 record(ai, "$(DEV):EM_GAIN_RBV")
