@@ -589,9 +589,14 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
         //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
     } else if (function == getChScanSetup_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+		
+        if (chNumber < 1 || chNumber > MAX_CHANNELS) 
+			return asynError;
+
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
-        "\r\n", chNumber);
+						"\r\n", 
+						chNumber);
+						
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseChScanSetup(data_, chScanSetup_, chNumber);
@@ -610,7 +615,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
                   driverName, functionName, this->portName, function);
         return asynError;
     }
-    callParamCallbacks(chNumber);
+    callParamCallbacks(0, chNumber);
     return status;
 }
 
