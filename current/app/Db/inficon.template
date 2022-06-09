@@ -84,14 +84,14 @@ record(calcout, "$(DEV):CYCLE_READ_TIMER")
     field(SCAN, "1 second")
     field(CALC, "(VAL+1)%(3600/A)")
     field(INPA, "$(DEV):N_SCANS_PER_HOUR.VAL")
-#    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
+    field(OUT,  "$(DEV):CYCLE_TEST.PROC")
 }
 
-#record(bi, "$(DEV):CYCLE_TEST")
-#{
-#    field(DESC, "Test")
-#	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
-#}
+record(bi, "$(DEV):CYCLE_TEST")
+{
+    field(DESC, "Test")
+	field(FLNK, "$(DEV):SET_LEAKCHK_STATE")
+}
 
 # SCAN STOP IMMEDIATELLY
 record(bo, "$(DEV):STOP_SCAN")
