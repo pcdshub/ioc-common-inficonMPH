@@ -325,6 +325,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
+        printf("%s::%s scanStopString:%s\n", driverName, functionName, data);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -992,7 +993,7 @@ asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanI
         scanInfo->ppScan = j["data"]["pointsPerScan"];
         btemp = j["data"]["scanning"];		
         scanInfo->scanStatus = (btemp != false) ? 1 : 0;
-        printf("%s::%s scanStatus:%d\n", driverName, functionName, btemp);
+        //printf("%s::%s scanStatus:%d\n", driverName, functionName, btemp);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
