@@ -424,20 +424,31 @@ record(mbbo, "$(DEV):CH4_PPAMU")
 # SET NUMBER OF SWEEPS
 record(longout, "$(DEV):SWEEP_N")
 {
+    field(PINI, "YES")
     field(DESC, "N of Sweeps per Scan")
     field(DRVH, "5")
     field(DRVL, "1")
 	field(VAL,  "2")
 }
 
+record(sel, "$(DEV):SWEPP_N_SEL")
+{
+    field(DESC, "Select N of Sweeps")
+    field(SELM, "Specified")
+    field(NVL,  "$(DEV):INFICON_STATE.VAL")
+    field(INPA, "-1")
+    field(INPB, "-1")
+    field(INPC, "$(DEV):SWEEP_N")
+    field(INPD, "-1")
+}
+
 record(longout, "$(DEV):SET_SWEEP_N")
 {
     field(DESC, "Set N of Sweeps per Scan")
     field(DTYP, "asynInt32")
+    field(OMSL, "closed_loop")
+    field(DOL,  "$(DEV):SWEPP_N_SEL.VAL PP")
     field(OUT,  "@asyn($(PORT))SCAN_COUNT")
-    field(DRVH, "5")
-    field(DRVL, "-1")
-	field(VAL,  "2")
 }
 
 # SET CH START MASS
