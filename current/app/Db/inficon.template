@@ -439,6 +439,7 @@ record(ao, "$(DEV):CH1_STOP_MASS")
 # CH MODE STATIC
 record(stringout, "$(DEV):CH1_MODE")
 {
+    field(PINI, "YES")
     field(DESC, "Ch1 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),1)CH_MODE")
@@ -447,6 +448,7 @@ record(stringout, "$(DEV):CH1_MODE")
 
 record(stringout, "$(DEV):CH4_MODE")
 {
+    field(PINI, "YES")
     field(DESC, "Ch4 measurement mode")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),4)CH_MODE")
