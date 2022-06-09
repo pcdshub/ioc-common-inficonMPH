@@ -245,6 +245,25 @@ record(longout, "$(DEV):EM_V")
 	field(VAL,  "815")
 }
 
+# SET MAX AND MIN FOR EM_V
+record(dfanout, "$(DEV):SET_EM_V_MAX")
+{
+    field(DESC, "Set DRVH field for EM V")
+    field(DOL,  "$(DEV):EM_V_MAX_RBV")
+    field(OMSL, "closed_loop")
+    field(SELM, "All")
+    field(OUTA, "$(DEV):EM_V.DRVH")
+}
+
+record(dfanout, "$(DEV):SET_EM_V_MIN")
+{
+    field(DESC, "Set DRVL field for EM V")
+    field(DOL,  "$(DEV):EM_V_MIN_RBV")
+    field(OMSL, "closed_loop")
+    field(SELM, "All")
+    field(OUTA, "$(DEV):EM_V.DRVL")
+}
+
 # SET EM Gain
 record(ao, "$(DEV):EM_GAIN")
 {
@@ -253,7 +272,6 @@ record(ao, "$(DEV):EM_GAIN")
     field(OUT,  "@asyn($(PORT))EM_GAIN")
     field(PREC, "2")
 }
-
 
 # SET START AND STOP CHANNEL
 record(longout, "$(DEV):SET_CH4_ASINPUT")
@@ -848,7 +866,7 @@ record(longin, "$(DEV):EM_V_MAX_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MAX")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
-	field(FLNK, "$(DEV):EM_V.DRVH")
+	field(FLNK, "$(DEV):SET_EM_V_MAX")
 }
 
 record(longin, "$(DEV):EM_V_MIN_RBV")
@@ -858,7 +876,7 @@ record(longin, "$(DEV):EM_V_MIN_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MIN")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
-	field(FLNK, "$(DEV):EM_V.DRVL")
+	field(FLNK, "$(DEV):SET_EM_V_MIN")
 }
 
 record(ai, "$(DEV):EM_GAIN_RBV")
