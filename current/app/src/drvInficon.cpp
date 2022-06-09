@@ -246,13 +246,6 @@ void drvInficon::report(FILE *fp, int details)
     asynPortDriver::report(fp, details);
 }
 
-/*asynStatus drvInficon::getAddress(asynUser *pasynUser, int *address)
-{
-    *address = 0;
-    return asynSuccess;
-}
-*/
-
 /*
 **  asynUInt32D support
 */

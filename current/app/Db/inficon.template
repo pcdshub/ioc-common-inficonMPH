@@ -701,6 +701,7 @@ record(longin, "$(DEV):PWR_ON_TIME_RBV")
 
 record(longin, "$(DEV):EMI_ON_TIME_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Emi on time")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_ON_T")
@@ -710,13 +711,13 @@ record(longin, "$(DEV):EMI_ON_TIME_RBV")
 
 record(longin, "$(DEV):EM_ON_TIME_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Em on time")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_ON_T")
     field(SCAN, "I/O Intr")
     field(EGU,  "s")
 	field(VAL,  "0")
-	field(PINI, "1")
 }
 
 record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
@@ -730,6 +731,7 @@ record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
 
 record(longin, "$(DEV):EM_PRESS_TRIP_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Em press. trip counter")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_PRESS_TRIP")
@@ -802,6 +804,7 @@ record(longin, "$(DEV):FIL_CURR_RBV")
 
 record(longin, "$(DEV):EM_POT_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Sens. Detect. EM Potential")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_POTENTIAL")
@@ -843,6 +846,7 @@ record(longin, "$(DEV):PPSCAN")
 
 record(bi, "$(DEV):SCAN_STAT")
 {
+    field(PINI, "YES")
     field(DESC, "Scan running status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")
