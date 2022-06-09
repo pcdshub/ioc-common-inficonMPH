@@ -617,6 +617,7 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
 
     pasynManager->getAddr(pasynUser, &chNumber);
 
+    setStringParam(chNumber, function, value);
     if (function == chMode_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode/set?%s\r\n"
