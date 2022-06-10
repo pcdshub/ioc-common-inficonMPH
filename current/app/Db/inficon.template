@@ -145,6 +145,7 @@ record(bo, "$(DEV):STOP_SCAN")
 {
     field(DESC, "Stop scanning button")
 	field(FLNK, "$(DEV):SET_STOP_SCAN")
+    field(OUT,  "$(DEV):SET_IDLE_STATE.PROC")
 }
 
 record(bo, "$(DEV):SET_STOP_SCAN")
@@ -155,7 +156,7 @@ record(bo, "$(DEV):SET_STOP_SCAN")
     field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
     field(ZNAM, "IMMEDIATELLY")
     field(ONAM, "END_OF_SCAN")
-	field(FLNK, "$(DEV):SET_IDLE_STATE")
+#	field(FLNK, "$(DEV):SET_IDLE_STATE")
 	field(VAL,  "0")
 }
 
