@@ -1226,6 +1226,7 @@ record(bi, "$(DEV):EMI_LEVEL_RBV")
 
 record(bi, "$(DEV):OPT_TYPE_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Emi Level")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0x1)OPT_TYPE")

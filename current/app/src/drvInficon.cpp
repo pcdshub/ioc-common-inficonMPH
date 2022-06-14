@@ -1229,7 +1229,7 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
                 "%s::%s JSON error parsing optimization type string: %s\n", driverName, functionName, stemp);
             return asynError;
         }
-        printf("%s::%s filSel:%d, emiLevel:%d, optType:%d\n", driverName, functionName, sensIonSource->filSel, sensIonSource->emiLevel, sensIonSource->optType);
+        //printf("%s::%s filSel:%d, emiLevel:%d, optType:%d\n", driverName, functionName, sensIonSource->filSel, sensIonSource->emiLevel, sensIonSource->optType);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
