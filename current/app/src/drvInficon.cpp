@@ -965,15 +965,18 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->emOnTime = j["data"]["emStretch"];
         devStatus->emCmlOnTime = j["data"]["emOnTime"];
         devStatus->emPressTrip = j["data"]["emPressTrip"];
-        auto filaments = j["data"]["filaments"];
+        //auto filaments = j["data"]["filaments"];
         unsigned int emiCmlOnTime = 0;
-        for (json::iterator i = filaments.begin(); i != filaments.end(); i++) {
+		int i = 0;
+        for (auto& filaments : j["data"]["filaments"]) {
+            i++;
+        //for (json::iterator i = filaments.begin(); i != filaments.end(); i++) {
             /*devStatus->filament[*i].id = filaments["@id"];
             emiCmlOnTime = filaments["emisOnTime"];
             devStatus->filament[*i].emiCmlOnTime = emiCmlOnTime/3600;
             devStatus->filament[*i].emiPressTrip = filaments["emisPressTrip"];
             printf("%s::%s id:%d, emiCmlOnTime:%.1f, emiPressTrip:%d\n", driverName, functionName, devStatus->filament[*i].id, devStatus->filament[*i].emiCmlOnTime, devStatus->filament[*i].emiPressTrip);*/
-            printf("%s::%s iterator:%d\n", driverName, functionName, *i);
+            printf("%s::%s iterator:%d\n", driverName, functionName, i);
         }
         //add emi press trip for every filamenet and cumulative power on time
         //printf("%s::%s systStatus:%d, pwrOnTime:%d\n", driverName, functionName, devStatus->systStatus, devStatus->pwrOnTime);
