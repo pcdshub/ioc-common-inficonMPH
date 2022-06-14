@@ -647,12 +647,12 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
     int function = pasynUser->reason;
     char request[HTTP_REQUEST_SIZE];
 	int chNumber;
-	std::string tempChMode;
-    char chMode[32];
-	double startMass;
-	double stopMass;
-	unsigned int ppamu;
-	unsigned int dwell;
+	//std::string tempChMode;
+    //char chMode[32];
+	//double startMass;
+	//double stopMass;
+	//unsigned int ppamu;
+	//unsigned int dwell;
     static const char *functionName = "writeOctet";
 
     pasynManager->getAddr(pasynUser, &chNumber);

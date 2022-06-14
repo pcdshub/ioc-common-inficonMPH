@@ -453,7 +453,8 @@ record(dfanout, "$(DEV):SET_MASS_MAX")
 record(dfanout, "$(DEV):SET_MASS_MIN")
 {
     field(DESC, "Set DRVL field for Mass")
-    field(DOL,  "$(DEV):MASS_MIN_RBV")
+#    field(DOL,  "$(DEV):MASS_MIN_RBV")
+    field(DOL,  "0.5")
     field(OMSL, "closed_loop")
     field(SELM, "All")
     field(OUTA, "$(DEV):CH1_START_MASS.DRVL")
@@ -522,14 +523,6 @@ record(waveform,"$(DEV):MONITORING_SCAN")
     field(DTYP, "asynFloat32ArrayIn")
     field(INP,  "@asyn($(PORT))GET_SCAN")
     field(SCAN, "$(CSCAN) second")
-    field(FTVL, "FLOAT")
-    field(NELM, "16384")
-}
-
-record(waveform,"$(DEV):CYCLE_SCAN")
-{
-    field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT))GET_SCAN")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
 }
