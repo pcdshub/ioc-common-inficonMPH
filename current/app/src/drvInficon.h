@@ -129,7 +129,7 @@ typedef struct {
 } sensInfoStruct;
 
 typedef struct {
-    double emiCmlOnTime
+    double emiCmlOnTime;
     unsigned int emiPressTrip;
 } filamentsStruct;
 
