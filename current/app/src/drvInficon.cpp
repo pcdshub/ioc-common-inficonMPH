@@ -1193,9 +1193,9 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
         size_t len = cutAt - tempJsonData - 1;
         strncpy(jsonDataSubstring, tempJsonData, len);
 		jsonDataSubstring[len] = '\0';
-		//len = strlen(jsonDataSubstring);
-		//strcpy(jsonDataSubstring + len, cutTo - 1);
-		//len = strlen(jsonDataSubstring);
+		len = strlen(jsonDataSubstring);
+		strcpy(jsonDataSubstring + len, cutTo - 1);
+		len = strlen(jsonDataSubstring);
         printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, jsonDataSubstring);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
