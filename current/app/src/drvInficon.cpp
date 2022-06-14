@@ -1040,12 +1040,14 @@ asynStatus drvInficon::parseSensDetect(const char *jsonData, sensDetectStruct *s
 
     try {
         json j = json::parse(jsonData);
+        unsigned int emGainMass;
 
         sensDetect->emVMax = j["data"]["emVoltageMax"];
         sensDetect->emVMin = j["data"]["emVoltageMin"];
         sensDetect->emV = j["data"]["emVoltage"];
         sensDetect->emGain = j["data"]["emGain"];
-        sensDetect->emGainMass = j["data"]["emGainMass"];
+        emGainMass = j["data"]["emGainMass"];
+        sensDetect->emGainMass = emGainMass/100;
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
