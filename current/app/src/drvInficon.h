@@ -129,6 +129,7 @@ typedef struct {
 } sensInfoStruct;
 
 typedef struct {
+	unsigned int id;
     double emiCmlOnTime;
     unsigned int emiPressTrip;
 } filamentsStruct;
