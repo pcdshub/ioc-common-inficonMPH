@@ -1173,18 +1173,22 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
 {
     static const char *functionName = "parseSensIonSource";
 
-	char jsonDataSubstring[3000];
+	char jsonDataSubstring[5000];
 	char stemp[32];
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
 
-	memset(jsonDataSubstring, '\0', 3000);
+	memset(jsonDataSubstring, '\0', 5000);
 	memset(stemp, '\0', 32);	
 
     cutAt = strstr(tempJsonData,"ionSource");
     cutTo = strstr(tempJsonData,"calIndex");
 
+
+    printf("%s::%s len:%d, cutAt:%s\n", driverName, functionName, cutAt);
+    printf("%s::%s len:%d, cutTo:%s\n", driverName, functionName, cutTo);
+/*
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
         strncpy(jsonDataSubstring, tempJsonData, len);
@@ -1197,7 +1201,7 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s JSON data corrupted\n", driverName, functionName);
         return asynError;
-    }
+    }*/
 /*
     try {
         json j = json::parse(jsonDataSubstring);
