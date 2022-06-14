@@ -967,7 +967,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->emPressTrip = j["data"]["emPressTrip"];
         auto filaments = j["data"]["filaments"];
         unsigned int emiCmlOnTime = 0;
-        for (json::iterator i = filaments.begin(); i != filaments.end(); i++) {
+        for (int i = filaments.begin(); i != filaments.end(); i++) {
             devStatus->filament[i].id = filaments["@id"];
             emiCmlOnTime = filaments["emisOnTime"];
             devStatus->filament[i].emiCmlOnTime = emiCmlOnTime/3600;
