@@ -1173,13 +1173,13 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
 {
     static const char *functionName = "parseSensIonSource";
 
-	char jsonDataSubstring[5000];
+	char jsonDataSubstring[8000];
 	char stemp[32];
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
 
-	memset(jsonDataSubstring, '\0', 5000);
+	memset(jsonDataSubstring, '\0', 8000);
 	memset(stemp, '\0', 32);	
 
     cutAt = strstr(tempJsonData,"ionSource");
