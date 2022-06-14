@@ -925,10 +925,11 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
-    cutAt = strstr(tempJsonData,"peakfind");
-    cutTo = strstr(tempJsonData,"filaments");
 
 	memset(jsonDataSubstring, '\0', 1500);
+
+    cutAt = strstr(tempJsonData,"peakfind");
+    cutTo = strstr(tempJsonData,"filaments");
 
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
@@ -1177,11 +1178,12 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
-    cutAt = strstr(tempJsonData,"ionSource");
-    cutTo = strstr(tempJsonData,"calIndex"");
 
 	memset(jsonDataSubstring, '\0', 3000);
-	memset(stemp, '\0', 32);
+	memset(stemp, '\0', 32);	
+
+    cutAt = strstr(tempJsonData,"ionSource");
+    cutTo = strstr(tempJsonData,"calIndex");
 
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
