@@ -129,6 +129,11 @@ typedef struct {
 } sensInfoStruct;
 
 typedef struct {
+    double emiCmlOnTime
+    unsigned int emiPressTrip;
+} filamentsStruct;
+
+typedef struct {
     unsigned int systStatus;
     unsigned int hwError;
     unsigned int hwWarn;
@@ -137,8 +142,7 @@ typedef struct {
     unsigned int emOnTime;
     unsigned int emCmlOnTime;
     unsigned int emPressTrip;
-    unsigned int emiCmlOnTime;
-    unsigned int emiPressTrip;
+    filamentsStruct filament[3];
 } devStatusStruct;
 
 typedef struct {
