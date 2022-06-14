@@ -87,6 +87,11 @@
 #define INFICON_MASS_MIN_STRING           "MASS_MIN"
 #define INFICON_DWELL_MAX_STRING          "DWELL_MAX"
 #define INFICON_DWELL_MIN_STRING          "DWELL_MIN"
+//Sensor Ion Source
+#define INFICON_GET_SENS_ION_SRC_STRING   "GET_SENS_ION_SRC"
+#define INFICON_FIL_SEL_STRING            "FIL_SEL"
+#define INFICON_EMI_LEVEL_STRING          "EMI_LEVEL"
+#define INFICON_OPT_TYPE_STRING           "OPT_TYPE"
 //Scan setup
 #define INFICON_GET_CH_SCAN_SETUP_STRING  "GET_CH_SCAN_SETUP"
 #define INFICON_SET_CH_SCAN_SETUP_STRING  "SET_CH_SCAN_SETUP"
@@ -164,6 +169,12 @@ typedef struct {
 } sensDetectStruct;
 
 typedef struct {
+    unsigned int filSel;
+    unsigned int emiLevel;
+    unsigned int optType;
+} sensIonSourceStruct;
+
+typedef struct {
     double massMax;
     double massMin;
     unsigned int dwellMax;
@@ -238,6 +249,7 @@ public:
     asynStatus parseSensFilt(const char *jsonData, sensFiltStruct *sensFilt);
     asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
     asynStatus parsePressure(const char *jsonData, double *value);
+    asynStatus parseSensIonSource(const char *jsonData, sensIonSourceStruct *sensIonSource);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
@@ -304,6 +316,11 @@ protected:
     int massMin_;
     int dwelMax_;
     int dwelMin_;
+    //Sensor filter parameters
+    int getSensIonSrc_;
+    int filSel_;
+    int emiLevel_;
+    int optType_;
     //Scan setup parameters
     int getChScanSetup_;
     int setChScanSetup_;
@@ -346,6 +363,7 @@ private:
     sensFiltStruct *sensFilt_;
     chScanSetupStruct *chScanSetup_;
     scanDataStruct *scanData_;
+    sensIonSourceStruct *sensIonSource_;
 	float totalPressure_;
 };
 

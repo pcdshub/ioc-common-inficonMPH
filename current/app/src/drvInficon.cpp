@@ -134,6 +134,11 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_MASS_MIN_STRING,           asynParamFloat64,        &massMin_);
     createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
     createParam(INFICON_DWELL_MIN_STRING,          asynParamUInt32Digital,  &dwelMin_);
+    //Sensor Ion Source parameters
+    createParam(INFICON_GET_SENS_ION_SRC_STRING,   asynParamOctet,          &getSensIonSrc_);
+    createParam(INFICON_FIL_SEL_STRING,            asynParamUInt32Digital,  &filSel_);
+    createParam(INFICON_EMI_LEVEL_STRING,          asynParamUInt32Digital,  &emiLevel_);
+    createParam(INFICON_OPT_TYPE_STRING,           asynParamUInt32Digital,  &optType_);
     //Scan setup parameters
     createParam(INFICON_GET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &getChScanSetup_);
     createParam(INFICON_SET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &setChScanSetup_);
@@ -180,7 +185,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     sensFilt_ = new sensFiltStruct;
     chScanSetup_ = new chScanSetupStruct[5];
     scanData_ = new scanDataStruct;
-	
+    sensIonSource_ = new sensIonSourceStruct;
 
     /* Connect to asyn octet port with asynOctetSyncIO */
     status = pasynOctetSyncIO->connect(octetPortName_, 0, &pasynUserOctet_, 0);
@@ -220,6 +225,7 @@ drvInficon::~drvInficon() {
     delete sensFilt_;
     delete chScanSetup_;
     delete scanData_;
+    delete sensIonSource_;
 }
 
 /***********************/
@@ -325,7 +331,11 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-        printf("%s::%s scanStopString:%s\n", driverName, functionName, data_);
+    } else if (function == filSel_) {
+        sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -430,6 +440,11 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == emGain_) {
         sprintf(request,"GET /mmsp/sensorDetector/emGain/set?%.2f\r\n"
+        "\r\n", value);
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else if (function == emGainMass_) {
+        sprintf(request,"GET /mmsp/sensorDetector/emGainMass/set?%.2f\r\n"
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
@@ -583,6 +598,16 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
         setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
         //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
+    } else if (function == getSensIonSrc_) {
+        sprintf(request,"GET /mmsp/sensorIonSource/get\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        status = parseSensIonSource(data_, sensIonSource_);
+        if (status != asynSuccess) return(status);
+        setUIntDigitalParam(filSel_, sensIonSource_->filSel, 0xFFFFFFFF);
+        setUIntDigitalParam(emiLevel_, sensIonSource_->emiLevel, 0xFFFFFFFF);
+        setUIntDigitalParam(optType_, sensIonSource_->optType, 0xFFFFFFFF);
     } else if (function == getChScanSetup_) {
 		
         if (chNumber < 1 || chNumber > MAX_CHANNELS) 
@@ -644,8 +669,8 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
         getUIntDigitalParam(chNumber, chPpamu_, &ppamu, 0xFFFFFFFF);
         getUIntDigitalParam(chNumber, chDwell_, &dwell, 0xFFFFFFFF);
 		if (strcmp(chMode, "Single") == 0) {
-            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
-            "\r\n", chNumber, chMode, startMass, ppamu, dwell);
+            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&dwell=%d&enabled=True\r\n"
+            "\r\n", chNumber, chMode, startMass, dwell);
         } else {
             sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
             "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
@@ -1129,6 +1154,80 @@ asynStatus drvInficon::parsePressure(const char *jsonData, double *value)
         json j = json::parse(jsonData);
 
         *value = j["data"];
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStruct *sensIonSource)
+{
+    static const char *functionName = "parseSensIonSource";
+
+	char jsonDataSubstring[3000];
+	char stemp[32];
+    const char *tempJsonData = jsonData;
+    const char *cutAt;
+    const char *cutTo;
+    cutAt = strstr(tempJsonData,"ionSource");
+    cutTo = strstr(tempJsonData,"calIndex"");
+
+	memset(jsonDataSubstring, '\0', 3000);
+	memset(stemp, '\0', 32);
+
+    if(cutAt != NULL && cutTo != NULL) {
+        size_t len = cutAt - tempJsonData - 1;
+        strncpy(jsonDataSubstring, tempJsonData, len);
+		jsonDataSubstring[len] = '\0';
+		len = strlen(jsonDataSubstring);
+		strcpy(jsonDataSubstring + len, cutTo - 1);
+		len = strlen(jsonDataSubstring);
+        printf("%s::%s len:%d, substring:%s\n", driverName, functionName, (int)len, jsonDataSubstring);
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON data corrupted\n", driverName, functionName);
+        return asynError;
+    }
+
+    try {
+        json j = json::parse(jsonDataSubstring);
+        std::string jstring;
+
+        sensIonSource->filSel = j["data"]["filamentSelected"];
+
+        jstring = j["data"]["emissionLevel"];
+        strcpy(stemp, jstring.c_str());
+	    if(strcmp(stemp,"Lo") == 0) {
+            sensIonSource->emiLevel = 0;
+        } else if (strcmp(stemp,"Hi") == 0) {
+            sensIonSource->emiLevel = 1;
+        } else {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+                "%s::%s JSON error parsing emiss level string: %s\n", driverName, functionName, stemp);
+            return asynError;
+        }
+
+	    memset(stemp, '\0', 32);
+        jstring = j["data"]["optimizationType"];
+        strcpy(stemp, jstring.c_str());
+	    if(strcmp(stemp,"Linearity") == 0) {
+            sensIonSource->optType = 0;
+        } else if (strcmp(stemp,"Sensitivity") == 0) {
+            sensIonSource->optType = 1;
+        } else {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+                "%s::%s JSON error parsing optimization type string: %s\n", driverName, functionName, stemp);
+            return asynError;
+        }
+        printf("%s::%s filSel:%d, emiLevel:%d, optType:%d\n", driverName, functionName, sensIonSource->filSel, sensIonSource->emiLevel, sensIonSource->optType);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 

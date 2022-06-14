@@ -318,6 +318,14 @@ record(ao, "$(DEV):EM_GAIN")
     field(PREC, "2")
 }
 
+# SET EM Gain Mass
+record(longout, "$(DEV):EM_GAIN_MASS")
+{
+    field(DESC, "Set em gain mass")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_GAIN_MASS")
+}
+
 # SET START AND STOP CHANNEL
 record(longout, "$(DEV):SET_CH4_ASINPUT")
 {
@@ -443,30 +451,16 @@ record(mbbo, "$(DEV):CH1_PPAMU")
 	field(VAL,  "10")
 }
 
-record(mbbo, "$(DEV):CH4_PPAMU")
+# SET FILAMENT SELECTED
+record(mbbo, "$(DEV):SET_FIL_SEL")
 {
-    field(DESC, "Set CH4 Points Per AMU")
+    field(DESC, "Set filament selected")
     field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_PPAMU")
+    field(OUT,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
     field(ZRVL, "1")
     field(ONVL, "2")
-    field(TWVL, "4")
-    field(THVL, "5")
-    field(FRVL, "10")
-    field(FVVL, "20")
-    field(SXVL, "25")
-    field(SVVL, "50")
-    field(EIVL, "100")
     field(ZRST, "1")
     field(ONST, "2")
-    field(TWST, "4")
-    field(THST, "5")
-    field(FRST, "10")
-    field(FVST, "20")
-    field(SXST, "25")
-    field(SVST, "50")
-    field(EIST, "100")
-	field(VAL,  "10")
 }
 
 # SET NUMBER OF SWEEPS
@@ -691,6 +685,13 @@ record(stringin, "$(DEV):GET_SENS_FILT")
 {
     field(DTYP, "asynOctetRead")
     field(INP,  "@asyn($(PORT))GET_SENS_FILT")
+    field(SCAN, "$(CSCAN) second")
+}
+
+record(stringin, "$(DEV):GET_SENS_ION_SRC")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_SENS_ION_SRC")
     field(SCAN, "$(CSCAN) second")
 }
 
@@ -1201,9 +1202,37 @@ record(ai, "$(DEV):CH4_STOP_MASS_RBV")
     field(EGU,  "AMU")
 }
 
+record(mbbi, "$(DEV):FIL_SEL_RBV")
+{
+    field(DESC, "Filament selected")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
+    field(SCAN, "I/O Intr")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(ZRST, "1")
+    field(ONST, "2")
+}
 
+record(bi, "$(DEV):EMI_LEVEL_RBV")
+{
+    field(DESC, "Emi Level")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0x1)EMI_LEVEL")
+    field(ZNAM, "Lo")
+    field(ONAM, "Hi")
+    field(SCAN, "I/O Intr")
+}
 
-
+record(bi, "$(DEV):OPT_TYPE_RBV")
+{
+    field(DESC, "Emi Level")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0x1)OPT_TYPE")
+    field(ZNAM, "Linearity")
+    field(ONAM, "Sensitivity")
+    field(SCAN, "I/O Intr")
+}
 
 
 
