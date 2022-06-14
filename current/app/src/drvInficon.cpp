@@ -1186,8 +1186,8 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
     cutTo = strstr(tempJsonData,"calIndex");
 
 
-    printf("%s::%s len:%d, cutAt:%s\n", driverName, functionName, cutAt);
-    printf("%s::%s len:%d, cutTo:%s\n", driverName, functionName, cutTo);
+    printf("%s::%s cutAt:%s\n", driverName, functionName, cutAt);
+    printf("%s::%s cutTo:%s\n", driverName, functionName, cutTo);
 /*
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
