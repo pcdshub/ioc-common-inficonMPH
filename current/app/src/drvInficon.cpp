@@ -327,8 +327,13 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == scanStop_) {
-        sprintf(request,"GET /mmsp/scanSetup/scanStop/set?%d\r\n"
-        "\r\n", value);
+        if (value == 1) {
+            sprintf(request,"GET /mmsp/scanSetup/scanStop/set?EndOfScan\r\n"
+                    "\r\n");
+        } else {
+            sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
+                    "\r\n");
+        }
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == filSel_) {
@@ -662,7 +667,7 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == setChScanSetup_) {
         if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
-        getStringParam(chNumber, chMode_, tempChMode);
+        /*getStringParam(chNumber, chMode_, tempChMode);
         strcpy(chMode, tempChMode.c_str());
         getDoubleParam(chNumber, chStartMass_, &startMass);
         getDoubleParam(chNumber, chStopMass_, &stopMass);
@@ -674,7 +679,11 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
         } else {
             sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
             "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
-        }
+        }*/
+        sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?enabled=True\r\n"
+                "\r\n",
+                chNumber);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else {
