@@ -1185,6 +1185,8 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
     cutAt = strstr(tempJsonData,"ionSource");
     cutTo = strstr(tempJsonData,"calIndex");
 
+    printf("%s::%s IonSource:%s\n", driverName, functionName, tempJsonData);
+/*
     if(cutAt != NULL && cutTo != NULL) {
         size_t len = cutAt - tempJsonData - 1;
         strncpy(jsonDataSubstring, tempJsonData, len);
@@ -1240,7 +1242,7 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
-    }
+    }*/
     return asynSuccess;
 }
 
