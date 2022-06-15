@@ -138,10 +138,10 @@ typedef struct {
     unsigned int systStatus;
     unsigned int hwError;
     unsigned int hwWarn;
-    unsigned int pwrOnTime;
-    unsigned int emiOnTime;
-    unsigned int emOnTime;
-    unsigned int emCmlOnTime;
+    double pwrOnTime;
+    double emiOnTime;
+    double emOnTime;
+    double emCmlOnTime;
     unsigned int emPressTrip;
     filamentsStruct filament[3];
 } devStatusStruct;

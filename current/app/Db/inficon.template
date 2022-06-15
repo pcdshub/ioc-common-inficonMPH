@@ -676,43 +676,43 @@ record(mbbiDirect, "$(DEV):HW_WARN_RBV")
     field(SCAN, "I/O Intr")
 }
 
-record(longin, "$(DEV):PWR_ON_TIME_RBV")
+record(ai, "$(DEV):PWR_ON_TIME_RBV")
 {
     field(DESC, "Pwr on time")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)PWR_ON_T")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))PWR_ON_T")
     field(SCAN, "I/O Intr")
-    field(EGU,  "s")
+    field(EGU,  "h")
 }
 
-record(longin, "$(DEV):EMI_ON_TIME_RBV")
+record(ai, "$(DEV):EMI_ON_TIME_RBV")
 {
     field(PINI, "YES")
     field(DESC, "Emi on time")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EMI_ON_T")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))EMI_ON_T")
     field(SCAN, "I/O Intr")
-    field(EGU,  "s")
+    field(EGU,  "h")
 }
 
-record(longin, "$(DEV):EM_ON_TIME_RBV")
+record(ai, "$(DEV):EM_ON_TIME_RBV")
 {
     field(PINI, "YES")
     field(DESC, "Em on time")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_ON_T")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))EM_ON_T")
     field(SCAN, "I/O Intr")
-    field(EGU,  "s")
-	field(VAL,  "0")
+    field(EGU,  "h")
 }
 
-record(longin, "$(DEV):EM_CML_ON_TIME_RBV")
+record(ai, "$(DEV):EM_CML_ON_TIME_RBV")
 {
     field(DESC, "Em cumulative on time")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_CML_ON_T")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))EM_CML_ON_T")
     field(SCAN, "I/O Intr")
-    field(EGU,  "s")
+    field(PREC, "1")
+    field(EGU,  "h")
 }
 
 record(longin, "$(DEV):EM_PRESS_TRIP_RBV")

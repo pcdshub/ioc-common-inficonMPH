@@ -94,11 +94,11 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SYST_STAT_STRING,          asynParamUInt32Digital,  &systStatus_);
     createParam(INFICON_HW_ERROR_STRING,           asynParamUInt32Digital,  &hwError_);
     createParam(INFICON_HW_WARN_STRING,            asynParamUInt32Digital,  &hwWarn_);
-    createParam(INFICON_PWR_ON_TIME_STRING,        asynParamUInt32Digital,  &pwrOnTime_);
-    createParam(INFICON_EMI_ON_TIME_STRING,        asynParamUInt32Digital,  &emiOnTime_);
-    createParam(INFICON_EM_ON_TIME_STRING,         asynParamUInt32Digital,  &emOnTime_);
-    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamUInt32Digital,  &emiCmlOnTime_);
-    createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamUInt32Digital,  &emCmlOnTime_);
+    createParam(INFICON_PWR_ON_TIME_STRING,        asynParamFloat64,        &pwrOnTime_);
+    createParam(INFICON_EMI_ON_TIME_STRING,        asynParamFloat64,        &emiOnTime_);
+    createParam(INFICON_EM_ON_TIME_STRING,         asynParamFloat64,        &emOnTime_);
+    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamFloat64,        &emiCmlOnTime_);
+    createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamFloat64,        &emCmlOnTime_);
     createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamUInt32Digital,  &emiPressTrip_);
     createParam(INFICON_EM_PRESS_TRIP_STRING,      asynParamUInt32Digital,  &emPressTrip_);
     //Diagnostic data parameters
@@ -544,10 +544,10 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
         setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
         setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
-        setUIntDigitalParam(pwrOnTime_, devStatus_->pwrOnTime, 0xFFFFFFFF);
-        setUIntDigitalParam(emiOnTime_, devStatus_->emiOnTime, 0xFFFFFFFF);
-        setUIntDigitalParam(emOnTime_, devStatus_->emOnTime, 0xFFFFFFFF);
-        setUIntDigitalParam(emCmlOnTime_, devStatus_->emCmlOnTime, 0xFFFFFFFF);
+        setDoubleParam(pwrOnTime_, devStatus_->pwrOnTime);
+        setDoubleParam(emiOnTime_, devStatus_->emiOnTime);
+        setDoubleParam(emOnTime_, devStatus_->emOnTime);
+        setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
         setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
     } else if (function == getDiagData_) {
         sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
@@ -934,6 +934,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
     const char *tempJsonData = jsonData;
     const char *cutAt;
     const char *cutTo;
+    unsigned int uintValue = 0;
 
 	memset(jsonDataSubstring, '\0', 1500);
 
@@ -960,27 +961,29 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->systStatus = j["data"]["systemStatus"];
         devStatus->hwError = j["data"]["hardwareErrors"];
         devStatus->hwWarn = j["data"]["hardwareWarnings"];
-        devStatus->pwrOnTime = j["data"]["powerSupplyPowerOnTime"];
-        devStatus->emiOnTime = j["data"]["emissionStretch"];
-        devStatus->emOnTime = j["data"]["emStretch"];
-        devStatus->emCmlOnTime = j["data"]["emOnTime"];
+        uintValue = j["data"]["powerSupplyPowerOnTime"];
+        devStatus->pwrOnTime = uintValue/3600;
+        uintValue = j["data"]["emissionStretch"];
+        devStatus->emiOnTime = uintValue/3600;
+        uintValue = j["data"]["emStretch"];
+        devStatus->emOnTime = uintValue/3600;
+        uintValue = j["data"]["emOnTime"];
+        devStatus->emCmlOnTime = uintValue/3600;
         devStatus->emPressTrip = j["data"]["emPressTrip"];
         //auto filaments = j["data"]["filaments"];
-        unsigned int emiCmlOnTime = 0;
 		int i = 0;
         for (auto& filaments : j["data"]["filaments"]) {
             if (i > 2) 
                 return asynError;
 
             devStatus->filament[i].id = filaments["@id"];
-            emiCmlOnTime = filaments["emisOnTime"];
-            devStatus->filament[i].emiCmlOnTime = emiCmlOnTime/3600;
+            uintValue = filaments["emisOnTime"];
+            devStatus->filament[i].emiCmlOnTime = uintValue/3600;
             devStatus->filament[i].emiPressTrip = filaments["emisPressTrip"];
-            printf("%s::%s id:%d, emiCmlOnTime:%.1f, emiPressTrip:%d\n", driverName, functionName, devStatus->filament[i].id, devStatus->filament[i].emiCmlOnTime, devStatus->filament[i].emiPressTrip);
-            //printf("%s::%s iterator:%d\n", driverName, functionName, i);
             i++;
+            //printf("%s::%s id:%d, emiCmlOnTime:%.1f, emiPressTrip:%d\n", driverName, functionName, devStatus->filament[i].id, devStatus->filament[i].emiCmlOnTime, devStatus->filament[i].emiPressTrip);
+            //printf("%s::%s iterator:%d\n", driverName, functionName, i);
         }
-        //add emi press trip for every filamenet and cumulative power on time
         //printf("%s::%s systStatus:%d, pwrOnTime:%d\n", driverName, functionName, devStatus->systStatus, devStatus->pwrOnTime);
     }
 	catch (const json::parse_error& e) {
