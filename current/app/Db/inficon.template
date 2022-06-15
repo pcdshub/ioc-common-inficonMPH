@@ -724,6 +724,44 @@ record(longin, "$(DEV):EM_PRESS_TRIP_RBV")
     field(SCAN, "I/O Intr")
 }
 
+record(ai, "$(DEV):FIL1_CML_ON_TIME_RBV")
+{
+    field(DESC, "FIL1 cumulative on time")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))FIL1_CML_ON_T")
+    field(SCAN, "I/O Intr")
+    field(PREC, "1")
+    field(EGU,  "h")
+}
+
+record(longin, "$(DEV):FIL1_PRESS_TRIP_RBV")
+{
+    field(PINI, "YES")
+    field(DESC, "FIL1 press. trip counter")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL1_PRESS_TRIP")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(DEV):FIL2_CML_ON_TIME_RBV")
+{
+    field(DESC, "FIL2 cumulative on time")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))FIL2_CML_ON_T")
+    field(SCAN, "I/O Intr")
+    field(PREC, "1")
+    field(EGU,  "h")
+}
+
+record(longin, "$(DEV):FIL2_PRESS_TRIP_RBV")
+{
+    field(PINI, "YES")
+    field(DESC, "FIL2 press. trip counter")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIL2_PRESS_TRIP")
+    field(SCAN, "I/O Intr")
+}
+
 record(ai, "$(DEV):DEVICE_TEMP_RBV")
 {
     field(DESC, "Device internal Temp.")

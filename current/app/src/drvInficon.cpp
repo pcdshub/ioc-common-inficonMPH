@@ -97,10 +97,12 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_PWR_ON_TIME_STRING,        asynParamFloat64,        &pwrOnTime_);
     createParam(INFICON_EMI_ON_TIME_STRING,        asynParamFloat64,        &emiOnTime_);
     createParam(INFICON_EM_ON_TIME_STRING,         asynParamFloat64,        &emOnTime_);
-    createParam(INFICON_EMI_CML_ON_TIME_STRING,    asynParamFloat64,        &emiCmlOnTime_);
     createParam(INFICON_EM_CML_ON_TIME_STRING,     asynParamFloat64,        &emCmlOnTime_);
-    createParam(INFICON_EMI_PRESS_TRIP_STRING,     asynParamUInt32Digital,  &emiPressTrip_);
     createParam(INFICON_EM_PRESS_TRIP_STRING,      asynParamUInt32Digital,  &emPressTrip_);
+    createParam(INFICON_FIL1_CML_ON_TIME_STRING,   asynParamFloat64,        &fil1CmlOnTime_);
+    createParam(INFICON_FIL1_PRESS_TRIP_STRING,    asynParamUInt32Digital,  &fil1PressTrip_);
+    createParam(INFICON_FIL2_CML_ON_TIME_STRING,   asynParamFloat64,        &fil2CmlOnTime_);
+    createParam(INFICON_FIL2_PRESS_TRIP_STRING,    asynParamUInt32Digital,  &fil2PressTrip_);
     //Diagnostic data parameters
     createParam(INFICON_GET_DIAG_DATA_STRING,      asynParamOctet,          &getDiagData_);
     createParam(INFICON_BOX_TEMP_STRING,           asynParamFloat64,        &boxTemp_);
@@ -549,6 +551,10 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setDoubleParam(emOnTime_, devStatus_->emOnTime);
         setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
         setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
+        setDoubleParam(fil1CmlOnTime_, devStatus_->filament[1].emiCmlOnTime);
+        setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
+        setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
+        setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
     } else if (function == getDiagData_) {
         sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
         "\r\n");

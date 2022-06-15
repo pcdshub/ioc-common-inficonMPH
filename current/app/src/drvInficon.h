@@ -50,10 +50,12 @@
 #define INFICON_PWR_ON_TIME_STRING        "PWR_ON_T"
 #define INFICON_EMI_ON_TIME_STRING        "EMI_ON_T"
 #define INFICON_EM_ON_TIME_STRING         "EM_ON_T"
-#define INFICON_EMI_CML_ON_TIME_STRING    "EMI_CML_ON_T"
 #define INFICON_EM_CML_ON_TIME_STRING     "EM_CML_ON_T"
-#define INFICON_EMI_PRESS_TRIP_STRING     "EMI_PRESS_TRIP"
 #define INFICON_EM_PRESS_TRIP_STRING      "EM_PRESS_TRIP"
+#define INFICON_FIL1_CML_ON_TIME_STRING   "FIL1_CML_ON_T"
+#define INFICON_FIL1_PRESS_TRIP_STRING    "FIL1_PRESS_TRIP"
+#define INFICON_FIL2_CML_ON_TIME_STRING   "FIL2_CML_ON_T"
+#define INFICON_FIL2_PRESS_TRIP_STRING    "FIL2_PRESS_TRIP"
 //Diagnostic data
 #define INFICON_GET_DIAG_DATA_STRING      "GET_DIAG_DATA"
 #define INFICON_BOX_TEMP_STRING           "BOX_TEMP"
@@ -284,10 +286,12 @@ protected:
     int pwrOnTime_;
     int emiOnTime_;
     int emOnTime_;
-    int emiCmlOnTime_;
     int emCmlOnTime_;
-    int emiPressTrip_;
     int emPressTrip_;
+    int fil1CmlOnTime_;
+    int fil1PressTrip_;
+    int fil2CmlOnTime_;
+    int fil2PressTrip_;
     //Diagnostic data parameters
     int getDiagData_;
     int boxTemp_;
