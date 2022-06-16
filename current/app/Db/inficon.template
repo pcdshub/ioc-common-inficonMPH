@@ -111,6 +111,17 @@ record(bo, "$(DEV):MONITOR_START")
 	field(VAL,  "1")
 }
 
+# START LEAKCHECK
+record(bo, "$(DEV):LEAKCHECK_START")
+{
+    field(DESC, "Start monitoring")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)LEAKCHECK_START")
+    field(ZNAM, "START_LEAKCHECK")
+    field(ONAM, "START_LEAKCHECK")
+	field(VAL,  "1")
+}
+
 
 # EMI ON/OFF
 record(bo, "$(DEV):SET_EMI_ON")
@@ -270,26 +281,26 @@ record(longout, "$(DEV):EM_GAIN_MASS")
 # SET START AND STOP CHANNEL
 record(longout, "$(DEV):SET_CH4_ASINPUT")
 {
-    field(DESC, "Set start_stop ch comm. leakchk")
+    field(DESC, "Set start_stop ch. for leakchk")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),4,0xFFFFFFFF)START_STOP_CH")
 	field(VAL,  "4")
 }
 
-record(longout, "$(DEV):SET_CH1_ASINPUT")
+record(longout, "$(DEV):SET_CH3_ASINPUT")
 {
-    field(DESC, "Set start_stop ch comm. cycle read")
+    field(DESC, "Set start_stop ch. for monitor")
     field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)START_STOP_CH")
+    field(OUT,  "@asynMask($(PORT),3,0xFFFFFFFF)START_STOP_CH")
 	field(VAL,  "1")
 }
 
 # SET CH DWELL
-record(mbbo, "$(DEV):CH1_DWELL")
+record(mbbo, "$(DEV):SET_CH3_DWELL")
 {
-    field(DESC, "Set CH1 dwell")
+    field(DESC, "Set CH3 dwell")
     field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_DWELL")
+    field(OUT,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -325,7 +336,7 @@ record(mbbo, "$(DEV):CH1_DWELL")
 	field(VAL,  "16")
 }
 
-record(mbbo, "$(DEV):CH4_DWELL")
+record(mbbo, "$(DEV):SET_CH4_DWELL")
 {
     field(DESC, "Set CH4 dwell")
     field(DTYP, "asynUInt32Digital")
@@ -366,11 +377,11 @@ record(mbbo, "$(DEV):CH4_DWELL")
 }
 
 # SET CH PPAMU
-record(mbbo, "$(DEV):CH1_PPAMU")
+record(mbbo, "$(DEV):SET_CH3_PPAMU")
 {
     field(DESC, "Set CH1 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_PPAMU")
+    field(OUT,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_PPAMU")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -425,15 +436,15 @@ record(longout, "$(DEV):SET_SWEEP_N")
 }
 
 # SET CH START MASS
-record(ao, "$(DEV):CH1_START_MASS")
+record(ao, "$(DEV):SET_CH3_START_MASS")
 {
-    field(DESC, "Set Ch1 start Mass")
+    field(DESC, "Set Ch3 start Mass")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),1)CH_START_MASS")
+    field(OUT,  "@asyn($(PORT),3)CH_START_MASS")
     field(PREC, "2")
 }
 
-record(ao, "$(DEV):CH4_START_MASS")
+record(ao, "$(DEV):SET_CH4_START_MASS")
 {
     field(DESC, "Set Ch4 start Mass")
     field(DTYP, "asynFloat64")
@@ -442,11 +453,11 @@ record(ao, "$(DEV):CH4_START_MASS")
 }
 
 # SET CH STOP MASS
-record(ao, "$(DEV):CH1_STOP_MASS")
+record(ao, "$(DEV):SET_CH3_STOP_MASS")
 {
-    field(DESC, "Set Ch1 stop Mass")
+    field(DESC, "Set Ch3 stop Mass")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),1)CH_STOP_MASS")
+    field(OUT,  "@asyn($(PORT),3)CH_STOP_MASS")
     field(PREC, "2")
 }
 
@@ -457,9 +468,9 @@ record(dfanout, "$(DEV):SET_MASS_MAX")
     field(DOL,  "$(DEV):MASS_MAX_RBV")
     field(OMSL, "closed_loop")
     field(SELM, "All")
-    field(OUTA, "$(DEV):CH1_START_MASS.DRVH")
-    field(OUTB, "$(DEV):CH4_START_MASS.DRVH")
-    field(OUTC, "$(DEV):CH1_STOP_MASS.DRVH")
+    field(OUTA, "$(DEV):SET_CH3_START_MASS.DRVH")
+    field(OUTB, "$(DEV):SET_CH4_START_MASS.DRVH")
+    field(OUTC, "$(DEV):SET_CH3_STOP_MASS.DRVH")
 }
 
 record(dfanout, "$(DEV):SET_MASS_MIN")
@@ -469,22 +480,22 @@ record(dfanout, "$(DEV):SET_MASS_MIN")
     field(DOL,  "0.5")
     field(OMSL, "closed_loop")
     field(SELM, "All")
-    field(OUTA, "$(DEV):CH1_START_MASS.DRVL")
-    field(OUTB, "$(DEV):CH4_START_MASS.DRVL")
-    field(OUTC, "$(DEV):CH1_STOP_MASS.DRVL")
+    field(OUTA, "$(DEV):SET_CH3_START_MASS.DRVL")
+    field(OUTB, "$(DEV):SET_CH4_START_MASS.DRVL")
+    field(OUTC, "$(DEV):SET_CH3_STOP_MASS.DRVL")
 }
 
 # CH MODE STATIC
-record(stringout, "$(DEV):CH1_MODE")
+record(stringout, "$(DEV):SET_CH3_MODE")
 {
     field(PINI, "YES")
-    field(DESC, "Ch1 measurement mode")
+    field(DESC, "Ch3 measurement mode")
     field(DTYP, "asynOctetWrite")
-    field(OUT,  "@asyn($(PORT),1)CH_MODE")
+    field(OUT,  "@asyn($(PORT),3)CH_MODE")
     field(VAL,  "Sweep")
 }
 
-record(stringout, "$(DEV):CH4_MODE")
+record(stringout, "$(DEV):SET_CH4_MODE")
 {
     field(PINI, "YES")
     field(DESC, "Ch4 measurement mode")
@@ -494,11 +505,11 @@ record(stringout, "$(DEV):CH4_MODE")
 }
 
 # SET SCAN SETUP FOR CH
-record(stringout, "$(DEV):SET_CH1_SCAN_SETUP")
+record(stringout, "$(DEV):SET_CH3_SCAN_SETUP")
 {
-    field(DESC, "CH1 scan setup")
+    field(DESC, "CH3 scan setup")
     field(DTYP, "asynOctetWrite")
-    field(OUT,  "@asyn($(PORT),1)SET_CH_SCAN_SETUP")
+    field(OUT,  "@asyn($(PORT),3)SET_CH_SCAN_SETUP")
 }
 
 record(stringout, "$(DEV):SET_CH4_SCAN_SETUP")
@@ -570,10 +581,10 @@ record(stringin, "$(DEV):GET_DEV_STATUS")
     field(SCAN, "$(CSCAN) second")
 }
 
-record(stringin, "$(DEV):GET_CH1_SCAN_SETUP")
+record(stringin, "$(DEV):GET_CH3_SCAN_SETUP")
 {
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT),1)GET_CH_SCAN_SETUP")
+    field(INP,  "@asyn($(PORT),3)GET_CH_SCAN_SETUP")
     field(SCAN, "$(CSCAN) second")
 }
 
@@ -976,19 +987,19 @@ record(longin, "$(DEV):DWELL_MIN_RBV")
     field(SCAN, "I/O Intr")
 }
 
-record(stringin, "$(DEV):CH1_MODE_RBV")
+record(stringin, "$(DEV):CH3_MODE_RBV")
 {
-    field(DESC, "Ch1 mode")
+    field(DESC, "Ch3 mode")
     field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT),1)CH_MODE")
+    field(INP,  "@asyn($(PORT),3)CH_MODE")
     field(SCAN, "I/O Intr")
 }
 
-record(mbbi, "$(DEV):CH1_DWELL_RBV")
+record(mbbi, "$(DEV):CH3_DWELL_RBV")
 {
-    field(DESC, "CH1 dwell")
+    field(DESC, "CH3 dwell")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_DWELL")
+    field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
     field(ZRVL, "1")
     field(ONVL, "2")
@@ -1024,11 +1035,11 @@ record(mbbi, "$(DEV):CH1_DWELL_RBV")
     field(FFST, "16384")
 }
 
-record(mbbi, "$(DEV):CH1_PPAMU_RBV")
+record(mbbi, "$(DEV):CH3_PPAMU_RBV")
 {
     field(DESC, "CH1 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),1,0xFFFFFFFF)CH_PPAMU")
+    field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_PPAMU")
     field(SCAN, "I/O Intr")
     field(ZRVL, "1")
     field(ONVL, "2")
@@ -1050,21 +1061,21 @@ record(mbbi, "$(DEV):CH1_PPAMU_RBV")
     field(EIST, "100")
 }
 
-record(ai, "$(DEV):CH1_START_MASS_RBV")
+record(ai, "$(DEV):CH3_START_MASS_RBV")
 {
     field(DESC, "CH1 start mass")
     field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(PORT),1)CH_START_MASS")
+    field(INP,  "@asyn($(PORT),3)CH_START_MASS")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")
 }
 
-record(ai, "$(DEV):CH1_STOP_MASS_RBV")
+record(ai, "$(DEV):CH3_STOP_MASS_RBV")
 {
     field(DESC, "CH1 start mass")
     field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(PORT),1)CH_STOP_MASS")
+    field(INP,  "@asyn($(PORT),3)CH_STOP_MASS")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")

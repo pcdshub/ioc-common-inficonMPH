@@ -156,6 +156,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SCAN_STOP_STRING,          asynParamUInt32Digital,  &scanStop_);
     //User commands
     createParam(MONITOR_START_STRING,              asynParamUInt32Digital,  &startMonitor_);
+    createParam(LEAKCHECK_START_STRING,            asynParamUInt32Digital,  &startLeakcheck_);
 
     /* Create octet port name */
 	size_t prefixlen = strlen(PORT_PREFIX);
@@ -349,11 +350,11 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
                 "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
-        sprintf(request,"GET /mmsp/scanSetup/channels/1/set?enabled=True\r\n"
+        sprintf(request,"GET /mmsp/scanSetup/channels/3/set?channelMode=Sweep&enabled=True\r\n"
                 "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
-        sprintf(request,"GET /mmsp/scanSetup/set?startChannel=1&stopChannel=1\r\n"
+        sprintf(request,"GET /mmsp/scanSetup/set?startChannel=3&stopChannel=3\r\n"
                 "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
@@ -363,6 +364,29 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
         "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+    } else if (function == startLeakcheck_) {
+        sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/channels/4/set?channelMode=Single&enabled=True\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/set?startChannel=4&stopChannel=4\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/scanCount/set?-1\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         if (ioStatus_ != asynSuccess)

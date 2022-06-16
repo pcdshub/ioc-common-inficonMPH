@@ -110,6 +110,8 @@
 
 //User commands
 #define MONITOR_START_STRING              "MONITOR_START"
+#define LEAKCHECK_START_STRING            "LEAKCHECK_START"
+
 
 #define MAX_CHANNELS                       4
 #define MAX_SCAN_SIZE                      16384
@@ -347,6 +349,7 @@ protected:
     int scanStop_;
     //User commands
     int startMonitor_;
+    int startLeakcheck_;
 
 private:
     /* Our data */
