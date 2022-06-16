@@ -100,6 +100,18 @@ record(bo, "$(DEV):SET_START_SCAN")
 	field(VAL,  "1")
 }
 
+# START MONITORING
+record(bo, "$(DEV):MONITOR_START")
+{
+    field(DESC, "Start monitoring")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0x1)MONITOR_START")
+    field(ZNAM, "START_MONITOR")
+    field(ONAM, "START_MONITOR")
+	field(VAL,  "1")
+}
+
+
 # EMI ON/OFF
 record(bo, "$(DEV):SET_EMI_ON")
 {

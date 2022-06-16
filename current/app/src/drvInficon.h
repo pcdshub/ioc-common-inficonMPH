@@ -108,7 +108,9 @@
 #define INFICON_SCAN_START_STRING         "SCAN_START"
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
-#define MAX_INFICON_COMMAND_TYPES          10
+//User commands
+#define MONITOR_START_STRING              "MONITOR_START"
+
 #define MAX_CHANNELS                       4
 #define MAX_SCAN_SIZE                      16384
 
@@ -343,6 +345,8 @@ protected:
     int scanMode_;
     int scanStart_;
     int scanStop_;
+    //User commands
+    int startMonitor_;
 
 private:
     /* Our data */

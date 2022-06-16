@@ -154,7 +154,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SCAN_MODE_STRING,          asynParamInt32,          &scanMode_);
     createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
     createParam(INFICON_SCAN_STOP_STRING,          asynParamUInt32Digital,  &scanStop_);
-
+    //User commands
+    createParam(MONITOR_START_STRING,              asynParamUInt32Digital,  &startMonitor_);
 
     /* Create octet port name */
 	size_t prefixlen = strlen(PORT_PREFIX);
@@ -343,6 +344,29 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else if (function == startMonitor_) {
+        sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/channels/1/set?enabled=True\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/set?startChannel=1&stopChannel=1\r\n"
+                "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/scanCount/set?-1\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
+        "\r\n");
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
