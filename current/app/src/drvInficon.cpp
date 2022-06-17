@@ -801,6 +801,7 @@ void drvInficon::pollerThread()
          * structure while the poller thread is running. */
         lock();
 
+        /*Get Device comm. parameters*/
         sprintf(request,"GET /mmsp/communication/get\r\n"
                 "\r\n");
         /* Read the data */
@@ -814,6 +815,7 @@ void drvInficon::pollerThread()
         setStringParam(ip_, commParams_->ip);
         setStringParam(mac_, commParams_->mac);
 
+        /*Get device status*/
         sprintf(request,"GET /mmsp/status/get\r\n"
                 "\r\n");
         /* Read the data */
@@ -836,6 +838,26 @@ void drvInficon::pollerThread()
         setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
         setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
         setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
+
+        /*Get diagnostic data*/
+        sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
+                "\r\n");
+        /* Read the data */
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        status = parseDiagData(data_, diagData_);
+        if (status)
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s:%s: ERROR parsing device diagnostic data, status=%d\n",
+                      driverName, functionName, status);
+        setDoubleParam(boxTemp_, diagData_->boxTemp);
+        setUIntDigitalParam(anodePotential_, diagData_->anodePot, 0xFFFFFFFF);
+        setUIntDigitalParam(emiCurrent_, diagData_->emiCurrent, 0xFFFFFFFF);
+        setUIntDigitalParam(focusPotential_, diagData_->focusPot, 0xFFFFFFFF);
+        setUIntDigitalParam(electEnergy_, diagData_->electEng, 0xFFFFFFFF);
+        setUIntDigitalParam(filPotential_, diagData_->filPot, 0xFFFFFFFF);
+        setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
+        setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
 
         /* If we have an I/O error this time and the previous time, just try again */
         if (ioStatus_ != asynSuccess &&
