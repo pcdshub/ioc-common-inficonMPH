@@ -574,12 +574,12 @@ record(stringin, "$(DEV):GET_SENS_INFO")
     field(SCAN, "$(CSCAN) second")
 }
 
-record(stringin, "$(DEV):GET_DEV_STATUS")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_DEV_STAT")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_DEV_STATUS")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_DEV_STAT")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
 record(stringin, "$(DEV):GET_CH3_SCAN_SETUP")
 {

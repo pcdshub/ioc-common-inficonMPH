@@ -814,6 +814,29 @@ void drvInficon::pollerThread()
         setStringParam(ip_, commParams_->ip);
         setStringParam(mac_, commParams_->mac);
 
+        sprintf(request,"GET /mmsp/status/get\r\n"
+                "\r\n");
+        /* Read the data */
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        status = parseDevStatus(data_, devStatus_);
+        if (status)
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s:%s: ERROR parsing device status parameters, status=%d\n",
+                      driverName, functionName, status);
+        setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
+        setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
+        setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
+        setDoubleParam(pwrOnTime_, devStatus_->pwrOnTime);
+        setDoubleParam(emiOnTime_, devStatus_->emiOnTime);
+        setDoubleParam(emOnTime_, devStatus_->emOnTime);
+        setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
+        setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
+        setDoubleParam(fil1CmlOnTime_, devStatus_->filament[1].emiCmlOnTime);
+        setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
+        setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
+        setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
+
         /* If we have an I/O error this time and the previous time, just try again */
         if (ioStatus_ != asynSuccess &&
             ioStatus_ == prevIOStatus) {
