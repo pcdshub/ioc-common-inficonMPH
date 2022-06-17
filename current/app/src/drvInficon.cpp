@@ -1304,13 +1304,13 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
         devStatus->hwError = j["data"]["hardwareErrors"];
         devStatus->hwWarn = j["data"]["hardwareWarnings"];
         uintValue = j["data"]["powerSupplyPowerOnTime"];
-        devStatus->pwrOnTime = uintValue/3600;
+        devStatus->pwrOnTime = uintValue/3600.0;
         uintValue = j["data"]["emissionStretch"];
-        devStatus->emiOnTime = uintValue/3600;
+        devStatus->emiOnTime = uintValue/3600.0;
         uintValue = j["data"]["emStretch"];
-        devStatus->emOnTime = uintValue/3600;
+        devStatus->emOnTime = uintValue/3600.0;
         uintValue = j["data"]["emOnTime"];
-        devStatus->emCmlOnTime = uintValue/3600;
+        devStatus->emCmlOnTime = uintValue/3600.0;
         devStatus->emPressTrip = j["data"]["emPressTrip"];
         //auto filaments = j["data"]["filaments"];
 		int i = 0;
@@ -1320,7 +1320,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
 
             devStatus->filament[i].id = filaments["@id"];
             uintValue = filaments["emisOnTime"];
-            devStatus->filament[i].emiCmlOnTime = uintValue/3600;
+            devStatus->filament[i].emiCmlOnTime = uintValue/3600.0;
             devStatus->filament[i].emiPressTrip = filaments["emisPressTrip"];
             i++;
             //printf("%s::%s id:%d, emiCmlOnTime:%.1f, emiPressTrip:%d\n", driverName, functionName, devStatus->filament[i].id, devStatus->filament[i].emiCmlOnTime, devStatus->filament[i].emiPressTrip);
