@@ -602,12 +602,12 @@ record(waveform,"$(DEV):LEAKCHECK_SCAN")
 #    field(SCAN, "$(CSCAN) second")
 #}
 
-record(stringin, "$(DEV):GET_SCAN_INFO")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SCAN_INFO")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_SCAN_INFO")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_SCAN_INFO")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
 #record(stringin, "$(DEV):GET_SENS_DETECT")
 #{
@@ -634,7 +634,7 @@ record(ai, "$(DEV):TOTAL_PRESS_RBV")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))GET_PRESS")
-    field(SCAN, "$(DSCAN) second")
+#    field(SCAN, "$(DSCAN) second")
 }
 
 record(stringin, "$(DEV):IP")

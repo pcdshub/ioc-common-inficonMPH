@@ -974,6 +974,39 @@ void drvInficon::pollerThread()
             epicsTimeGetCurrent(&cycleTimeTenSec);
         }
 
+        /*****************Do this every cycle******************************/
+        /*Get scan info data*/
+        sprintf(request,"GET /mmsp/scanInfo/get\r\n"
+                        "\r\n");
+        /* Read the data */
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        status = parseScanInfo(data_, scanInfo_);
+        if (status)
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s:%s: ERROR parsing scan info, status=%d\n",
+                      driverName, functionName, status);
+        setUIntDigitalParam(firstScan_, scanInfo_->firstScan, 0xFFFFFFFF);
+        setUIntDigitalParam(lastScan_, scanInfo_->lastScan, 0xFFFFFFFF);
+        setUIntDigitalParam(currentScan_, scanInfo_->currScan, 0xFFFFFFFF);
+        setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
+        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0xFFFFFFFF);
+
+
+        /*Get pressure value*/
+        sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
+                        "\r\n");
+        /* Read the data */
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        status = parsePressure(data_, &totalPressure_);
+        if (status)
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s:%s: ERROR parsing total pressure data, status=%d\n",
+                      driverName, functionName, status);
+        setDoubleParam(getPress_, totalPressure_);
+
+
         /* If we have an I/O error this time and the previous time, just try again */
         if (ioStatus_ != asynSuccess &&
             ioStatus_ == prevIOStatus) {

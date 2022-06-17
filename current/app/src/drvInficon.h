@@ -377,7 +377,7 @@ private:
     chScanSetupStruct *chScanSetup_;
     scanDataStruct *scanData_;
     sensIonSourceStruct *sensIonSource_;
-	float totalPressure_;
+	double totalPressure_;
     double pollTime_;
     bool forceCallback_;
     epicsThreadId pollerThreadId_;
