@@ -578,7 +578,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 
     if (function == getCommParam_) {
         sprintf(request,"GET /mmsp/communication/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseCommParam(data_, commParams_);
@@ -588,7 +588,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_->ip, commParams_->mac);
     } else if (function == getSensInfo_) {
         sprintf(request,"GET /mmsp/sensorInfo/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensInfo(data_, sensInfo_);
@@ -599,7 +599,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_->sensSN, sensInfo_->sensName, sensInfo_->sensDesc);
     } else if (function == getDevStatus_) {
         sprintf(request,"GET /mmsp/status/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDevStatus(data_, devStatus_);
@@ -618,7 +618,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
     } else if (function == getDiagData_) {
         sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseDiagData(data_, diagData_);
@@ -634,7 +634,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
     } else if (function == getScanInfo_) {
         sprintf(request,"GET /mmsp/scanInfo/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseScanInfo(data_, scanInfo_);
@@ -647,7 +647,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
     } else if (function == getSensDetect_) {
         sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensDetect(data_, sensDetect_);
@@ -660,7 +660,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
     } else if (function == getSensFilt_) {
         sprintf(request,"GET /mmsp/sensorFilter/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensFilt(data_, sensFilt_);
@@ -672,7 +672,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
     } else if (function == getSensIonSrc_) {
         sprintf(request,"GET /mmsp/sensorIonSource/get\r\n"
-        "\r\n");
+                "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
         status = parseSensIonSource(data_, sensIonSource_);
@@ -781,8 +781,10 @@ void drvInficon::pollerThread()
 {
     char request[HTTP_REQUEST_SIZE];
     asynStatus status = asynSuccess;
-    asynStatus prevIOStatus=asynSuccess;
-	int i;
+    asynStatus prevIOStatus = asynSuccess;
+    epicsTimeStamp currTime, cycleTimeFifeSec, cycleTimeTenSec;
+    double dTFifeSec, dTTenSec;
+
     static const char *functionName="pollerThread";
 
     lock();
@@ -801,63 +803,62 @@ void drvInficon::pollerThread()
          * structure while the poller thread is running. */
         lock();
 
-        /*Get Device comm. parameters*/
-        sprintf(request,"GET /mmsp/communication/get\r\n"
-                "\r\n");
-        /* Read the data */
-        ioStatus_ = inficonReadWrite(request, data_);
+        epicsTimeGetCurrent(&currTime);
+        dTFifeSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeFifeSec);
+        dTTenSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeTenSec);
+        if(dTFifeSec >= 5.) {
+            /*Get diagnostic data*/
+            sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
+                    "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
 
-        status = parseCommParam(data_, commParams_);
-        if (status)
-            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                      "%s:%s: ERROR parsing communication parameters, status=%d\n",
-                      driverName, functionName, status);
-        setStringParam(ip_, commParams_->ip);
-        setStringParam(mac_, commParams_->mac);
+            status = parseDiagData(data_, diagData_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing device diagnostic data, status=%d\n",
+                          driverName, functionName, status);
+            setDoubleParam(boxTemp_, diagData_->boxTemp);
+            setUIntDigitalParam(anodePotential_, diagData_->anodePot, 0xFFFFFFFF);
+            setUIntDigitalParam(emiCurrent_, diagData_->emiCurrent, 0xFFFFFFFF);
+            setUIntDigitalParam(focusPotential_, diagData_->focusPot, 0xFFFFFFFF);
+            setUIntDigitalParam(electEnergy_, diagData_->electEng, 0xFFFFFFFF);
+            setUIntDigitalParam(filPotential_, diagData_->filPot, 0xFFFFFFFF);
+            setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
+            setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
 
-        /*Get device status*/
-        sprintf(request,"GET /mmsp/status/get\r\n"
-                "\r\n");
-        /* Read the data */
-        ioStatus_ = inficonReadWrite(request, data_);
+            /*Update cycle time*/
+            epicsTimeGetCurrent(&cycleTimeFifeSec);
+        }
 
-        status = parseDevStatus(data_, devStatus_);
-        if (status)
-            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                      "%s:%s: ERROR parsing device status parameters, status=%d\n",
-                      driverName, functionName, status);
-        setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
-        setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
-        setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
-        setDoubleParam(pwrOnTime_, devStatus_->pwrOnTime);
-        setDoubleParam(emiOnTime_, devStatus_->emiOnTime);
-        setDoubleParam(emOnTime_, devStatus_->emOnTime);
-        setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
-        setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
-        setDoubleParam(fil1CmlOnTime_, devStatus_->filament[1].emiCmlOnTime);
-        setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
-        setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
-        setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
+        if(dTTenSec >= 10.) {
+            /*Get device status*/
+            sprintf(request,"GET /mmsp/status/get\r\n"
+                    "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
 
-        /*Get diagnostic data*/
-        sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
-                "\r\n");
-        /* Read the data */
-        ioStatus_ = inficonReadWrite(request, data_);
+            status = parseDevStatus(data_, devStatus_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing device status parameters, status=%d\n",
+                          driverName, functionName, status);
+            setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
+            setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
+            setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
+            setDoubleParam(pwrOnTime_, devStatus_->pwrOnTime);
+            setDoubleParam(emiOnTime_, devStatus_->emiOnTime);
+            setDoubleParam(emOnTime_, devStatus_->emOnTime);
+            setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
+            setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
+            setDoubleParam(fil1CmlOnTime_, devStatus_->filament[1].emiCmlOnTime);
+            setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
+            setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
+            setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
 
-        status = parseDiagData(data_, diagData_);
-        if (status)
-            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                      "%s:%s: ERROR parsing device diagnostic data, status=%d\n",
-                      driverName, functionName, status);
-        setDoubleParam(boxTemp_, diagData_->boxTemp);
-        setUIntDigitalParam(anodePotential_, diagData_->anodePot, 0xFFFFFFFF);
-        setUIntDigitalParam(emiCurrent_, diagData_->emiCurrent, 0xFFFFFFFF);
-        setUIntDigitalParam(focusPotential_, diagData_->focusPot, 0xFFFFFFFF);
-        setUIntDigitalParam(electEnergy_, diagData_->electEng, 0xFFFFFFFF);
-        setUIntDigitalParam(filPotential_, diagData_->filPot, 0xFFFFFFFF);
-        setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
-        setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
+            /*Update cycle time*/
+            epicsTimeGetCurrent(&cycleTimeTenSec);
+        }
 
         /* If we have an I/O error this time and the previous time, just try again */
         if (ioStatus_ != asynSuccess &&
@@ -877,7 +878,7 @@ void drvInficon::pollerThread()
             lock();
         }*/
 
-        for (i=0; i<5; i++) {
+        for (int i=0; i<5; i++) {
             callParamCallbacks(i);
         }
 

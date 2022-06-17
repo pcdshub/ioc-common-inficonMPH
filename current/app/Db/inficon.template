@@ -560,12 +560,12 @@ record(waveform,"$(DEV):LEAKCHECK_SCAN")
 
 
 # Pulling data PVs 
-#record(stringin, "$(DEV):GET_COMM_PARAM")
-#{
-#    field(DTYP, "asynOctetRead")
-#    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
-#    field(SCAN, "$(CSCAN) second")
-#}
+record(stringin, "$(DEV):GET_COMM_PARAM")
+{
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
+    field(SCAN, "$(CSCAN) second")
+}
 
 record(stringin, "$(DEV):GET_SENS_INFO")
 {
