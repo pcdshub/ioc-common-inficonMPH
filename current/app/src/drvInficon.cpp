@@ -799,17 +799,18 @@ void drvInficon::pollerThread()
 
         if (inficonExiting_) break;
 
+        epicsTimeGetCurrent(&currTime);
+        dTFifeSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeFifeSec);
+        dTTenSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeTenSec);
+
         /* Lock the port.  It is important that the port be locked so other threads cannot access the Inficon
          * structure while the poller thread is running. */
         lock();
 
-        epicsTimeGetCurrent(&currTime);
-        dTFifeSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeFifeSec);
-        dTTenSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeTenSec);
         if(dTFifeSec >= 5.) {
             /*Get diagnostic data*/
             sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
-                    "\r\n");
+                            "\r\n");
             /* Read the data */
             ioStatus_ = inficonReadWrite(request, data_);
 
@@ -827,14 +828,111 @@ void drvInficon::pollerThread()
             setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
             setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
 
+            /*Get Sensor detector data*/
+            sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseSensDetect(data_, sensDetect_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing sensor detector data, status=%d\n",
+                          driverName, functionName, status);
+            setUIntDigitalParam(emVMax_, sensDetect_->emVMax, 0xFFFFFFFF);
+            setUIntDigitalParam(emVMin_, sensDetect_->emVMin, 0xFFFFFFFF);
+            setUIntDigitalParam(emV_, sensDetect_->emV, 0xFFFFFFFF);
+            setDoubleParam(emGain_, sensDetect_->emGain);
+            setUIntDigitalParam(emGainMass_, sensDetect_->emGainMass, 0xFFFFFFFF);
+
+            /*Get Sensor Ion Source data*/
+            sprintf(request,"GET /mmsp/sensorIonSource/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseSensIonSource(data_, sensIonSource_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing sens Ion source data, status=%d\n",
+                          driverName, functionName, status);
+            setUIntDigitalParam(filSel_, sensIonSource_->filSel, 0xFFFFFFFF);
+            setUIntDigitalParam(emiLevel_, sensIonSource_->emiLevel, 0xFFFFFFFF);
+            setUIntDigitalParam(optType_, sensIonSource_->optType, 0xFFFFFFFF);
+
+
+            /*Get CH3 Scan setup data*/
+            sprintf(request,"GET /mmsp/scanSetup/channel/3/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseChScanSetup(data_, chScanSetup_, 3);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing ch3 scan setup, status=%d\n",
+                          driverName, functionName, status);
+            setStringParam(3, chMode_, chScanSetup_[3].chMode);
+            setDoubleParam(3, chStartMass_, chScanSetup_[3].chStartMass);
+            setDoubleParam(3, chStopMass_, chScanSetup_[3].chStopMass);	
+            setUIntDigitalParam(3, chDwell_, chScanSetup_[3].chDwell, 0xFFFFFFFF);
+            setUIntDigitalParam(3, chPpamu_, chScanSetup_[3].chPpamu, 0xFFFFFFFF);
+
+            /*Get CH4 Scan setup data*/
+            sprintf(request,"GET /mmsp/scanSetup/channel/4/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseChScanSetup(data_, chScanSetup_, 4);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing ch4 scan setup, status=%d\n",
+                          driverName, functionName, status);
+            setStringParam(4, chMode_, chScanSetup_[4].chMode);
+            setDoubleParam(4, chStartMass_, chScanSetup_[4].chStartMass);
+            setDoubleParam(4, chStopMass_, chScanSetup_[4].chStopMass);	
+            setUIntDigitalParam(4, chDwell_, chScanSetup_[4].chDwell, 0xFFFFFFFF);
+            setUIntDigitalParam(4, chPpamu_, chScanSetup_[4].chPpamu, 0xFFFFFFFF);
+
             /*Update cycle time*/
             epicsTimeGetCurrent(&cycleTimeFifeSec);
         }
 
         if(dTTenSec >= 10.) {
+            /*Get communication parameters*/
+            sprintf(request,"GET /mmsp/communication/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseCommParam(data_, commParams_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing communication parameters, status=%d\n",
+                          driverName, functionName, status);
+            setStringParam(ip_, commParams_->ip);
+            setStringParam(mac_, commParams_->mac);
+
+            /*Get Sensor info*/
+            sprintf(request,"GET /mmsp/sensorInfo/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseSensInfo(data_, sensInfo_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing sensor info parameters, status=%d\n",
+                          driverName, functionName, status);
+            setStringParam(sensName_, sensInfo_->sensName);
+            setStringParam(sensDesc_, sensInfo_->sensDesc);
+            setUIntDigitalParam(sensSn_, sensInfo_->sensSN, 0xFFFFFFFF);
+
+
             /*Get device status*/
             sprintf(request,"GET /mmsp/status/get\r\n"
-                    "\r\n");
+                            "\r\n");
             /* Read the data */
             ioStatus_ = inficonReadWrite(request, data_);
 
@@ -855,6 +953,22 @@ void drvInficon::pollerThread()
             setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
             setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
             setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
+
+            /*Get Sensor Filter data*/
+            sprintf(request,"GET /mmsp/sensorFilter/get\r\n"
+                            "\r\n");
+            /* Read the data */
+            ioStatus_ = inficonReadWrite(request, data_);
+
+            status = parseSensFilt(data_, sensFilt_);
+            if (status)
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                          "%s:%s: ERROR parsing sensor filter parameters, status=%d\n",
+                          driverName, functionName, status);
+            setDoubleParam(massMax_, sensFilt_->massMax);
+            setDoubleParam(massMin_, sensFilt_->massMin);
+            setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
+            setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
 
             /*Update cycle time*/
             epicsTimeGetCurrent(&cycleTimeTenSec);

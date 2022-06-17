@@ -560,19 +560,19 @@ record(waveform,"$(DEV):LEAKCHECK_SCAN")
 
 
 # Pulling data PVs 
-record(stringin, "$(DEV):GET_COMM_PARAM")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_COMM_PARAM")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_COMM_PARAM")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
-record(stringin, "$(DEV):GET_SENS_INFO")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SENS_INFO")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_SENS_INFO")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_SENS_INFO")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
 #record(stringin, "$(DEV):GET_DEV_STATUS")
 #{
@@ -581,19 +581,19 @@ record(stringin, "$(DEV):GET_SENS_INFO")
 #    field(SCAN, "$(CSCAN) second")
 #}
 
-record(stringin, "$(DEV):GET_CH3_SCAN_SETUP")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT),3)GET_CH_SCAN_SETUP")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_CH3_SCAN_SETUP")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT),3)GET_CH_SCAN_SETUP")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
-record(stringin, "$(DEV):GET_CH4_SCAN_SETUP")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT),4)GET_CH_SCAN_SETUP")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_CH4_SCAN_SETUP")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT),4)GET_CH_SCAN_SETUP")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
 #record(stringin, "$(DEV):GET_DIAG_DATA")
 #{
@@ -609,26 +609,26 @@ record(stringin, "$(DEV):GET_SCAN_INFO")
     field(SCAN, "$(CSCAN) second")
 }
 
-record(stringin, "$(DEV):GET_SENS_DETECT")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SENS_DETECT")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_SENS_DETECT")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_SENS_DETECT")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
-record(stringin, "$(DEV):GET_SENS_FILT")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SENS_FILT")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_SENS_FILT")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_SENS_FILT")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
-record(stringin, "$(DEV):GET_SENS_ION_SRC")
-{
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(PORT))GET_SENS_ION_SRC")
-    field(SCAN, "$(CSCAN) second")
-}
+#record(stringin, "$(DEV):GET_SENS_ION_SRC")
+#{
+#    field(DTYP, "asynOctetRead")
+#    field(INP,  "@asyn($(PORT))GET_SENS_ION_SRC")
+#    field(SCAN, "$(CSCAN) second")
+#}
 
 record(ai, "$(DEV):TOTAL_PRESS_RBV")
 {
