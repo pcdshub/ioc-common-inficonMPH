@@ -22,6 +22,7 @@
 #define HTTP_RESPONSE_SIZE 150000
 #define MAX_CHANNELS 4
 #define MAX_SCAN_SIZE 16384
+#define LEAKCHECK_SIZE 9001
 
 //Poller thread
 #define DEFAULT_POLL_TIME 0.1
@@ -208,8 +209,20 @@ typedef struct {
 	float scanValues[MAX_SCAN_SIZE];
 } scanDataStruct;
 
-/* Forward declarations */
-class drvInficon;
+typedef struct {
+    unsigned int scanNumber;
+	float scanValues[LEAKCHECK_SIZE];
+} leakChkStruct;
+
+typedef enum {
+    IDLE,
+    STARTING,
+    MONITORING,
+	LEAKCEHCK
+} mainState_t;
+
+/* Forward declarations
+class drvInficon;*/
 
 class drvInficon : public asynPortDriver {
 public:
@@ -382,6 +395,7 @@ private:
     bool forceCallback_;
     epicsThreadId pollerThreadId_;
     epicsEventId pollerEventId_;
+	mainState_t mainState_;
 };
 
 #endif /* drvInficon_H */

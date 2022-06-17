@@ -70,7 +70,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     prevIOStatus_(asynSuccess),
     totalPressure_(0),
     pollTime_(DEFAULT_POLL_TIME),
-    forceCallback_(true)
+    forceCallback_(true),
+    mainState_(0)
 {
     int status;
 	int ipConfigureStatus;
