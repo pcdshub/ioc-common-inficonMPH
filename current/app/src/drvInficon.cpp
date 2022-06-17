@@ -64,10 +64,9 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     data_(NULL),
 	ioStatus_(asynSuccess),
     prevIOStatus_(asynSuccess),
-    readOK_(0),
-    writeOK_(0),
-	scanChannel_(1)
-
+    totalPressure_(0),
+    pollTime_(DEFAULT_POLL_TIME),
+    forceCallback_(true)
 {
     int status;
 	int ipConfigureStatus;
@@ -199,6 +198,16 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
             driverName, functionName, portName_, octetPortName_);
         return;
     }
+
+    /* Create the epicsEvent to wake up the pollerThread.*/
+    pollerEventId_ = epicsEventCreate(epicsEventEmpty);
+
+    /* Create the thread to read registers if this is a read function code */
+    pollerThreadId_ = epicsThreadCreate("InficonPoller",
+            epicsThreadPriorityMedium,
+            epicsThreadGetStackSize(epicsThreadStackMedium),
+            (EPICSTHREADFUNC)pollerThreadC,
+            this);
 
     //epicsAtExit(inficonExitCallback, this);
 
@@ -748,6 +757,81 @@ asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_
     }
     return asynSuccess;
 }
+
+static void pollerThreadC(void *drvPvt)
+{
+    drvInficon *pPvt = (drvInficon *)drvPvt;
+
+    pPvt->pollerThread();
+}
+
+
+/*
+****************************************************************************
+** Poller thread for port reads
+   One instance spawned per asyn port
+****************************************************************************
+*/
+
+void drvInficon::pollerThread()
+{
+    char request[HTTP_REQUEST_SIZE];
+    asynStatus status = asynSuccess;
+    static const char *functionName="pollerThread";
+
+    lock();
+
+    /* Loop forever */
+    while (1)
+    {
+        /* Sleep for the poll delay or waiting for epicsEvent with the port unlocked */
+        unlock();
+
+        epicsEventWaitWithTimeout(pollerEventId_, pollTime_);
+
+        if (inficonExiting_) break;
+
+        /* Lock the port.  It is important that the port be locked so other threads cannot access the Inficon
+         * structure while the poller thread is running. */
+        lock();
+
+        sprintf(request,"GET /mmsp/communication/get\r\n"
+                "\r\n");
+        /* Read the data */
+        ioStatus_ = inficonReadWrite(request, data_);
+
+        status = parseCommParam(data_, commParams_);
+        if (status)
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s:%s: ERROR parsing communication parameters, status=%d\n",
+                      driverName, functionName, status);
+        setStringParam(ip_, commParams_->ip);
+        setStringParam(mac_, commParams_->mac);
+
+        /* If we have an I/O error this time and the previous time, just try again */
+        if (ioStatus_ != asynSuccess &&
+            ioStatus_ == prevIOStatus) {
+            epicsThreadSleep(1.0);
+            continue;
+        }
+
+        /* If the I/O status has changed then force callbacks */
+        if (ioStatus_ != prevIOStatus) forceCallback_ = true;
+
+        /* Don't start polling until EPICS interruptAccept flag is set,
+         * because it does callbacks to device support. */
+        while (!interruptAccept) {
+            unlock();
+            epicsThreadSleep(0.1);
+            lock();
+        }
+
+        for (i=0; i<5; i++) {
+            callParamCallbacks(i);
+        }
+    }
+}
+
 
 
 /*

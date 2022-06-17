@@ -20,6 +20,11 @@
 #define DEVICE_RW_TIMEOUT 0.2
 #define HTTP_REQUEST_SIZE 512
 #define HTTP_RESPONSE_SIZE 150000
+#define MAX_CHANNELS 4
+#define MAX_SCAN_SIZE 16384
+
+//Poller thread
+#define DEFAULT_POLL_TIME 0.1
 
 /* These are the strings that device support passes to drivers via
  * the asynDrvUser interface.
@@ -111,10 +116,6 @@
 //User commands
 #define MONITOR_START_STRING              "MONITOR_START"
 #define LEAKCHECK_START_STRING            "LEAKCHECK_START"
-
-
-#define MAX_CHANNELS                       4
-#define MAX_SCAN_SIZE                      16384
 
 typedef struct {
     char ip[32];
@@ -249,6 +250,7 @@ public:
     virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
+    void pollerThread();
     asynStatus inficonReadWrite(const char *request, char *response);
     asynStatus parseScan(const char *jsonData, scanDataStruct *scanData);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);
@@ -362,13 +364,8 @@ private:
     asynUser  *pasynUserCommon_; /* asynUser for asynCommon interface to asyn octet port */
     asynUser  *pasynUserTrace_;  /* asynUser for asynTrace on this port */
     char *data_;                 /* Memory buffer */
-    //char inficonRequest_[HTTP_REQUEST_SIZE];          /* Inficon request */
-    //char inficonResponse_[HTTP_RESPONSE_SIZE];        /* Inficon response */
     asynStatus ioStatus_;
     asynStatus prevIOStatus_;
-    int readOK_;
-    int writeOK_;
-    int scanChannel_;
     commParamStruct *commParams_;
     genCntrlStruct *genCntrl_;
     sensInfoStruct *sensInfo_;
@@ -381,6 +378,10 @@ private:
     scanDataStruct *scanData_;
     sensIonSourceStruct *sensIonSource_;
 	float totalPressure_;
+    double pollTime_;
+    bool forceCallback_;
+    epicsThreadId pollerThreadId_;
+    epicsEventId pollerEventId_;
 };
 
 #endif /* drvInficon_H */
