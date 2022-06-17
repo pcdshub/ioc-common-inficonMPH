@@ -632,6 +632,7 @@ record(waveform,"$(DEV):LEAKCHECK_SCAN")
 
 record(ai, "$(DEV):TOTAL_PRESS_RBV")
 {
+    field(PINI, "YES")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))GET_PRESS")
 #    field(SCAN, "$(DSCAN) second")

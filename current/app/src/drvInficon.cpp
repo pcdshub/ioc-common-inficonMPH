@@ -992,7 +992,6 @@ void drvInficon::pollerThread()
         setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
         setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0xFFFFFFFF);
 
-
         /*Get pressure value*/
         sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
                         "\r\n");
