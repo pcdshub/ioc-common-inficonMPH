@@ -18,6 +18,7 @@
 #include <epicsStdio.h>
 #include <epicsString.h>
 #include <epicsThread.h>
+#include <epicsEvent.h>
 #include <epicsExport.h>
 #include <epicsPrint.h>
 #include <epicsExit.h>
@@ -777,6 +778,8 @@ void drvInficon::pollerThread()
 {
     char request[HTTP_REQUEST_SIZE];
     asynStatus status = asynSuccess;
+    asynStatus prevIOStatus=asynSuccess;
+	int i;
     static const char *functionName="pollerThread";
 
     lock();
@@ -829,6 +832,12 @@ void drvInficon::pollerThread()
         for (i=0; i<5; i++) {
             callParamCallbacks(i);
         }
+
+        /* Reset the forceCallback flag */
+        forceCallback_ = false;
+
+        /* Set the previous I/O status */
+        prevIOStatus = ioStatus_;
     }
 }
 
