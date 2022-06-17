@@ -995,7 +995,7 @@ void drvInficon::pollerThread()
         for (int i=0; i<5; i++) {
             callParamCallbacks(i);
         }
-
+        unlock();
         /* Reset the forceCallback flag */
         forceCallback_ = false;
 
