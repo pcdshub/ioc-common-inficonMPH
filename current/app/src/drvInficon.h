@@ -250,7 +250,7 @@ public:
     virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
 
     /* These are the methods that are new to this class */
-    void pollerThread(void);
+    void pollerThread();
     asynStatus inficonReadWrite(const char *request, char *response);
     asynStatus parseScan(const char *jsonData, scanDataStruct *scanData);
     asynStatus parseCommParam(const char *jsonData, commParamStruct *commParam);

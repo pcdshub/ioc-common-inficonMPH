@@ -41,6 +41,8 @@ using nlohmann::json;
 
 static const char *driverName = "INFICON";
 
+static void pollerThreadC(void *drvPvt);
+
 //==========================================================//
 // class drvInficon
 //		Holds useful vars for interacting with Inficon MPH RGA****
@@ -824,11 +826,11 @@ void drvInficon::pollerThread()
 
         /* Don't start polling until EPICS interruptAccept flag is set,
          * because it does callbacks to device support. */
-        while (!interruptAccept) {
+        /*while (!interruptAccept) {
             unlock();
             epicsThreadSleep(0.1);
             lock();
-        }
+        }*/
 
         for (i=0; i<5; i++) {
             callParamCallbacks(i);
