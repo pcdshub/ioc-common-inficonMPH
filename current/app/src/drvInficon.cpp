@@ -18,6 +18,7 @@
 #include <epicsStdio.h>
 #include <epicsString.h>
 #include <epicsThread.h>
+#include <epicsMutex.h>
 #include <epicsEvent.h>
 #include <epicsExport.h>
 #include <epicsPrint.h>
