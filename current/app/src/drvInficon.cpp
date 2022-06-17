@@ -14,7 +14,7 @@
 #include <time.h>
 
 /* EPICS includes */
-//#include <dbAccess.h>
+#include <dbAccess.h>
 #include <epicsStdio.h>
 #include <epicsString.h>
 #include <epicsThread.h>
@@ -1019,11 +1019,11 @@ void drvInficon::pollerThread()
 
         /* Don't start polling until EPICS interruptAccept flag is set,
          * because it does callbacks to device support. */
-        /*while (!interruptAccept) {
+        while (!interruptAccept) {
             unlock();
             epicsThreadSleep(0.1);
             lock();
-        }*/
+        }
 
         for (int i=0; i<5; i++) {
             callParamCallbacks(i);
