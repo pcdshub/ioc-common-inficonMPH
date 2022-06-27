@@ -360,8 +360,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = IDLE;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
-        printf("%s::%s mainState:%d\n", driverName, functionName, mainState_);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xFF);
+        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == filSel_) {
         sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
@@ -402,8 +402,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = MONITORING;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
-        printf("%s::%s mainState:%d\n", driverName, functionName, mainState_);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xFF);
+        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == startLeakcheck_) {
         //check if we are in idle state
@@ -439,8 +439,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = LEAKCEHCK;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
-        printf("%s::%s mainState:%d\n", driverName, functionName, mainState_);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xFF);
+        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
