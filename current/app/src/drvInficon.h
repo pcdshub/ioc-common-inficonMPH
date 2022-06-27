@@ -25,7 +25,7 @@
 #define LEAKCHECK_SIZE 9001
 
 //Poller thread
-#define DEFAULT_POLL_TIME 0.1
+#define DEFAULT_POLL_TIME 0.25
 
 /* These are the strings that device support passes to drivers via
  * the asynDrvUser interface.
