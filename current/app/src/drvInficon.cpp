@@ -360,7 +360,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = IDLE;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
         printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == filSel_) {
@@ -403,7 +403,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = MONITORING;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
         printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == startLeakcheck_) {
@@ -441,7 +441,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = LEAKCEHCK;
-        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0x2);
+        setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
         printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else {
