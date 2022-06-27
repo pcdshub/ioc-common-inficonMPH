@@ -1176,6 +1176,10 @@ asynStatus drvInficon::inficonReadWrite(const char *request, char *response)
         httpResponse[nread +1] = '\0';
         status = asynSuccess;
     } else {
+        status = asynError;
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                 "%s::%s port %s http response is empty string or invalid asynStatus\n",
+                 driverName, functionName, this->portName);
         goto done;
     }
 
