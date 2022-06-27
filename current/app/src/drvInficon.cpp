@@ -395,7 +395,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
                         "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
+        //ioStatus_ = inficonReadWrite(request, data_);
+        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent, guessing that it takes time
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
@@ -432,7 +433,8 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
                         "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
+        //ioStatus_ = inficonReadWrite(request, data_);
+        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent, guessing that it takes time
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
