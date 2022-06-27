@@ -216,9 +216,9 @@ typedef struct {
 } leakChkStruct;
 
 typedef enum {
-    IDLE,
-    MONITORING,
-	LEAKCEHCK
+    IDLE = 0,
+    MONITORING = 1,
+	LEAKCEHCK = 2
 } mainState_t;
 
 class drvInficon : public asynPortDriver {
