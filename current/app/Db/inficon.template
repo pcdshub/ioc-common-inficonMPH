@@ -19,7 +19,7 @@ record(mbbi, "$(DEV):INFICON_STATE")
     field(TWVL, "2")
     field(ZRST, "IDLE")
     field(ONST, "MONITORING")
-    field(THST, "LEAKCHECK")
+    field(TWST, "LEAKCHECK")
 	field(VAL,  "0")
 }
 
