@@ -7,7 +7,7 @@
 ##
 ##
 
-record(mbbo, "$(DEV):INFICON_STATE")
+record(mbbi, "$(DEV):INFICON_STATE")
 {
     field(PINI, "YES")
     field(DESC, "Current device state")
@@ -34,7 +34,7 @@ record(calcout, "$(DEV):CALC_MONITOR_STATE")
     field(CALC, "A=0?1:0")
     field(INPA, "$(DEV):INFICON_STATE.VAL")
     field(OOPT, "When Non-zero")
-    field(OUT,  "$(DEV):SET_MONITOR_STATE.PROC")
+#    field(OUT,  "$(DEV):SET_MONITOR_STATE.PROC")
 }
 
 record(bo, "$(DEV):START_LEAKCHECK")
@@ -48,7 +48,7 @@ record(calcout, "$(DEV):CALC_LEAKCHECK_STATE")
     field(CALC, "A=0?1:0")
     field(INPA, "$(DEV):INFICON_STATE.VAL")
     field(OOPT, "When Non-zero")
-    field(OUT,  "$(DEV):SET_LEAKCHK_STATE.PROC")
+#    field(OUT,  "$(DEV):SET_LEAKCHK_STATE.PROC")
 }
 
 record(longout, "$(DEV):SET_MONITOR_STATE")
