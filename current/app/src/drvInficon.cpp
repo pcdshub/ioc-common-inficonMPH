@@ -158,7 +158,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SCAN_MODE_STRING,          asynParamInt32,          &scanMode_);
     createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
     createParam(INFICON_SCAN_STOP_STRING,          asynParamUInt32Digital,  &scanStop_);
-    //User commands
+    //User commands and parameters
+    createParam(DRIVER_STATE_STRING,               asynParamInt32,          &driverState_);   
     createParam(MONITOR_START_STRING,              asynParamUInt32Digital,  &startMonitor_);
     createParam(LEAKCHECK_START_STRING,            asynParamUInt32Digital,  &startLeakcheck_);
 
@@ -347,64 +348,97 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
     } else if (function == scanStop_) {
         if (value == 1) {
             sprintf(request,"GET /mmsp/scanSetup/scanStop/set?EndOfScan\r\n"
-                    "\r\n");
+                            "\r\n");
         } else {
             sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
-                    "\r\n");
+                            "\r\n");
         }
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
+        //If we get up to here set the internal driver state
+        mainState_ = IDLE;
+        setIntegerParam(driverState_, mainState_);
+
     } else if (function == filSel_) {
         sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
         "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startMonitor_) {
+        //check if we are in idle state
+        if (mainState_ != IDLE) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s::%s device not in idle state\n",
+                      driverName, functionName);
+            return asynError;
+		}
+
         sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/channels/3/set?channelMode=Sweep&enabled=True\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/set?startChannel=3&stopChannel=3\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/scanCount/set?-1\r\n"
-        "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
-        "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
+
+        //If we get up to here set the internal driver state
+        mainState_ = MONITORING;
+        setIntegerParam(driverState_, mainState_);
+
     } else if (function == startLeakcheck_) {
+        //check if we are in idle state
+        if (mainState_ != IDLE) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s::%s device not in idle state\n",
+                      driverName, functionName);
+            return asynError;
+		}
+
         sprintf(request,"GET /mmsp/scanSetup/scanStop/set?Immediately\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/channels/4/set?channelMode=Single&enabled=True\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/set?startChannel=4&stopChannel=4\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/scanCount/set?-1\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
-                "\r\n");
+                        "\r\n");
         ioStatus_ = inficonReadWrite(request, data_);
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
+
+        //If we get up to here set the internal driver state
+        mainState_ = LEAKCEHCK;
+        setIntegerParam(driverState_, mainState_);
+
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",

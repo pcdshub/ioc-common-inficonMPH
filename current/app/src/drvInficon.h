@@ -114,7 +114,8 @@
 #define INFICON_SCAN_START_STRING         "SCAN_START"
 #define INFICON_SCAN_STOP_STRING          "SCAN_STOP"
 
-//User commands
+//User commands and parameters
+#define DRIVER_STATE_STRING               "DRIVER_STATE"
 #define MONITOR_START_STRING              "MONITOR_START"
 #define LEAKCHECK_START_STRING            "LEAKCHECK_START"
 
@@ -216,13 +217,9 @@ typedef struct {
 
 typedef enum {
     IDLE,
-    STARTING,
     MONITORING,
 	LEAKCEHCK
 } mainState_t;
-
-/* Forward declarations
-class drvInficon;*/
 
 class drvInficon : public asynPortDriver {
 public:
@@ -362,7 +359,8 @@ protected:
     int scanMode_;
     int scanStart_;
     int scanStop_;
-    //User commands
+    //User commands and parameters
+    int driverState_;
     int startMonitor_;
     int startLeakcheck_;
 
