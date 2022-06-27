@@ -159,7 +159,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_SCAN_START_STRING,         asynParamUInt32Digital,  &scanStart_);
     createParam(INFICON_SCAN_STOP_STRING,          asynParamUInt32Digital,  &scanStop_);
     //User commands and parameters
-    createParam(DRIVER_STATE_STRING,               asynParamInt32,          &driverState_);   
+    createParam(DRIVER_STATE_STRING,               asynParamUInt32Digital,  &driverState_);   
     createParam(MONITOR_START_STRING,              asynParamUInt32Digital,  &startMonitor_);
     createParam(LEAKCHECK_START_STRING,            asynParamUInt32Digital,  &startLeakcheck_);
 
@@ -360,7 +360,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = IDLE;
-        setIntegerParam(driverState_, mainState_);
+        setUIntDigitalParam(driverState_, mainState_, 0x2);
 
     } else if (function == filSel_) {
         sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
@@ -401,7 +401,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = MONITORING;
-        setIntegerParam(driverState_, mainState_);
+        setUIntDigitalParam(driverState_, mainState_, 0x2);
 
     } else if (function == startLeakcheck_) {
         //check if we are in idle state
@@ -437,7 +437,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = LEAKCEHCK;
-        setIntegerParam(driverState_, mainState_);
+        setUIntDigitalParam(driverState_, mainState_, 0x2);
 
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
