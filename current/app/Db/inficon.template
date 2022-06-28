@@ -549,6 +549,7 @@ record(waveform,"$(DEV):MONITORING_SCAN")
     field(DTYP, "asynFloat32ArrayIn")
     field(INP,  "@asyn($(PORT))GET_SCAN")
 #    field(SCAN, "$(CSCAN) second")
+    field(SCAN, "I/O Intr")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
 }

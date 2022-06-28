@@ -74,7 +74,8 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     mainState_(IDLE),
     startingLeakcheck_(false),
     startingMonitor_(false),
-    leakChkValue_(0)
+    leakChkValue_(0),
+    lastPolledScan_(-1)
 {
     int status;
 	int ipConfigureStatus;
@@ -830,7 +831,6 @@ void drvInficon::pollerThread()
     asynStatus prevIOStatus = asynSuccess;
     epicsTimeStamp currTime, cycleTimeFifeSec, cycleTimeTenSec;
     double dTFifeSec, dTTenSec;
-    int lastPolledScan;
 
     static const char *functionName="pollerThread";
 
@@ -1052,14 +1052,14 @@ void drvInficon::pollerThread()
                       driverName, functionName, status);
         setDoubleParam(getPress_, totalPressure_);
 
-        //let's check if the leakcheck is running, and start pulling data
+        //let's check if the leakcheck is running, and start pulling leakcheck data
         if(mainState_ == LEAKCEHCK && scanInfo_->scanStatus == 1) {
             if (startingLeakcheck_) {
                 startingLeakcheck_ = false;
-                lastPolledScan = -1;
+                lastPolledScan_ = -1;
             }
 
-            if (scanInfo_->lastScan > lastPolledScan) {
+            if (scanInfo_->lastScan > lastPolledScan_) {
                 /*Get leakcheck value from last successfull scan*/
                 sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
                                 "\r\n");
@@ -1074,7 +1074,7 @@ void drvInficon::pollerThread()
                 setDoubleParam(getLeakChk_, leakChkValue_);
 
                 //update last polled scan number 
-                lastPolledScan = scanInfo_->lastScan;
+                lastPolledScan_ = scanInfo_->lastScan;
             }
         }
 
@@ -1082,6 +1082,26 @@ void drvInficon::pollerThread()
         if(mainState_ == MONITORING && scanInfo_->scanStatus == 1) {
             if (startingMonitor_) {
                 startingMonitor_ = false;
+                lastPolledScan_ = -1;
+            }
+
+            if (scanInfo_->lastScan > lastPolledScan_) {
+                /*Get scan values from last successfull scan*/
+                sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
+                                "\r\n");
+                /*Read the data*/
+                ioStatus_ = inficonReadWrite(request, data_);
+
+		        status = parseScan(data_, scanData_);
+                if (status)
+                    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                              "%s:%s: ERROR parsing leakcheck data, status=%d\n",
+                              driverName, functionName, status);
+
+                doCallbacksFloat32Array(scanData_->scanValues, scanData_->scanSize, getScan_, 0);
+
+                //update last polled scan number 
+                lastPolledScan_ = scanInfo_->lastScan;
             }
         }
 

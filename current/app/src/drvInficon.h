@@ -391,15 +391,16 @@ private:
     chScanSetupStruct *chScanSetup_;
     scanDataStruct *scanData_;
     sensIonSourceStruct *sensIonSource_;
-	double totalPressure_;
+    double totalPressure_;
     double pollTime_;
     bool forceCallback_;
     epicsThreadId pollerThreadId_;
     epicsEventId pollerEventId_;
-	mainState_t mainState_;
+    mainState_t mainState_;
     bool startingLeakcheck_;
     bool startingMonitor_;
-	double leakChkValue_;
+    double leakChkValue_;
+    int lastPolledScan_;
 };
 
 #endif /* drvInficon_H */
