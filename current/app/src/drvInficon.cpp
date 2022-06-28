@@ -375,7 +375,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startMonitor_) {
         //check if we are in idle state
-        if (mainState_ != IDLE) {
+        if (mainState_ != IDLE && scanInfo_->scanStatus != 0) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                       "%s::%s device not in idle state\n",
                       driverName, functionName);
@@ -414,7 +414,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
     } else if (function == startLeakcheck_) {
         //check if we are in idle state
-        if (mainState_ != IDLE) {
+        if (mainState_ != IDLE && scanInfo_->scanStatus != 0) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                       "%s::%s device not in idle state\n",
                       driverName, functionName);
@@ -1083,6 +1083,10 @@ void drvInficon::pollerThread()
             if (startingMonitor_) {
                 startingMonitor_ = false;
                 lastPolledScan_ = -1;
+                //set elements of array to 0
+                memset(scanData_->scanValues, 0, MAX_SCAN_SIZE*sizeof(float));
+                //clear screen for the user, size from previous scan
+                doCallbacksFloat32Array(scanData_->scanValues, scanData_->scanSize, getScan_, 0);
             }
 
             if (scanInfo_->lastScan > lastPolledScan_) {
