@@ -554,8 +554,18 @@ record(waveform,"$(DEV):MONITORING_SCAN")
     field(NELM, "16384")
     field(EGU,  "")
     field(PREC, "2")
-    field(HOPR, "50.5")
-    field(LOPR, "0.5")
+}
+
+record(waveform,"$(DEV):X_COORD_SCAN")
+{
+    field(DESC, "X coordinate array")
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT))GET_XCOORD")
+    field(SCAN, "I/O Intr")
+    field(FTVL, "FLOAT")
+    field(NELM, "16384")
+    field(EGU,  "AMU")
+    field(PREC, "2")
 }
 
 #record(waveform,"$(DEV):LEAKCHECK_SCAN")

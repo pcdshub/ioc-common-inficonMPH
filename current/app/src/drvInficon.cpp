@@ -124,6 +124,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     //Measurement parameters
     createParam(INFICON_GET_PRESS_STRING,          asynParamFloat64,        &getPress_);
     createParam(INFICON_GET_SCAN_STRING,           asynParamFloat32Array,   &getScan_);
+    createParam(INFICON_GET_XCOORD_STRING,         asynParamFloat32Array,   &getXCoord_);
     createParam(INFICON_GET_LEAKCHK_STRING,        asynParamFloat64,        &getLeakChk_);
     //Scan info parameters
     createParam(INFICON_GET_SCAN_INFO_STRING,      asynParamOctet,          &getScanInfo_);
@@ -690,7 +691,7 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
         setIntegerParam (lastScan_, scanInfo_->lastScan);
         setIntegerParam (currentScan_, scanInfo_->currScan);
         setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
-        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0xFFFFFFFF);
+        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0x1);
         //printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
     } else if (function == getSensDetect_) {
         sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
@@ -1037,7 +1038,7 @@ void drvInficon::pollerThread()
         setIntegerParam(lastScan_, scanInfo_->lastScan);
         setIntegerParam(currentScan_, scanInfo_->currScan);
         setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
-        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0xFFFFFFFF);
+        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0x1);
 
         /*Get pressure value*/
         sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
@@ -1083,10 +1084,15 @@ void drvInficon::pollerThread()
             if (startingMonitor_) {
                 startingMonitor_ = false;
                 lastPolledScan_ = -1;
-                //set elements of array to 0
+                //set elements of scan array to 0
                 memset(scanData_->scanValues, 0, MAX_SCAN_SIZE*sizeof(float));
-                //clear screen for the user, size from previous scan
+                //clear screen for the user, array size from previous scan
                 doCallbacksFloat32Array(scanData_->scanValues, scanData_->scanSize, getScan_, 0);
+
+                //set elements of x cooridnate array to 0
+                memset(scanData_->amuValues, 0, MAX_SCAN_SIZE*sizeof(float));
+                //clear screen for the user, array size from previous scan
+                doCallbacksFloat32Array(scanData_->amuValues, scanData_->scanSize, getXCoord_, 0);
             }
 
             if (scanInfo_->lastScan > lastPolledScan_) {
@@ -1102,6 +1108,10 @@ void drvInficon::pollerThread()
                               "%s:%s: ERROR parsing leakcheck data, status=%d\n",
                               driverName, functionName, status);
 
+                //update x coordinate data
+                doCallbacksFloat32Array(scanData_->amuValues, scanData_->scanSize, getXCoord_, 0);
+
+                //update scan/measurement data
                 doCallbacksFloat32Array(scanData_->scanValues, scanData_->scanSize, getScan_, 0);
 
                 //update last polled scan number 
@@ -1600,6 +1610,10 @@ asynStatus drvInficon::parseChScanSetup(const char *jsonData, chScanSetupStruct 
 
 asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
 {
+    unsigned int ppAMU = 0;
+    double dAMU = 0;
+    double startMass = 0;
+    double stopMass = 0;
     static const char *functionName = "parseScan";
 
     try {
@@ -1623,6 +1637,39 @@ asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
             "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
         return asynError;
     }
+	
+    /*calculate x coordinate data points*/
+    getDoubleParam(3, chStartMass_, &startMass);
+    getDoubleParam(3, chStopMass_, &stopMass);
+    getUIntDigitalParam(3, chPpamu_, &ppAMU, 0xFFFFFFFF);
+
+	if (ppAMU <= 0) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s ppAMU value not valid\n",
+                  driverName, functionName);
+        return asynError;
+
+    } else if (scanData->scanSize <= 0) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s scanSize value not valid\n",
+                  driverName, functionName);
+        return asynError;
+
+    } else if (startMass > stopMass) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s startMass value higher than stopMass value\n",
+                  driverName, functionName);
+        return asynError;
+    }
+
+    //calculate delta AMU
+    dAMU = 1/(double)ppAMU;
+
+	//calculate array of values for x coordinate
+    for(int i = 0; i < scanData->scanSize; i++) {
+        scanData->amuValues[i] = startMass + (i*dAMU);
+    }
+
     return asynSuccess;
 }
 

@@ -75,6 +75,7 @@
 //Measurement
 #define INFICON_GET_PRESS_STRING          "GET_PRESS"
 #define INFICON_GET_SCAN_STRING           "GET_SCAN"
+#define INFICON_GET_XCOORD_STRING         "GET_XCOORD"
 #define INFICON_GET_LEAKCHK_STRING        "GET_LEAKCHK"
 //Scan info
 #define INFICON_GET_SCAN_INFO_STRING      "GET_SCAN_INFO"
@@ -209,6 +210,7 @@ typedef struct {
     unsigned int actualScanSize;
     unsigned int scanNumber;
 	float scanValues[MAX_SCAN_SIZE];
+	float amuValues[MAX_SCAN_SIZE];
 } scanDataStruct;
 
 /*typedef struct {
@@ -323,6 +325,7 @@ protected:
     //Measurement parameters
     int getPress_;
     int getScan_;
+    int getXCoord_;
     int getLeakChk_;
     //Scan info parameters
     int getScanInfo_;
