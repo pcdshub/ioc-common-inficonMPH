@@ -71,7 +71,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     totalPressure_(0),
     pollTime_(DEFAULT_POLL_TIME),
     forceCallback_(true),
-    mainState_(IDLE)
+    mainState_(IDLE),
     startingLeakcheck_(false),
     startingMonitor_(false),
     leakChkValue_(0)
