@@ -126,9 +126,9 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_GET_LEAKCHK_STRING,        asynParamFloat64,        &getLeakChk_);
     //Scan info parameters
     createParam(INFICON_GET_SCAN_INFO_STRING,      asynParamOctet,          &getScanInfo_);
-    createParam(INFICON_FIRST_SCAN_STRING,         asynParamUInt32Digital,  &firstScan_);
-    createParam(INFICON_LAST_SCAN_STRING,          asynParamUInt32Digital,  &lastScan_);
-    createParam(INFICON_CURRENT_SCAN_STRING,       asynParamUInt32Digital,  &currentScan_);
+    createParam(INFICON_FIRST_SCAN_STRING,         asynParamInt32,          &firstScan_);
+    createParam(INFICON_LAST_SCAN_STRING,          asynParamInt32,          &lastScan_);
+    createParam(INFICON_CURRENT_SCAN_STRING,       asynParamInt32,          &currentScan_);
     createParam(INFICON_PPSCAN_STRING,             asynParamUInt32Digital,  &ppscan_);
     createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStatus_);
     //Sensor detector parameters
