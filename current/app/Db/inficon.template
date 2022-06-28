@@ -873,24 +873,24 @@ record(longin, "$(DEV):EM_POT_RBV")
 record(longin, "$(DEV):FIRST_SCAN")
 {
     field(DESC, "First scan number")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)FIRST_SCAN")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT))FIRST_SCAN")
     field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(DEV):LAST_SCAN")
 {
     field(DESC, "Last complete scan number")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)LAST_SCAN")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT))LAST_SCAN")
     field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(DEV):CURRENT_SCAN")
 {
     field(DESC, "Current scan number")
-    field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)CURRENT_SCAN")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT))CURRENT_SCAN")
     field(SCAN, "I/O Intr")
 }
 

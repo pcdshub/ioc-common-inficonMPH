@@ -168,9 +168,9 @@ typedef struct {
 } diagDataStruct;
 
 typedef struct {
-    unsigned int firstScan;
-    unsigned int lastScan;
-    unsigned int currScan;
+    int firstScan;
+    int lastScan;
+    int currScan;
     unsigned int ppScan;
     unsigned int scanStatus;
 } scanInfoStruct;
