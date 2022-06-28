@@ -401,7 +401,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
                         "\r\n");
         //ioStatus_ = inficonReadWrite(request, data_);
-        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent, guessing that it takes time
+        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent because it timeouts before getting data, guessing that it takes time
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
@@ -440,7 +440,7 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?1\r\n"
                         "\r\n");
         //ioStatus_ = inficonReadWrite(request, data_);
-        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent, guessing that it takes time
+        inficonReadWrite(request, data_); //i get ioStatus error every time scanStart sent because it timeouts before getting data, guessing that it takes time
 
         if (ioStatus_ != asynSuccess)
             return(ioStatus_);
@@ -1665,7 +1665,7 @@ asynStatus drvInficon::parseLeakChk(const char *jsonData, double *value)
                       driverName, functionName);   
             return asynError;				 
         }
-        printf("%s::%s value:%e\n", driverName, functionName, *value);
+        //printf("%s::%s value:%e\n", driverName, functionName, *value);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
