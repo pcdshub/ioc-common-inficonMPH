@@ -1666,7 +1666,7 @@ asynStatus drvInficon::parseScan(const char *jsonData, scanDataStruct *scanData)
     dAMU = 1/(double)ppAMU;
 
 	//calculate array of values for x coordinate
-    for(int i = 0; i < scanData->scanSize; i++) {
+    for(int i = 0; i < (int)scanData->scanSize; i++) {
         scanData->amuValues[i] = startMass + (i*dAMU);
     }
 
