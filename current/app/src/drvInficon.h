@@ -75,6 +75,7 @@
 //Measurement
 #define INFICON_GET_PRESS_STRING          "GET_PRESS"
 #define INFICON_GET_SCAN_STRING           "GET_SCAN"
+#define INFICON_GET_LEAKCHK_STRING        "GET_LEAKCHK"
 //Scan info
 #define INFICON_GET_SCAN_INFO_STRING      "GET_SCAN_INFO"
 #define INFICON_FIRST_SCAN_STRING         "FIRST_SCAN"
@@ -210,10 +211,10 @@ typedef struct {
 	float scanValues[MAX_SCAN_SIZE];
 } scanDataStruct;
 
-typedef struct {
+/*typedef struct {
     unsigned int scanNumber;
 	float scanValues[LEAKCHECK_SIZE];
-} leakChkStruct;
+} leakChkStruct;*/
 
 typedef enum {
     IDLE = 0,
@@ -273,6 +274,7 @@ public:
     asynStatus parseChScanSetup(const char *jsonData, chScanSetupStruct *chScanSetup, unsigned int chNumber);
     asynStatus parsePressure(const char *jsonData, double *value);
     asynStatus parseSensIonSource(const char *jsonData, sensIonSourceStruct *sensIonSource);
+    asynStatus parseLeakChk(const char *jsonData, double *value);
     asynStatus verifyConnection();   // Verify connection using asynUser //Return asynSuccess for connect
     bool inficonExiting_;
 
@@ -321,6 +323,7 @@ protected:
     //Measurement parameters
     int getPress_;
     int getScan_;
+    int getLeakChk_;
     //Scan info parameters
     int getScanInfo_;
     int firstScan_;
@@ -394,6 +397,9 @@ private:
     epicsThreadId pollerThreadId_;
     epicsEventId pollerEventId_;
 	mainState_t mainState_;
+    bool startingLeakcheck_;
+    bool startingMonitor_;
+	double leakChkValue_;
 };
 
 #endif /* drvInficon_H */

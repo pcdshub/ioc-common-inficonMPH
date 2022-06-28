@@ -72,6 +72,9 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     pollTime_(DEFAULT_POLL_TIME),
     forceCallback_(true),
     mainState_(IDLE)
+    startingLeakcheck_(false),
+    startingMonitor_(false),
+    leakChkValue_(0)
 {
     int status;
 	int ipConfigureStatus;
@@ -120,6 +123,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     //Measurement parameters
     createParam(INFICON_GET_PRESS_STRING,          asynParamFloat64,        &getPress_);
     createParam(INFICON_GET_SCAN_STRING,           asynParamFloat32Array,   &getScan_);
+    createParam(INFICON_GET_LEAKCHK_STRING,        asynParamFloat64,        &getLeakChk_);
     //Scan info parameters
     createParam(INFICON_GET_SCAN_INFO_STRING,      asynParamOctet,          &getScanInfo_);
     createParam(INFICON_FIRST_SCAN_STRING,         asynParamUInt32Digital,  &firstScan_);
@@ -171,7 +175,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
 	memcpy(octetPortName_ + prefixlen, portName_, strlen(portName_) + 1);
 	octetPortName_[len - 1] = '\0';
 	
-    // drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect,noProcessEos)
+    //drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect,noProcessEos)
 	ipConfigureStatus = drvAsynIPPortConfigure(octetPortName_, hostInfo_, 0, 0, 0);
 
 	if (ipConfigureStatus) {
@@ -361,11 +365,11 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
         //If we get up to here set the internal driver state
         mainState_ = IDLE;
         setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
-        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
+        //printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == filSel_) {
         sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n", value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startMonitor_) {
@@ -403,8 +407,9 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = MONITORING;
+        startingMonitor_ = true;
         setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
-        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
+        //printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else if (function == startLeakcheck_) {
         //check if we are in idle state
@@ -441,8 +446,9 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         //If we get up to here set the internal driver state
         mainState_ = LEAKCEHCK;
+        startingLeakcheck_ = true;
         setUIntDigitalParam(driverState_, static_cast<unsigned int>(mainState_), 0xF);
-        printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
+        //printf("%s::%s mainState:%d\n", driverName, functionName, static_cast<unsigned int>(mainState_));
 
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -824,6 +830,7 @@ void drvInficon::pollerThread()
     asynStatus prevIOStatus = asynSuccess;
     epicsTimeStamp currTime, cycleTimeFifeSec, cycleTimeTenSec;
     double dTFifeSec, dTTenSec;
+    int lastPolledScan;
 
     static const char *functionName="pollerThread";
 
@@ -851,7 +858,7 @@ void drvInficon::pollerThread()
             /*Get diagnostic data*/
             sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseDiagData(data_, diagData_);
@@ -871,7 +878,7 @@ void drvInficon::pollerThread()
             /*Get Sensor detector data*/
             sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseSensDetect(data_, sensDetect_);
@@ -888,7 +895,7 @@ void drvInficon::pollerThread()
             /*Get Sensor Ion Source data*/
             sprintf(request,"GET /mmsp/sensorIonSource/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseSensIonSource(data_, sensIonSource_);
@@ -921,7 +928,7 @@ void drvInficon::pollerThread()
             /*Get CH4 Scan setup data*/
             sprintf(request,"GET /mmsp/scanSetup/channel/4/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseChScanSetup(data_, chScanSetup_, 4);
@@ -943,7 +950,7 @@ void drvInficon::pollerThread()
             /*Get communication parameters*/
             sprintf(request,"GET /mmsp/communication/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseCommParam(data_, commParams_);
@@ -957,7 +964,7 @@ void drvInficon::pollerThread()
             /*Get Sensor info*/
             sprintf(request,"GET /mmsp/sensorInfo/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseSensInfo(data_, sensInfo_);
@@ -973,7 +980,7 @@ void drvInficon::pollerThread()
             /*Get device status*/
             sprintf(request,"GET /mmsp/status/get\r\n"
                             "\r\n");
-            /* Read the data */
+            /*Read the data*/
             ioStatus_ = inficonReadWrite(request, data_);
 
             status = parseDevStatus(data_, devStatus_);
@@ -1018,7 +1025,7 @@ void drvInficon::pollerThread()
         /*Get scan info data*/
         sprintf(request,"GET /mmsp/scanInfo/get\r\n"
                         "\r\n");
-        /* Read the data */
+        /*Read the data*/
         ioStatus_ = inficonReadWrite(request, data_);
 
         status = parseScanInfo(data_, scanInfo_);
@@ -1035,7 +1042,7 @@ void drvInficon::pollerThread()
         /*Get pressure value*/
         sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
                         "\r\n");
-        /* Read the data */
+        /*Read the data*/
         ioStatus_ = inficonReadWrite(request, data_);
 
         status = parsePressure(data_, &totalPressure_);
@@ -1044,6 +1051,39 @@ void drvInficon::pollerThread()
                       "%s:%s: ERROR parsing total pressure data, status=%d\n",
                       driverName, functionName, status);
         setDoubleParam(getPress_, totalPressure_);
+
+        //let's check if the leakcheck is running, and start pulling data
+        if(mainState_ == LEAKCEHCK && scanInfo_->scanStatus == 1) {
+            if (startingLeakcheck_) {
+                startingLeakcheck_ = false;
+                lastPolledScan = -1;
+            }
+
+            if (scanInfo_->lastScan > lastPolledScan) {
+                /*Get leakcheck value from last successfull scan*/
+                sprintf(request,"GET /mmsp/measurement/scans/-1/get\r\n"
+                                "\r\n");
+                /*Read the data*/
+                ioStatus_ = inficonReadWrite(request, data_);
+
+                status = parseLeakChk(data_, &leakChkValue_);
+                if (status)
+                    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                              "%s:%s: ERROR parsing leakcheck data, status=%d\n",
+                              driverName, functionName, status);
+                setDoubleParam(getLeakChk_, leakChkValue_);
+
+                //update last polled scan number 
+                lastPolledScan = scanInfo_->lastScan;
+            }
+        }
+
+        //let's check if the monitoring is running, and start pulling data
+        if(mainState_ == MONITORING && scanInfo_->scanStatus == 1) {
+            if (startingMonitor_) {
+                startingMonitor_ = false;
+            }
+        }
 
 
         /* If we have an I/O error this time and the previous time, just try again */
@@ -1570,6 +1610,38 @@ asynStatus drvInficon::parsePressure(const char *jsonData, double *value)
         json j = json::parse(jsonData);
 
         *value = j["data"];
+    }
+	catch (const json::parse_error& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s JSON error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    catch (std::exception e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s::%s other error parsing string: %s\n", driverName, functionName, e.what());
+        return asynError;
+    }
+    return asynSuccess;
+}
+
+asynStatus drvInficon::parseLeakChk(const char *jsonData, double *value)
+{
+    static const char *functionName = "parseLeakChk";
+    unsigned int actualScanSize = 0;
+
+    try {
+        json j = json::parse(jsonData);
+
+		actualScanSize = j["data"]["values"].size();
+        if (actualScanSize == 1) {
+		    *value = j["data"]["values"][0];
+        } else {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s::%s Error parsing leakcheck data, array size not valid\n",
+                      driverName, functionName);   
+            return asynError;				 
+        }
+        printf("%s::%s value:%e\n", driverName, functionName, *value);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 

@@ -548,19 +548,26 @@ record(waveform,"$(DEV):MONITORING_SCAN")
 {
     field(DTYP, "asynFloat32ArrayIn")
     field(INP,  "@asyn($(PORT))GET_SCAN")
-    field(SCAN, "$(CSCAN) second")
+#    field(SCAN, "$(CSCAN) second")
     field(FTVL, "FLOAT")
     field(NELM, "16384")
 }
 
-record(waveform,"$(DEV):LEAKCHECK_SCAN")
+#record(waveform,"$(DEV):LEAKCHECK_SCAN")
+#{
+#    field(DTYP, "asynFloat32ArrayIn")
+#    field(INP,  "@asyn($(PORT))GET_SCAN")
+#    field(FTVL, "FLOAT")
+#    field(NELM, "16384")
+#}
+
+record(ai, "$(DEV):LEAKCHK_RBV")
 {
-    field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT))GET_SCAN")
-    field(FTVL, "FLOAT")
-    field(NELM, "16384")
+    field(DESC, "Leakcheck value readback")   
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))GET_LEAKCHK")
+    field(SCAN, "I/O Intr")
 }
-
 
 # Pulling data PVs 
 #record(stringin, "$(DEV):GET_COMM_PARAM")
