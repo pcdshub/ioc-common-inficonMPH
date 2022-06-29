@@ -251,7 +251,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="alarmChannels">
       <stringlist>
@@ -278,15 +278,17 @@
            <property name="toolTip">
             <string/>
            </property>
+           <property name="showXGrid">
+            <bool>true</bool>
+           </property>
            <property name="yAxes">
             <stringlist>
-             <string>{&quot;name&quot;: &quot;left&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -1.0, &quot;maxRange&quot;: 1.0, &quot;autoRange&quot;: true, &quot;logMode&quot;: null}</string>
-             <string>{&quot;name&quot;: &quot;Axis 1&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -1.0, &quot;maxRange&quot;: 1.0, &quot;autoRange&quot;: true, &quot;logMode&quot;: null}</string>
+             <string>{&quot;name&quot;: &quot;Axis 1&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -1.0, &quot;maxRange&quot;: 1.0, &quot;autoRange&quot;: true, &quot;logMode&quot;: false}</string>
             </stringlist>
            </property>
            <property name="curves">
             <stringlist>
-             <string>{&quot;y_channel&quot;: &quot;ca://${DEV}:MONITORING_SCAN&quot;, &quot;x_channel&quot;: null, &quot;plot_style&quot;: null, &quot;name&quot;: &quot;&quot;, &quot;color&quot;: &quot;white&quot;, &quot;lineStyle&quot;: 1, &quot;lineWidth&quot;: 1, &quot;symbol&quot;: null, &quot;symbolSize&quot;: 10, &quot;yAxisName&quot;: &quot;Axis 1&quot;, &quot;barWidth&quot;: null, &quot;upperThreshold&quot;: null, &quot;lowerThreshold&quot;: null, &quot;thresholdColor&quot;: &quot;white&quot;, &quot;redraw_mode&quot;: 2}</string>
+             <string>{&quot;y_channel&quot;: &quot;ca://${DEV}:MONITORING_SCAN&quot;, &quot;x_channel&quot;: &quot;ca://${DEV}:X_COORD_SCAN&quot;, &quot;plot_style&quot;: &quot;Line&quot;, &quot;name&quot;: &quot;&quot;, &quot;color&quot;: &quot;white&quot;, &quot;lineStyle&quot;: 1, &quot;lineWidth&quot;: 1, &quot;symbol&quot;: null, &quot;symbolSize&quot;: 10, &quot;yAxisName&quot;: &quot;Axis 1&quot;, &quot;barWidth&quot;: null, &quot;upperThreshold&quot;: null, &quot;lowerThreshold&quot;: null, &quot;thresholdColor&quot;: &quot;white&quot;, &quot;redraw_mode&quot;: 2}</string>
             </stringlist>
            </property>
           </widget>
@@ -534,6 +536,9 @@
                   <widget class="PyDMLabel" name="PyDMLabel_15">
                    <property name="toolTip">
                     <string/>
+                   </property>
+                   <property name="showUnits" stdset="0">
+                    <bool>true</bool>
                    </property>
                    <property name="precisionFromPV" stdset="0">
                     <bool>false</bool>
@@ -1059,6 +1064,9 @@
                   <widget class="PyDMLabel" name="PyDMLabel_56">
                    <property name="toolTip">
                     <string/>
+                   </property>
+                   <property name="showUnits" stdset="0">
+                    <bool>true</bool>
                    </property>
                    <property name="precisionFromPV" stdset="0">
                     <bool>false</bool>
