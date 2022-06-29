@@ -20,9 +20,8 @@
 #define DEVICE_RW_TIMEOUT 0.2
 #define HTTP_REQUEST_SIZE 512
 #define HTTP_RESPONSE_SIZE 150000
-#define MAX_CHANNELS 4
+#define MAX_CHANNELS 5
 #define MAX_SCAN_SIZE 16384
-#define LEAKCHECK_SIZE 9001
 
 //Poller thread
 #define DEFAULT_POLL_TIME 0.25
@@ -212,11 +211,6 @@ typedef struct {
 	float scanValues[MAX_SCAN_SIZE];
 	float amuValues[MAX_SCAN_SIZE];
 } scanDataStruct;
-
-/*typedef struct {
-    unsigned int scanNumber;
-	float scanValues[LEAKCHECK_SIZE];
-} leakChkStruct;*/
 
 typedef enum {
     IDLE = 0,

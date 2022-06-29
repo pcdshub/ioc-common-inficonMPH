@@ -51,7 +51,7 @@ static void pollerThreadC(void *drvPvt);
 drvInficon::drvInficon(const char *portName, const char* hostInfo)
 
    : asynPortDriver(portName,
-                    5, /* maxAddr */
+                    MAX_CHANNELS, /* maxAddr */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask | asynDrvUserMask, /* Interface mask */
                     asynInt32Mask | asynUInt32DigitalMask | asynFloat64Mask | asynFloat32ArrayMask | asynOctetMask,                   /* Interrupt mask */
                     ASYN_CANBLOCK | ASYN_MULTIDEVICE, /* asynFlags */
@@ -301,54 +301,77 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 	
     pasynManager->getAddr(pasynUser, &chNumber);
 
-    setUIntDigitalParam(chNumber, function, value, mask);
+    //setUIntDigitalParam(chNumber, function, value, mask);
     if (function == emiOn_) {
         sprintf(request,"GET /mmsp/generalControl/setEmission/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
-//maybe add emissionStandby command? This target puts the ion source filament in standby, a warm but not emitting state.
+        //maybe add emissionStandby command? This target puts the ion source filament in standby, a warm but not emitting state.
     } else if (function == emOn_) {
         sprintf(request,"GET /mmsp/generalControl/setEM/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == rfGenOn_) {
         sprintf(request,"GET /mmsp/generalControl/rfGeneratorSet/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == shutdown_) {
         sprintf(request,"GET /mmsp/generalControl/shutdown/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == emV_) {
         sprintf(request,"GET /mmsp/sensorDetector/emVoltage/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startStopCh_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS)
+            return asynError;
+
         sprintf(request,"GET /mmsp/scanSetup/set?startChannel=%d&stopChannel=%d\r\n"
-        "\r\n", chNumber, chNumber);
+                        "\r\n",
+                        chNumber, chNumber);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chPpamu_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS)
+            return asynError;
+
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/ppamu/set?%d\r\n"
-        "\r\n", chNumber, value);
+                        "\r\n",
+                        chNumber, value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == chDwell_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS)
+            return asynError;
+
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/dwell/set?%d\r\n"
-        "\r\n", chNumber, value);
+                        "\r\n",
+                        chNumber, value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == scanStart_) {
         sprintf(request,"GET /mmsp/scanSetup/scanStart/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == scanStop_) {
@@ -371,7 +394,9 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
     } else if (function == filSel_) {
         sprintf(request,"GET /mmsp/sensorIonSource/filamentSelected/set?%d\r\n"
-                        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startMonitor_) {
@@ -486,12 +511,16 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 	
     pasynManager->getAddr(pasynUser, &chNumber);
 
-    setIntegerParam(chNumber, function, value);
+    //setIntegerParam(chNumber, function, value);
     if (function == scanCount_) {
         sprintf(request,"GET /mmsp/scanSetup/scanCount/set?%d\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -507,27 +536,11 @@ asynStatus drvInficon::writeInt32(asynUser *pasynUser, epicsInt32 value)
 */
 asynStatus drvInficon::readFloat64 (asynUser *pasynUser, epicsFloat64 *value)
 {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    char request[HTTP_REQUEST_SIZE];
-    static const char *functionName = "readFloat64";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "readFloat64";
 
     *value = 0;
 
-    if (function == getPress_) {
-        sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
-        "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parsePressure(data_, value);
-        if (status != asynSuccess) return(status);
-        //printf("%s::%s pressure:%f json:%s\n", driverName, functionName, *value, data_);
-    } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                  "%s::%s port %s invalid pasynUser->reason %d\n",
-                  driverName, functionName, this->portName, function);
-        return asynError;
-    }
     return asynSuccess;
 }
 
@@ -537,33 +550,67 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
     int function = pasynUser->reason;
     char request[HTTP_REQUEST_SIZE];
 	int chNumber;
+    double startMass;
+    double stopMass;
     static const char *functionName = "writeFloat64";
 	
     pasynManager->getAddr(pasynUser, &chNumber);
 
-    setDoubleParam(chNumber, function, value);
+    //setDoubleParam(chNumber, function, value);
+    //get ch stop and start mass
+    getDoubleParam(chNumber, chStartMass_, &startMass);
+    getDoubleParam(chNumber, chStopMass_, &stopMass);
+
     if (function == chStartMass_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        //make sure that the chnumber doesn't exceed max available channels and that the chStartMass value is not higher than stop mass for that ch
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS) {
+            return asynError;
+	    } else if (value > stopMass) {
+            return asynError;
+        }
+
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/startMass/set?%.2f\r\n"
-        "\r\n", chNumber, value);
+                        "\r\n",
+                        chNumber, value);
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
     } else if (function == chStopMass_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
+        //make sure that the chnumber doesn't exceed max available channels and that the chStopMass value is not lower than start mass for that ch
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS) {
+            return asynError;
+	    } else if (value < startMass) {
+            return asynError;
+        }
+
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/stopMass/set?%.2f\r\n"
-        "\r\n", chNumber, value);
+                        "\r\n",
+                        chNumber, value);
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
     } else if (function == emGain_) {
         sprintf(request,"GET /mmsp/sensorDetector/emGain/set?%.2f\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
     } else if (function == emGainMass_) {
         sprintf(request,"GET /mmsp/sensorDetector/emGainMass/set?%.2f\r\n"
-        "\r\n", value);
+                        "\r\n",
+                        value);
+
         ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
+        if (ioStatus_ != asynSuccess)
+            return(ioStatus_);
+
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s::%s port %s invalid pasynUser->reason %d\n",
@@ -580,32 +627,11 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
 */
 asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data, size_t maxChans, size_t *nactual)
 {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    char request[HTTP_REQUEST_SIZE];
-	int scanMode;
-    static const char *functionName = "readFloat32Array";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "readFloat32Array";
 
     *nactual = 0;
-	
-    if (function == getScan_) {
-        getIntegerParam(scanMode_, &scanMode);
-        sprintf(request,"GET /mmsp/measurement/scans/%d/get\r\n"
-        "\r\n", scanMode);
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-		status = parseScan(data_, scanData_);
-        if (status != asynSuccess) return(status);
-		*nactual = scanData_->scanSize;
-		memcpy(data, scanData_->scanValues, scanData_->actualScanSize * sizeof(float));
-        //printf("%s::%s array0:%e array1:%e array2:%e nElements:%d scanNum:%d\n", driverName, functionName, data[0], data[1], scanData_->scanValues[2500], scanData_->actualScanSize, scanData_->scanNumber);
-        //doCallbacksFloat32Array(scanData_->scanValues, scanData_->actualScanSize, getScan_, 0);
-    } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                  "%s::%s port %s invalid pasynUser->reason %d\n",
-                  driverName, functionName, this->portName, function);
-        return asynError;
-    }
+
     return asynSuccess;
 }
 
@@ -615,198 +641,21 @@ asynStatus drvInficon::readFloat32Array(asynUser *pasynUser, epicsFloat32 *data,
 */
 asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nactual, int *eomReason)
 {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    char request[HTTP_REQUEST_SIZE];
-	int chNumber;
-    static const char *functionName = "readOctet";
+    //int function = pasynUser->reason;
+    //static const char *functionName = "readOctet";
 
-    pasynManager->getAddr(pasynUser, &chNumber);
     *nactual = 0;
-
-    if (function == getCommParam_) {
-        sprintf(request,"GET /mmsp/communication/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseCommParam(data_, commParams_);
-        if (status != asynSuccess) return(status);
-        setStringParam(ip_, commParams_->ip);
-        setStringParam(mac_, commParams_->mac);
-        //printf("%s::%s status:%d ip:%s mac:%s\n", driverName, functionName, status, commParams_->ip, commParams_->mac);
-    } else if (function == getSensInfo_) {
-        sprintf(request,"GET /mmsp/sensorInfo/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseSensInfo(data_, sensInfo_);
-        if (status != asynSuccess) return(status);
-        setStringParam(sensName_, sensInfo_->sensName);
-        setStringParam(sensDesc_, sensInfo_->sensDesc);
-        setUIntDigitalParam(sensSn_, sensInfo_->sensSN, 0xFFFFFFFF);
-        //printf("%s::%s status:%d serial:%d name:%s desc:%s\n", driverName, functionName, status, sensInfo_->sensSN, sensInfo_->sensName, sensInfo_->sensDesc);
-    } else if (function == getDevStatus_) {
-        sprintf(request,"GET /mmsp/status/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseDevStatus(data_, devStatus_);
-        if (status != asynSuccess) return(status);
-        setUIntDigitalParam(systStatus_, devStatus_->systStatus, 0xFFFFFFFF);
-        setUIntDigitalParam(hwError_, devStatus_->hwError, 0xFFFFFFFF);
-        setUIntDigitalParam(hwWarn_, devStatus_->hwWarn, 0xFFFFFFFF);
-        setDoubleParam(pwrOnTime_, devStatus_->pwrOnTime);
-        setDoubleParam(emiOnTime_, devStatus_->emiOnTime);
-        setDoubleParam(emOnTime_, devStatus_->emOnTime);
-        setDoubleParam(emCmlOnTime_, devStatus_->emCmlOnTime);
-        setUIntDigitalParam(emPressTrip_, devStatus_->emPressTrip, 0xFFFFFFFF);
-        setDoubleParam(fil1CmlOnTime_, devStatus_->filament[1].emiCmlOnTime);
-        setUIntDigitalParam(fil1PressTrip_, devStatus_->filament[1].emiPressTrip, 0xFFFFFFFF);
-        setDoubleParam(fil2CmlOnTime_, devStatus_->filament[2].emiCmlOnTime);
-        setUIntDigitalParam(fil2PressTrip_, devStatus_->filament[2].emiPressTrip, 0xFFFFFFFF);
-    } else if (function == getDiagData_) {
-        sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseDiagData(data_, diagData_);
-        if (status != asynSuccess) return(status);
-        setDoubleParam(boxTemp_, diagData_->boxTemp);
-        setUIntDigitalParam(anodePotential_, diagData_->anodePot, 0xFFFFFFFF);
-        setUIntDigitalParam(emiCurrent_, diagData_->emiCurrent, 0xFFFFFFFF);
-        setUIntDigitalParam(focusPotential_, diagData_->focusPot, 0xFFFFFFFF);
-        setUIntDigitalParam(electEnergy_, diagData_->electEng, 0xFFFFFFFF);
-        setUIntDigitalParam(filPotential_, diagData_->filPot, 0xFFFFFFFF);
-        setUIntDigitalParam(filCurrent_, diagData_->filCurrent, 0xFFFFFFFF);
-        setUIntDigitalParam(emPotential_, diagData_->emPot, 0xFFFFFFFF);
-        //printf("%s::%s boxTemp:%.3f anodePot:%d filCurrent:%d\n", driverName, functionName, diagData_->boxTemp, diagData_->anodePot, diagData_->filCurrent);
-    } else if (function == getScanInfo_) {
-        sprintf(request,"GET /mmsp/scanInfo/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseScanInfo(data_, scanInfo_);
-        if (status != asynSuccess) return(status);
-        setIntegerParam (firstScan_, scanInfo_->firstScan);
-        setIntegerParam (lastScan_, scanInfo_->lastScan);
-        setIntegerParam (currentScan_, scanInfo_->currScan);
-        setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
-        setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0x1);
-        //printf("%s::%s firstSan:%d currScan:%d scanStatus:%d\n", driverName, functionName, scanInfo_->firstScan, scanInfo_->currScan, scanInfo_->scanStatus);
-    } else if (function == getSensDetect_) {
-        sprintf(request,"GET /mmsp/sensorDetector/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseSensDetect(data_, sensDetect_);
-        if (status != asynSuccess) return(status);
-        setUIntDigitalParam(emVMax_, sensDetect_->emVMax, 0xFFFFFFFF);
-        setUIntDigitalParam(emVMin_, sensDetect_->emVMin, 0xFFFFFFFF);
-        setUIntDigitalParam(emV_, sensDetect_->emV, 0xFFFFFFFF);
-        setDoubleParam(emGain_, sensDetect_->emGain);
-        setUIntDigitalParam(emGainMass_, sensDetect_->emGainMass, 0xFFFFFFFF);
-        //printf("%s::%s emVMax:%d emV:%d emGain:%.3f\n", driverName, functionName, sensDetect_->emVMax, sensDetect_->emV, sensDetect_->emGain);
-    } else if (function == getSensFilt_) {
-        sprintf(request,"GET /mmsp/sensorFilter/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseSensFilt(data_, sensFilt_);
-        if (status != asynSuccess) return(status);
-        setDoubleParam(massMax_, sensFilt_->massMax);
-        setDoubleParam(massMin_, sensFilt_->massMin);
-        setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
-        setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
-        //printf("%s::%s massMax:%.3f massMin:%.3f dwellMin:%d\n", driverName, functionName, sensFilt_->massMax, sensFilt_->massMin, sensFilt_->dwellMin);
-    } else if (function == getSensIonSrc_) {
-        sprintf(request,"GET /mmsp/sensorIonSource/get\r\n"
-                "\r\n");
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseSensIonSource(data_, sensIonSource_);
-        if (status != asynSuccess) return(status);
-        setUIntDigitalParam(filSel_, sensIonSource_->filSel, 0xFFFFFFFF);
-        setUIntDigitalParam(emiLevel_, sensIonSource_->emiLevel, 0xFFFFFFFF);
-        setUIntDigitalParam(optType_, sensIonSource_->optType, 0xFFFFFFFF);
-    } else if (function == getChScanSetup_) {
-		
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) 
-            return asynError;
-
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/get\r\n"
-                        "\r\n", 
-                        chNumber);
-
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-        status = parseChScanSetup(data_, chScanSetup_, chNumber);
-        if (status != asynSuccess) return(status);
-        setStringParam(chNumber, chMode_, chScanSetup_[chNumber].chMode);
-        setDoubleParam(chNumber, chStartMass_, chScanSetup_[chNumber].chStartMass);
-        setDoubleParam(chNumber, chStopMass_, chScanSetup_[chNumber].chStopMass);	
-        setUIntDigitalParam(chNumber, chDwell_, chScanSetup_[chNumber].chDwell, 0xFFFFFFFF);
-        setUIntDigitalParam(chNumber, chPpamu_, chScanSetup_[chNumber].chPpamu, 0xFFFFFFFF);
-        //printf("%s::%s chNumber:%d chMode:%s chDwel:%d chppamu:%d chstartMass:%f chstopMass:%f\n", driverName, functionName, chNumber, chScanSetup_[chNumber].chMode, chScanSetup_[chNumber].chDwell, chScanSetup_[chNumber].chPpamu, chScanSetup_[chNumber].chStartMass, chScanSetup_[chNumber].chStopMass);
-    } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                  "%s::%s port %s invalid pasynUser->reason %d\n",
-                  driverName, functionName, this->portName, function);
-        return asynError;
-    }
-    callParamCallbacks(chNumber);
-    return status;
+	
+    return asynSuccess;
 }
 
 asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual)
 {
-    int function = pasynUser->reason;
-    char request[HTTP_REQUEST_SIZE];
-	int chNumber;
-	//std::string tempChMode;
-    //char chMode[32];
-	//double startMass;
-	//double stopMass;
-	//unsigned int ppamu;
-	//unsigned int dwell;
-    static const char *functionName = "writeOctet";
-
-    pasynManager->getAddr(pasynUser, &chNumber);
+    //int function = pasynUser->reason;
+    //static const char *functionName = "writeOctet";
 
     *nActual = strlen(value);
-    setStringParam(chNumber, function, value);
-    if (function == chMode_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
-        sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode/set?%s\r\n"
-        "\r\n", chNumber, value);
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-    } else if (function == setChScanSetup_) {
-        if (chNumber < 1 || chNumber > MAX_CHANNELS) return asynError;
-        /*getStringParam(chNumber, chMode_, tempChMode);
-        strcpy(chMode, tempChMode.c_str());
-        getDoubleParam(chNumber, chStartMass_, &startMass);
-        getDoubleParam(chNumber, chStopMass_, &stopMass);
-        getUIntDigitalParam(chNumber, chPpamu_, &ppamu, 0xFFFFFFFF);
-        getUIntDigitalParam(chNumber, chDwell_, &dwell, 0xFFFFFFFF);
-		if (strcmp(chMode, "Single") == 0) {
-            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&dwell=%d&enabled=True\r\n"
-            "\r\n", chNumber, chMode, startMass, dwell);
-        } else {
-            sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?channelMode=%s&startMass=%.2f&stopMass=%.2f&ppamu=%d&dwell=%d&enabled=True\r\n"
-            "\r\n", chNumber, chMode, startMass, stopMass, ppamu, dwell);
-        }*/
-        sprintf(request,"GET /mmsp/scanSetup/channels/%d/set?enabled=True\r\n"
-                "\r\n",
-                chNumber);
 
-        ioStatus_ = inficonReadWrite(request, data_);
-        if (ioStatus_ != asynSuccess) return(ioStatus_);
-    } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                  "%s::%s port %s invalid pasynUser->reason %d\n",
-                  driverName, functionName, this->portName, function);
-        return asynError;
-    }
     return asynSuccess;
 }
 
