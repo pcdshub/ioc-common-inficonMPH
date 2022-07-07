@@ -565,9 +565,9 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
         //make sure that the chnumber doesn't exceed max available channels and that the chStartMass value is not higher than stop mass for that ch
         if (chNumber < 1 || chNumber >= MAX_CHANNELS) {
             return asynError;
-	    } else if (value > stopMass) {
-            return asynError;
-        }
+	    } //else if (value > stopMass) {
+          //  return asynError;
+        //}
 
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/startMass/set?%.2f\r\n"
                         "\r\n",
@@ -581,9 +581,9 @@ asynStatus drvInficon::writeFloat64 (asynUser *pasynUser, epicsFloat64 value)
         //make sure that the chnumber doesn't exceed max available channels and that the chStopMass value is not lower than start mass for that ch
         if (chNumber < 1 || chNumber >= MAX_CHANNELS) {
             return asynError;
-	    } else if (value < startMass) {
-            return asynError;
-        }
+	    } //else if (value < startMass) {
+          //  return asynError;
+        //}
 
         sprintf(request,"GET /mmsp/scanSetup/channel/%d/stopMass/set?%.2f\r\n"
                         "\r\n",
@@ -987,7 +987,7 @@ void drvInficon::pollerThread()
             lock();
         }
 
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<MAX_CHANNELS; i++) {
             callParamCallbacks(i);
         }
         //unlock();

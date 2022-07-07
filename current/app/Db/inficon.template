@@ -548,6 +548,7 @@ record(mbbiDirect, "$(DEV):SYST_STAT_RBV")
 
 record(mbbiDirect, "$(DEV):HW_ERR_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Get hw errors")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_ERROR")
@@ -556,6 +557,7 @@ record(mbbiDirect, "$(DEV):HW_ERR_RBV")
 
 record(mbbiDirect, "$(DEV):HW_WARN_RBV")
 {
+    field(PINI, "YES")
     field(DESC, "Get system status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_WARN")
