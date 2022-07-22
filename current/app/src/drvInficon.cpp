@@ -1294,6 +1294,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
             //printf("%s::%s iterator:%d\n", driverName, functionName, i);
         }
         printf("%s::%s systStatus:%d\n", driverName, functionName, devStatus->systStatus);
+        printf("%s::%s json:%s\n", driverName, functionName, jsonDataSubstring);
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
