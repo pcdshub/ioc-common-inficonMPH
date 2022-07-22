@@ -145,9 +145,9 @@ typedef struct {
 } filamentsStruct;
 
 typedef struct {
-    unsigned int systStatus;
-    unsigned int hwError;
-    unsigned int hwWarn;
+    unsigned long systStatus;
+    unsigned long hwError;
+    unsigned long hwWarn;
     double pwrOnTime;
     double emiOnTime;
     double emOnTime;
