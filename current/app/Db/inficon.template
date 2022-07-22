@@ -32,7 +32,7 @@ record(bo, "$(DEV):STOP_SCAN")
 
 record(bo, "$(DEV):SET_STOP_SCAN")
 {
-    field(PINI, "YES")
+#    field(PINI, "YES")
     field(DESC, "Stop scanning command")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
