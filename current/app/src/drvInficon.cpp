@@ -1293,7 +1293,7 @@ asynStatus drvInficon::parseDevStatus(const char *jsonData, devStatusStruct *dev
             //printf("%s::%s id:%d, emiCmlOnTime:%.1f, emiPressTrip:%d\n", driverName, functionName, devStatus->filament[i].id, devStatus->filament[i].emiCmlOnTime, devStatus->filament[i].emiPressTrip);
             //printf("%s::%s iterator:%d\n", driverName, functionName, i);
         }
-        printf("%s::%s systStatus:%d\n", driverName, functionName, devStatus->systStatus);
+        printf("%s::%s systStatus:%lu\n", driverName, functionName, devStatus->systStatus);
         //printf("%s::%s json:%s\n", driverName, functionName, jsonDataSubstring);
     }
 	catch (const json::parse_error& e) {
