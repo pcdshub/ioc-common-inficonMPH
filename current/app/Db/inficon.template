@@ -547,6 +547,14 @@ record(mbbiDirect, "$(DEV):SYST_STAT_RBV")
     field(SCAN, "I/O Intr")
 }
 
+record(longin, "$(DEV):SYST_STAT_LONG")
+{
+    field(DESC, "Get system status")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)SYST_STAT")
+    field(SCAN, "I/O Intr")
+}
+
 record(mbbiDirect, "$(DEV):HW_ERR_RBV")
 {
     field(PINI, "YES")
