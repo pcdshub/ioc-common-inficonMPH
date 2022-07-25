@@ -581,10 +581,29 @@ record(mbbiDirect, "$(DEV):SYST_STAT_HIGH")
 record(mbbiDirect, "$(DEV):HW_ERR_RBV")
 {
     field(PINI, "YES")
-    field(DESC, "Get hw errors")
+    field(DESC, "Get HW errors")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_ERROR")
     field(SCAN, "I/O Intr")
+    field(FLNK, "$(DEV):HW_ERR_LOW")
+}
+
+record(mbbiDirect, "$(DEV):HW_ERR_LOW")
+{
+    field(DESC, "HW errors lower 16 bits")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(DEV):HW_ERR_RBV.RVAL")
+    field(NOBT, "16")
+    field(FLNK, "$(DEV):HW_ERR_HIGH")
+}
+
+record(mbbiDirect, "$(DEV):HW_ERR_HIGH")
+{
+    field(DESC, "HW errors higher 16 bits")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(DEV):HW_ERR_RBV.RVAL")
+    field(SHFT, "16")
+    field(NOBT, "16")
 }
 
 record(mbbiDirect, "$(DEV):HW_WARN_RBV")
@@ -594,6 +613,25 @@ record(mbbiDirect, "$(DEV):HW_WARN_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)HW_WARN")
     field(SCAN, "I/O Intr")
+    field(FLNK, "$(DEV):HW_WARN_LOW")
+}
+
+record(mbbiDirect, "$(DEV):HW_WARN_LOW")
+{
+    field(DESC, "HW warn. lower 16 bits")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(DEV):HW_WARN_RBV.RVAL")
+    field(NOBT, "16")
+    field(FLNK, "$(DEV):HW_WARN_HIGH")
+}
+
+record(mbbiDirect, "$(DEV):HW_WARN_HIGH")
+{
+    field(DESC, "HW warn. higher 16 bits")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(DEV):HW_WARN_RBV.RVAL")
+    field(SHFT, "16")
+    field(NOBT, "16")
 }
 
 record(ai, "$(DEV):PWR_ON_TIME_RBV")
@@ -1087,7 +1125,7 @@ record(ai, "$(DEV):SENS_FACTOR_RBV")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))SENS_FACTOR")
     field(SCAN, "I/O Intr")
-    field(PREC, "3")
+    field(PREC, "2")
     field(EGU,  "A/Torr")
 }
 
