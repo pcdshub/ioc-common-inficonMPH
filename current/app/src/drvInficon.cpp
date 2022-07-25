@@ -146,6 +146,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_MASS_MIN_STRING,           asynParamFloat64,        &massMin_);
     createParam(INFICON_DWELL_MAX_STRING,          asynParamUInt32Digital,  &dwelMax_);
     createParam(INFICON_DWELL_MIN_STRING,          asynParamUInt32Digital,  &dwelMin_);
+    createParam(INFICON_ROD_POLARTIY_STRING,       asynParamUInt32Digital,  &rodPolarity_);
     //Sensor Ion Source parameters
     createParam(INFICON_GET_SENS_ION_SRC_STRING,   asynParamOctet,          &getSensIonSrc_);
     createParam(INFICON_FIL_SEL_STRING,            asynParamUInt32Digital,  &filSel_);
@@ -868,6 +869,7 @@ void drvInficon::pollerThread()
             setDoubleParam(massMin_, sensFilt_->massMin);
             setUIntDigitalParam(dwelMax_, sensFilt_->dwellMax, 0xFFFFFFFF);
             setUIntDigitalParam(dwelMin_, sensFilt_->dwellMin, 0xFFFFFFFF);
+            setUIntDigitalParam(rodPolarity_, sensFilt_->rodPolarity, 0xF);
 
             /*Update cycle time*/
             epicsTimeGetCurrent(&cycleTimeTenSec);

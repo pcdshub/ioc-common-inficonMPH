@@ -872,6 +872,18 @@ record(longin, "$(DEV):DWELL_MIN_RBV")
     field(SCAN, "I/O Intr")
 }
 
+record(mbbi, "$(DEV):ROD_POLARITY_RBV")
+{
+    field(DESC, "Rod polarity rbv")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xF)ROD_POLARITY")
+    field(SCAN, "I/O Intr")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(ZRST, "NORMAL")
+    field(ONST, "REVERSE")
+}
+
 record(stringin, "$(DEV):CH3_MODE_RBV")
 {
     field(DESC, "Ch3 mode")

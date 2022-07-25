@@ -96,6 +96,7 @@
 #define INFICON_MASS_MIN_STRING           "MASS_MIN"
 #define INFICON_DWELL_MAX_STRING          "DWELL_MAX"
 #define INFICON_DWELL_MIN_STRING          "DWELL_MIN"
+#define INFICON_ROD_POLARTIY_STRING       "ROD_POLARITY"
 //Sensor Ion Source
 #define INFICON_GET_SENS_ION_SRC_STRING   "GET_SENS_ION_SRC"
 #define INFICON_FIL_SEL_STRING            "FIL_SEL"
@@ -196,6 +197,7 @@ typedef struct {
     double massMin;
     unsigned int dwellMax;
     unsigned int dwellMin;
+    unsigned int rodPolarity;
 } sensFiltStruct;
 
 typedef struct {
@@ -343,6 +345,7 @@ protected:
     int massMin_;
     int dwelMax_;
     int dwelMin_;
+    int rodPolarity_;
     //Sensor filter parameters
     int getSensIonSrc_;
     int filSel_;
