@@ -151,6 +151,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_FIL_SEL_STRING,            asynParamUInt32Digital,  &filSel_);
     createParam(INFICON_EMI_LEVEL_STRING,          asynParamUInt32Digital,  &emiLevel_);
     createParam(INFICON_OPT_TYPE_STRING,           asynParamUInt32Digital,  &optType_);
+    createParam(INFICON_SENS_FACTOR_STRING,        asynParamFloat64,        &ppSensFactor_);
     //Scan setup parameters
     createParam(INFICON_GET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &getChScanSetup_);
     createParam(INFICON_SET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &setChScanSetup_);
@@ -756,6 +757,7 @@ void drvInficon::pollerThread()
             setUIntDigitalParam(filSel_, sensIonSource_->filSel, 0xFFFFFFFF);
             setUIntDigitalParam(emiLevel_, sensIonSource_->emiLevel, 0xFFFFFFFF);
             setUIntDigitalParam(optType_, sensIonSource_->optType, 0xFFFFFFFF);
+            setDoubleParam(ppSensFactor_, sensIonSource_->ppSensFactor);
 
 
             /*Get CH3 Scan setup data*/
@@ -1608,10 +1610,12 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
     }
 
     try {
-        json j = json::parse(jsonDataSubstring);
         std::string jstring;
 
+        json j = json::parse(jsonDataSubstring);
+
         sensIonSource->filSel = j["data"]["filamentSelected"];
+        sensIonSource->ppSensFactor = j["data"]["ppSensitivityFactor"];
 
         jstring = j["data"]["emissionLevel"];
         strcpy(stemp, jstring.c_str());

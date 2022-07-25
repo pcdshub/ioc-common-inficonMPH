@@ -1056,3 +1056,14 @@ record(bi, "$(DEV):OPT_TYPE_RBV")
     field(ONAM, "Sensitivity")
     field(SCAN, "I/O Intr")
 }
+
+record(ai, "$(DEV):SENS_FACTOR_RBV")
+{
+    field(DESC, "PP Sensitivity factor")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT))SENS_FACTOR")
+    field(SCAN, "I/O Intr")
+    field(PREC, "8")
+    field(EGU,  "A/torr")
+}
+

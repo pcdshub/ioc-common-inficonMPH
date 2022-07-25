@@ -101,6 +101,7 @@
 #define INFICON_FIL_SEL_STRING            "FIL_SEL"
 #define INFICON_EMI_LEVEL_STRING          "EMI_LEVEL"
 #define INFICON_OPT_TYPE_STRING           "OPT_TYPE"
+#define INFICON_SENS_FACTOR_STRING        "SENS_FACTOR"
 //Scan setup
 #define INFICON_GET_CH_SCAN_SETUP_STRING  "GET_CH_SCAN_SETUP"
 #define INFICON_SET_CH_SCAN_SETUP_STRING  "SET_CH_SCAN_SETUP"
@@ -187,6 +188,7 @@ typedef struct {
     unsigned int filSel;
     unsigned int emiLevel;
     unsigned int optType;
+    double ppSensFactor;
 } sensIonSourceStruct;
 
 typedef struct {
@@ -346,6 +348,7 @@ protected:
     int filSel_;
     int emiLevel_;
     int optType_;
+    int ppSensFactor_;
     //Scan setup parameters
     int getChScanSetup_;
     int setChScanSetup_;
