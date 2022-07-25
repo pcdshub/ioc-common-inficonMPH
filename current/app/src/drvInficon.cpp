@@ -401,6 +401,13 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
 
         ioStatus_ = inficonReadWrite(request, data_);
         if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else if (function == rodPolarity_) {
+        sprintf(request,"GET /mmsp/sensorFilter/rodPolarity/set?%d\r\n"
+                        "\r\n",
+                        value);
+
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == startMonitor_) {
         //check if we are in idle state
         if (mainState_ != IDLE && scanInfo_->scanStatus != 0) {

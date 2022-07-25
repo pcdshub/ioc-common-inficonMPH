@@ -326,18 +326,6 @@ record(mbbo, "$(DEV):SET_CH3_PPAMU")
 	field(VAL,  "10")
 }
 
-# SET FILAMENT SELECTED
-record(mbbo, "$(DEV):SET_FIL_SEL")
-{
-    field(DESC, "Set filament selected")
-    field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
-    field(ZRVL, "1")
-    field(ONVL, "2")
-    field(ZRST, "1")
-    field(ONST, "2")
-}
-
 # SET CH START MASS
 record(ao, "$(DEV):SET_CH3_START_MASS")
 {
@@ -362,6 +350,30 @@ record(ao, "$(DEV):SET_CH3_STOP_MASS")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),3)CH_STOP_MASS")
     field(PREC, "2")
+}
+
+# SET FILAMENT SELECTED
+record(mbbo, "$(DEV):SET_FIL_SEL")
+{
+    field(DESC, "Set filament selected")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(ZRST, "1")
+    field(ONST, "2")
+}
+
+# SET ROD POLARITY
+record(mbbo, "$(DEV):SET_ROD_POLARITY")
+{
+    field(DESC, "Set Rod Polarity")
+    field(DTYP, "asynUInt32Digital")
+    field(OUT,  "@asynMask($(PORT),0,0xF)ROD_POLARITY")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(ZRST, "NORMAL")
+    field(ONST, "REVERSE")
 }
 
 # SET MAX AND MIN FOR CH START AND STOP MASS
