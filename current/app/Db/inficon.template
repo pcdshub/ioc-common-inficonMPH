@@ -1075,7 +1075,7 @@ record(ai, "$(DEV):SENS_FACTOR_RBV")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT))SENS_FACTOR")
     field(SCAN, "I/O Intr")
-    field(PREC, "8")
-    field(EGU,  "A/torr")
+    field(PREC, "3")
+    field(EGU,  "A/Torr")
 }
 

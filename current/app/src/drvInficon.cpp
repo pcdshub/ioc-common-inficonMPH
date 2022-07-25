@@ -1416,6 +1416,7 @@ asynStatus drvInficon::parseSensFilt(const char *jsonData, sensFiltStruct *sensF
         sensFilt->massMin = j["data"]["massMin"];
         sensFilt->dwellMax = j["data"]["dwellMax"];
         sensFilt->dwellMin = j["data"]["dwellMin"];
+        sensFilt->rodPolarity = j["data"]["rodPolarity"];
     }
 	catch (const json::parse_error& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
