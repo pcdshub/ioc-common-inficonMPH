@@ -363,7 +363,7 @@ record(stringout, "$(DEV):SET_CH3_MODE")
 {
     field(DESC, "Sets ch mode on the startup")
     field(DTYP, "asynOctetWrite")
-    field(OUT,  "@asynMask($(PORT),3)CH_MODE")
+    field(OUT,  "@asyn($(PORT),3)CH_MODE")
 	field(VAL,  "Sweep")
 }
 
@@ -377,7 +377,7 @@ record(stringout, "$(DEV):SET_CH4_MODE")
 {
     field(DESC, "Sets ch mode on the startup")
     field(DTYP, "asynOctetWrite")
-    field(OUT,  "@asynMask($(PORT),4)CH_MODE")
+    field(OUT,  "@asyn($(PORT),4)CH_MODE")
 	field(VAL,  "Single")
 }
 
