@@ -317,6 +317,11 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
                         "\r\n",
                         value);
         ioStatus_ = inficonReadWrite(request, data_);
+
+        sprintf(request,"GET mmsp/generalControl/emEquivIonSet/set?1\r\n"
+                        "\r\n"); //set the EM values to positive.
+        ioStatus_ = inficonReadWrite(request, data_);
+
         if (ioStatus_ != asynSuccess) return(ioStatus_);
     } else if (function == rfGenOn_) {
         sprintf(request,"GET /mmsp/generalControl/rfGeneratorSet/set?%d\r\n"
@@ -660,11 +665,30 @@ asynStatus drvInficon::readOctet(asynUser *pasynUser, char *value, size_t maxCha
 
 asynStatus drvInficon::writeOctet (asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual)
 {
-    //int function = pasynUser->reason;
-    //static const char *functionName = "writeOctet";
+    int function = pasynUser->reason;
+    char request[HTTP_REQUEST_SIZE];
+    int chNumber;
+    static const char *functionName = "writeOctet";
 
+    pasynManager->getAddr(pasynUser, &chNumber);
     *nActual = strlen(value);
 
+    if (function == chMode_) {
+        if (chNumber < 1 || chNumber >= MAX_CHANNELS)
+            return asynError;
+
+        sprintf(request,"GET /mmsp/scanSetup/channel/%d/channelMode/set?%s\r\n"
+                        "\r\n",
+                        chNumber, value);
+
+        ioStatus_ = inficonReadWrite(request, data_);
+        if (ioStatus_ != asynSuccess) return(ioStatus_);
+    } else {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s::%s port %s invalid pasynUser->reason %d\n",
+                  driverName, functionName, this->portName, function);
+        return asynError;
+    }
     return asynSuccess;
 }
 

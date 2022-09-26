@@ -352,6 +352,35 @@ record(ao, "$(DEV):SET_CH3_STOP_MASS")
     field(PREC, "2")
 }
 
+# SET CH MODE USE THIS COMMAND AFTER DEVICE REBOOT
+record(bo, "$(DEV):CH3_MODE")
+{
+    field(DESC, "CH3 mode button")
+	field(FLNK, "$(DEV):SET_CH3_MODE")
+}
+
+record(stringout, "$(DEV):SET_CH3_MODE")
+{
+    field(DESC, "Sets ch mode on the startup")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asynMask($(PORT),3)CH_MODE")
+	field(VAL,  "Sweep")
+}
+
+record(bo, "$(DEV):CH4_MODE")
+{
+    field(DESC, "CH4 mode button")
+	field(FLNK, "$(DEV):SET_CH4_MODE")
+}
+
+record(stringout, "$(DEV):SET_CH4_MODE")
+{
+    field(DESC, "Sets ch mode on the startup")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asynMask($(PORT),4)CH_MODE")
+	field(VAL,  "Single")
+}
+
 # SET FILAMENT SELECTED
 record(mbbo, "$(DEV):SET_FIL_SEL")
 {
