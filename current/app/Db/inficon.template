@@ -820,7 +820,7 @@ record(longin, "$(DEV):EM_POT_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_POTENTIAL")
     field(SCAN, "I/O Intr")
-    field(EGU,  "mA")
+    field(EGU,  "V")
 }
 
 record(longin, "$(DEV):FIRST_SCAN")
