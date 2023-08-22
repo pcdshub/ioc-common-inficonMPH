@@ -318,8 +318,9 @@ asynStatus drvInficon::writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value
                         value);
         ioStatus_ = inficonReadWrite(request, data_);
 
-        sprintf(request,"GET mmsp/generalControl/emEquivIonSet/set?1\r\n"
-                        "\r\n"); //set the EM values to positive.
+        sprintf(request,"GET /mmsp/generalControl/emEquivIonSet/set?%d\r\n"
+                        "\r\n",
+						value); //set the EM values to positive.
         ioStatus_ = inficonReadWrite(request, data_);
 
         if (ioStatus_ != asynSuccess) return(ioStatus_);
