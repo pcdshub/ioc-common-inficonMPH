@@ -791,7 +791,7 @@ void drvInficon::pollerThread()
             setUIntDigitalParam(emiLevel_, sensIonSource_->emiLevel, 0xFFFFFFFF);
             setUIntDigitalParam(optType_, sensIonSource_->optType, 0xFFFFFFFF);
             setDoubleParam(ppSensFactor_, sensIonSource_->ppSensFactor);
-
+            setUIntDigitalParam(ionEnergy_, sensIonSource_->ionEnergy, 0xFFFFFFFF);
 
             /*Get CH3 Scan setup data*/
             sprintf(request,"GET /mmsp/scanSetup/channel/3/get\r\n"
@@ -1651,6 +1651,7 @@ asynStatus drvInficon::parseSensIonSource(const char *jsonData, sensIonSourceStr
 
         sensIonSource->filSel = j["data"]["filamentSelected"];
         sensIonSource->ppSensFactor = j["data"]["ppSensitivityFactor"];
+        sensIonSource->ionEnergy = j["data"]["ionEnergyGlobal"];
 
         jstring = j["data"]["emissionLevel"];
         strcpy(stemp, jstring.c_str());

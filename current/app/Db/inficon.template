@@ -1158,3 +1158,12 @@ record(ai, "$(DEV):SENS_FACTOR_RBV")
     field(EGU,  "A/Torr")
 }
 
+record(longin, "$(DEV):ION_ENERGY_RBV")
+{
+    field(DESC, "Ion source ion energy potential")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)ION_ENERGY")
+    field(SCAN, "I/O Intr")
+    field(EGU,  "meV")
+}
+
