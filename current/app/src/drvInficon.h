@@ -191,7 +191,7 @@ typedef struct {
     unsigned int emiLevel;
     unsigned int optType;
     double ppSensFactor;
-	unsigned ionEnergy;
+	unsigned int ionEnergy;
 } sensIonSourceStruct;
 
 typedef struct {
