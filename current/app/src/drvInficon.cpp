@@ -153,6 +153,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_EMI_LEVEL_STRING,          asynParamUInt32Digital,  &emiLevel_);
     createParam(INFICON_OPT_TYPE_STRING,           asynParamUInt32Digital,  &optType_);
     createParam(INFICON_SENS_FACTOR_STRING,        asynParamFloat64,        &ppSensFactor_);
+    createParam(INFICON_ION_ENERGY_STRING,         asynParamUInt32Digital,  &ionEnergy_);
     //Scan setup parameters
     createParam(INFICON_GET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &getChScanSetup_);
     createParam(INFICON_SET_CH_SCAN_SETUP_STRING,  asynParamOctet,          &setChScanSetup_);

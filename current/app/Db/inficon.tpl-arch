@@ -30,4 +30,4 @@ $(BASE):CH4_PPAMU_RBV                5 monitor
 $(BASE):CH4_START_MASS_RBV           5 monitor
 $(BASE):FIL_SEL_RBV                  5 monitor
 $(BASE):SENS_FACTOR_RBV              5 monitor
-
+$(BASE):ION_ENERGY_RBV               5 monitor
