@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1495</width>
-    <height>790</height>
+    <height>773</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -239,7 +239,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="alarmChannels">
       <stringlist>
@@ -2136,7 +2136,125 @@
               <layout class="QHBoxLayout" name="horizontalLayout_10">
                <item>
                 <layout class="QGridLayout" name="gridLayout_8">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_47">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>EM Voltage:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_39">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>ca://${DEV}:EM_V_MIN_RBV</string>
+                   </property>
+                   <property name="showUnits" stdset="0">
+                    <bool>true</bool>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EM_V_MIN_RBV</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="0" column="1">
+                  <widget class="PyDMLineEdit" name="PyDMLineEdit_5">
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EM_V</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_44">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>EM Gain:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_46">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>EM Votage Min:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_45">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>EM Voltage Max:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_40">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>ca://${DEV}:EM_V_MAX_RBV</string>
+                   </property>
+                   <property name="showUnits" stdset="0">
+                    <bool>true</bool>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EM_V_MAX_RBV</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
                   <widget class="PyDMLabel" name="PyDMLabel_36">
                    <property name="toolTip">
                     <string/>
@@ -2162,7 +2280,7 @@
                   </widget>
                  </item>
                  <item row="2" column="0">
-                  <widget class="QLabel" name="label_46">
+                  <widget class="QLabel" name="label_48">
                    <property name="font">
                     <font>
                      <weight>50</weight>
@@ -2170,20 +2288,23 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>EM Votage Min:</string>
+                    <string>EM Gain Mass:</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="PyDMLabel" name="PyDMLabel_40">
+                  <widget class="PyDMLineEdit" name="PyDMLineEdit_6">
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                    <property name="toolTip">
                     <string/>
                    </property>
-                   <property name="text">
-                    <string>ca://${DEV}:EM_V_MAX_RBV</string>
-                   </property>
-                   <property name="showUnits" stdset="0">
-                    <bool>true</bool>
+                   <property name="precision" stdset="0">
+                    <number>2</number>
                    </property>
                    <property name="precisionFromPV" stdset="0">
                     <bool>false</bool>
@@ -2192,43 +2313,55 @@
                     <bool>false</bool>
                    </property>
                    <property name="channel" stdset="0">
-                    <string>ca://${DEV}:EM_V_MAX_RBV</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_47">
-                   <property name="font">
-                    <font>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>EM Voltage:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_45">
-                   <property name="font">
-                    <font>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>EM Voltage Max:</string>
+                    <string>ca://${DEV}:EM_GAIN</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="PyDMLabel" name="PyDMLabel_39">
+                  <widget class="PyDMLineEdit" name="PyDMLineEdit_8">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EM_GAIN_MASS</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_38">
                    <property name="toolTip">
                     <string/>
                    </property>
                    <property name="text">
-                    <string>ca://${DEV}:EM_V_MIN_RBV</string>
+                    <string>ca://${DEV}:EM_GAIN_RBV</string>
+                   </property>
+                   <property name="precision" stdset="0">
+                    <number>2</number>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EM_GAIN_RBV</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_37">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>ca://${DEV}:EM_GAIN_MASS_RBV</string>
                    </property>
                    <property name="showUnits" stdset="0">
                     <bool>true</bool>
@@ -2240,7 +2373,7 @@
                     <bool>false</bool>
                    </property>
                    <property name="channel" stdset="0">
-                    <string>ca://${DEV}:EM_V_MIN_RBV</string>
+                    <string>ca://${DEV}:EM_GAIN_MASS_RBV</string>
                    </property>
                   </widget>
                  </item>
@@ -2270,6 +2403,41 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="3" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_63">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>ca://${DEV}:OPT_TYPE_RBV</string>
+                   </property>
+                   <property name="showUnits" stdset="0">
+                    <bool>true</bool>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:OPT_TYPE_RBV</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_61">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Optim. Type:</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="1" column="2">
                   <widget class="PyDMLabel" name="PyDMLabel_64">
                    <property name="toolTip">
@@ -2293,6 +2461,41 @@
                   <widget class="QLabel" name="label_19">
                    <property name="text">
                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sensitivity Factor:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="PyDMLabel" name="PyDMLabel_58">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>ca://${DEV}:EMI_LEVEL_RBV</string>
+                   </property>
+                   <property name="precision" stdset="0">
+                    <number>2</number>
+                   </property>
+                   <property name="precisionFromPV" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:EMI_LEVEL_RBV</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_64">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Emiss. Level:</string>
                    </property>
                   </widget>
                  </item>
@@ -2331,20 +2534,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_64">
-                   <property name="font">
-                    <font>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Emiss. Level:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
+                 <item row="4" column="0">
                   <widget class="QLabel" name="label_70">
                    <property name="font">
                     <font>
@@ -2357,64 +2547,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_61">
-                   <property name="font">
-                    <font>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Optim. Type:</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="4" column="2">
-                  <widget class="PyDMLabel" name="PyDMLabel_63">
-                   <property name="toolTip">
-                    <string/>
-                   </property>
-                   <property name="text">
-                    <string>ca://${DEV}:OPT_TYPE_RBV</string>
-                   </property>
-                   <property name="showUnits" stdset="0">
-                    <bool>true</bool>
-                   </property>
-                   <property name="precisionFromPV" stdset="0">
-                    <bool>false</bool>
-                   </property>
-                   <property name="alarmSensitiveBorder" stdset="0">
-                    <bool>false</bool>
-                   </property>
-                   <property name="channel" stdset="0">
-                    <string>ca://${DEV}:OPT_TYPE_RBV</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="PyDMLabel" name="PyDMLabel_58">
-                   <property name="toolTip">
-                    <string/>
-                   </property>
-                   <property name="text">
-                    <string>ca://${DEV}:EMI_LEVEL_RBV</string>
-                   </property>
-                   <property name="precision" stdset="0">
-                    <number>2</number>
-                   </property>
-                   <property name="precisionFromPV" stdset="0">
-                    <bool>false</bool>
-                   </property>
-                   <property name="alarmSensitiveBorder" stdset="0">
-                    <bool>false</bool>
-                   </property>
-                   <property name="channel" stdset="0">
-                    <string>ca://${DEV}:EMI_LEVEL_RBV</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
                   <widget class="PyDMLabel" name="PyDMLabel_66">
                    <property name="toolTip">
                     <string/>
@@ -3006,6 +3139,19 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="4" column="1">
+                  <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="alarmSensitiveBorder" stdset="0">
+                    <bool>false</bool>
+                   </property>
+                   <property name="channel" stdset="0">
+                    <string>ca://${DEV}:SET_ROD_POLARITY</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_50">
                    <property name="font">
@@ -3067,7 +3213,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
+                 <item row="4" column="2">
                   <widget class="PyDMLabel" name="PyDMLabel_65">
                    <property name="toolTip">
                     <string/>
