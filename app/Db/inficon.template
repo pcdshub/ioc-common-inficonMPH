@@ -137,15 +137,15 @@ record(bi, "$(DEV):EM_STATUS")
     field(ONAM, "ON")
 }
 
-# RF GEN ON/OFF
-record(bo, "$(DEV):SET_RFGEN_ON")
-{
-    field(DESC, "RF generator on_off")
-    field(DTYP, "asynUInt32Digital")
-    field(OUT,  "@asynMask($(PORT),0,0x1)RFGEN_ON")
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-}
+# RF GEN ON/OFF, PV removed since RF is turned ON automatically
+#record(bo, "$(DEV):SET_RFGEN_ON")
+#{
+#    field(DESC, "RF generator on_off")
+#    field(DTYP, "asynUInt32Digital")
+#    field(OUT,  "@asynMask($(PORT),0,0x1)RFGEN_ON")
+#    field(ZNAM, "OFF")
+#    field(ONAM, "ON")
+#}
 
 record(bi, "$(DEV):RFGEN_STATUS")
 {
@@ -179,7 +179,7 @@ record(longout, "$(DEV):EM_V")
     field(DESC, "Set em voltage")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
-	field(VAL,  "815")
+#	field(VAL,  "815")
 }
 
 # SET MAX AND MIN FOR EM_V
@@ -420,8 +420,8 @@ record(dfanout, "$(DEV):SET_MASS_MAX")
 record(dfanout, "$(DEV):SET_MASS_MIN")
 {
     field(DESC, "Set DRVL field for Mass")
-#    field(DOL,  "$(DEV):MASS_MIN_RBV")
-    field(DOL,  "0.5")
+    field(DOL,  "$(DEV):MASS_MIN_RBV")
+#    field(DOL,  "0.5")
     field(OMSL, "closed_loop")
     field(SELM, "All")
     field(OUTA, "$(DEV):SET_CH3_START_MASS.DRVL")

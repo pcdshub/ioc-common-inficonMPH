@@ -714,8 +714,8 @@ void drvInficon::pollerThread()
     char request[HTTP_REQUEST_SIZE];
     asynStatus status = asynSuccess;
     asynStatus prevIOStatus = asynSuccess;
-    epicsTimeStamp currTime, cycleTimeFifeSec, cycleTimeTenSec;
-    double dTFifeSec, dTTenSec;
+    epicsTimeStamp currTime, cycleTimeFiveSec, cycleTimeTenSec;
+    double dTFiveSec, dTTenSec;
 
     static const char *functionName="pollerThread";
 
@@ -732,14 +732,14 @@ void drvInficon::pollerThread()
         if (inficonExiting_) break;
 
         epicsTimeGetCurrent(&currTime);
-        dTFifeSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeFifeSec);
+        dTFiveSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeFiveSec);
         dTTenSec = epicsTimeDiffInSeconds(&currTime, &cycleTimeTenSec);
 
         /* Lock the port.  It is important that the port be locked so other threads cannot access the Inficon
          * structure while the poller thread is running. */
         lock();
 
-        if(dTFifeSec >= 5.) {
+        if(dTFiveSec >= 5.) {
             /*Get diagnostic data*/
             sprintf(request,"GET /mmsp/diagnosticData/get\r\n"
                             "\r\n");
@@ -829,7 +829,7 @@ void drvInficon::pollerThread()
             setUIntDigitalParam(4, chPpamu_, chScanSetup_[4].chPpamu, 0xFFFFFFFF);
 
             /*Update cycle time*/
-            epicsTimeGetCurrent(&cycleTimeFifeSec);
+            epicsTimeGetCurrent(&cycleTimeFiveSec);
         }
 
         if(dTTenSec >= 10.) {
