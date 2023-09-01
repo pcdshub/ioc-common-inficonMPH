@@ -1,5 +1,6 @@
 ## Inficon MPH archiver
 $(BASE):INFICON_STATE                5 monitor
+$(BASE):DEVICE_STATE                 5 monitor
 $(BASE):EMI_STATUS                   5 monitor
 $(BASE):EMI_IMODE                    5 monitor
 $(BASE):EMI_PMODE                    5 monitor
@@ -35,20 +36,28 @@ $(BASE):LAST_SCAN                    5 monitor
 $(BASE):CURRENT_SCAN                 5 monitor
 $(BASE):PPSCAN                       5 monitor
 $(BASE):SCAN_STAT                    5 monitor
+$(BASE):SCANNING_STATUS              5 monitor
 $(BASE):EM_V_RBV                     5 monitor
 $(BASE):EM_GAIN_RBV                  5 monitor
 $(BASE):EM_GAIN_MASS_RBV             5 monitor
 $(BASE):ROD_POLARITY_RBV             5 monitor
+$(BASE):ROD_POLARITY                 5 monitor
 $(BASE):CH3_MODE_RBV                 5 monitor
 $(BASE):CH3_DWELL_RBV                5 monitor
+$(BASE):CH3_DWELL                    5 monitor
 $(BASE):CH3_PPAMU_RBV                5 monitor
+$(BASE):CH3_PPAMU                    5 monitor
 $(BASE):CH3_START_MASS_RBV           5 monitor
 $(BASE):CH3_STOP_MASS_RBV            5 monitor
 $(BASE):CH4_MODE_RBV                 5 monitor
 $(BASE):CH4_DWELL_RBV                5 monitor
+$(BASE):CH4_DWELL                    5 monitor
 $(BASE):CH4_START_MASS_RBV           5 monitor
 $(BASE):FIL_SEL_RBV                  5 monitor
+$(BASE):FIL_SELECTED                 5 monitor
 $(BASE):EMI_LEVEL_RBV                5 monitor
+$(BASE):EMI_LEVEL                    5 monitor
 $(BASE):OPT_TYPE_RBV                 5 monitor
+$(BASE):OPT_TYPE                     5 monitor
 $(BASE):SENS_FACTOR_RBV              5 monitor
 $(BASE):ION_ENERGY_RBV               5 monitor

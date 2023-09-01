@@ -869,9 +869,17 @@ record(bi, "$(DEV):SCAN_STAT")
     field(DESC, "Scan running status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")
+    field(FLNK, "$(DEV):SCANNING_STATUS")
     field(ZNAM, "STOP")
     field(ONAM, "RUNNING")
     field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(DEV):SCANNING_STATUS")
+{
+    field(DESC, "Current scan status raw value")
+    field(INP,  "$(DEV):SCAN_STAT.VAL")
+    field(SCAN, "Passive")
 }
 
 record(longin, "$(DEV):EM_V_RBV")
@@ -965,10 +973,18 @@ record(mbbi, "$(DEV):ROD_POLARITY_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xF)ROD_POLARITY")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):ROD_POLARITY")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(ZRST, "NORMAL")
     field(ONST, "REVERSE")
+}
+
+record(stringin, "$(DEV):ROD_POLARITY")
+{
+    field(DESC, "Rod polarity raw value")
+    field(INP,  "$(DEV):ROD_POLARITY_RBV.VAL")
+    field(SCAN, "Passive")
 }
 
 record(stringin, "$(DEV):CH3_MODE_RBV")
@@ -985,6 +1001,7 @@ record(mbbi, "$(DEV):CH3_DWELL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):CH3_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1019,12 +1036,20 @@ record(mbbi, "$(DEV):CH3_DWELL_RBV")
     field(FFST, "16384")
 }
 
+record(longin, "$(DEV):CH3_DWELL")
+{
+    field(DESC, "Monitoring DWELL raw value")
+    field(INP,  "$(DEV):CH3_DWELL_RBV.RVAL")
+    field(SCAN, "Passive")
+}
+
 record(mbbi, "$(DEV):CH3_PPAMU_RBV")
 {
     field(DESC, "CH1 Points Per AMU")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_PPAMU")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):CH3_PPAMU")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1043,6 +1068,13 @@ record(mbbi, "$(DEV):CH3_PPAMU_RBV")
     field(SXST, "25")
     field(SVST, "50")
     field(EIST, "100")
+}
+
+record(longin, "$(DEV):CH3_PPAMU")
+{
+    field(DESC, "Monitoring PPAMU raw value")
+    field(INP,  "$(DEV):CH3_PPAMU_RBV.RVAL")
+    field(SCAN, "Passive")
 }
 
 record(ai, "$(DEV):CH3_START_MASS_RBV")
@@ -1079,6 +1111,7 @@ record(mbbi, "$(DEV):CH4_DWELL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):CH4_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1113,6 +1146,13 @@ record(mbbi, "$(DEV):CH4_DWELL_RBV")
     field(FFST, "16384")
 }
 
+record(longin, "$(DEV):CH4_DWELL")
+{
+    field(DESC, "Leakcheck DWELL raw value")
+    field(INP,  "$(DEV):CH4_DWELL_RBV.RVAL")
+    field(SCAN, "Passive")
+}
+
 record(ai, "$(DEV):CH4_START_MASS_RBV")
 {
     field(DESC, "CH4 start mass")
@@ -1129,10 +1169,18 @@ record(mbbi, "$(DEV):FIL_SEL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):FIL_SELECTED")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(ZRST, "1")
     field(ONST, "2")
+}
+
+record(longin, "$(DEV):FIL_SELECTED")
+{
+    field(DESC, "Selected filament raw value")
+    field(INP,  "$(DEV):FIL_SEL_RBV.RVAL")
+    field(SCAN, "Passive")
 }
 
 record(bi, "$(DEV):EMI_LEVEL_RBV")
@@ -1143,6 +1191,14 @@ record(bi, "$(DEV):EMI_LEVEL_RBV")
     field(ZNAM, "Lo")
     field(ONAM, "Hi")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):EMI_LEVEL")
+}
+
+record(stringin, "$(DEV):EMI_LEVEL")
+{
+    field(DESC, "Emission level raw value")
+    field(INP,  "$(DEV):EMI_LEVEL_RBV.VAL")
+    field(SCAN, "Passive")
 }
 
 record(bi, "$(DEV):OPT_TYPE_RBV")
@@ -1154,6 +1210,14 @@ record(bi, "$(DEV):OPT_TYPE_RBV")
     field(ZNAM, "Linearity")
     field(ONAM, "Sensitivity")
     field(SCAN, "I/O Intr")
+	field(FLNK, "$(DEV):OPT_TYPE")
+}
+
+record(stringin, "$(DEV):OPT_TYPE")
+{
+    field(DESC, "Optimization type raw value")
+    field(INP,  "$(DEV):OPT_TYPE_RBV.VAL")
+    field(SCAN, "Passive")
 }
 
 record(ai, "$(DEV):SENS_FACTOR_RBV")
