@@ -61,3 +61,8 @@ $(BASE):OPT_TYPE_RBV                 5 monitor
 $(BASE):OPT_TYPE                     5 monitor
 $(BASE):SENS_FACTOR_RBV              5 monitor
 $(BASE):ION_ENERGY_RBV               5 monitor
+$(BASE):IP                           5 monitor
+$(BASE):MAC                          5 monitor
+$(BASE):SENS_NAME                    5 monitor
+$(BASE):SENS_DESC                    5 monitor
+$(BASE):SENS_SN                      5 monitor
