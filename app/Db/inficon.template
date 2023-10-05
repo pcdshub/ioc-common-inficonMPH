@@ -14,14 +14,14 @@ record(mbbi, "$(DEV):INFICON_STATE")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xF)DRIVER_STATE")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):DEVICE_STATE")
+    field(FLNK, "$(DEV):DEVICE_STATE")
     field(ZRVL, "0")
     field(ONVL, "1")
     field(TWVL, "2")
     field(ZRST, "IDLE")
     field(ONST, "MONITORING")
     field(TWST, "LEAKCHECK")
-	field(VAL,  "0")
+    field(VAL,  "0")
 }
 
 record(stringin, "$(DEV):DEVICE_STATE")
@@ -34,19 +34,19 @@ record(stringin, "$(DEV):DEVICE_STATE")
 # SCAN STOP IMMEDIATELLY
 record(bo, "$(DEV):STOP_SCAN")
 {
+    field(PINI, "YES")
     field(DESC, "Stop scanning button")
-	field(FLNK, "$(DEV):SET_STOP_SCAN")
+    field(FLNK, "$(DEV):SET_STOP_SCAN")
 }
 
 record(bo, "$(DEV):SET_STOP_SCAN")
 {
-#    field(PINI, "YES")
     field(DESC, "Stop scanning command")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0x1)SCAN_STOP")
     field(ZNAM, "IMMEDIATELLY")
     field(ONAM, "END_OF_SCAN")
-	field(VAL,  "0")
+    field(VAL,  "0")
 }
 
 # START MONITORING
@@ -57,7 +57,7 @@ record(bo, "$(DEV):MONITOR_START")
     field(OUT,  "@asynMask($(PORT),0,0x1)MONITOR_START")
     field(ZNAM, "START_MONITOR")
     field(ONAM, "START_MONITOR")
-	field(VAL,  "1")
+    field(VAL,  "1")
 }
 
 # START LEAKCHECK
@@ -68,7 +68,7 @@ record(bo, "$(DEV):LEAKCHECK_START")
     field(OUT,  "@asynMask($(PORT),0,0x1)LEAKCHECK_START")
     field(ZNAM, "START_LEAKCHECK")
     field(ONAM, "START_LEAKCHECK")
-	field(VAL,  "1")
+    field(VAL,  "1")
 }
 
 # EMI ON/OFF
@@ -86,7 +86,7 @@ record(bi, "$(DEV):EMI_IMODE")
     field(DESC, "Emi current mode ON/OFF")
     field(SCAN, "$(DSCAN) second")
     field(INP,  "$(DEV):SYST_STAT_RBV.B1F")
-	field(FLNK, "$(DEV):EMI_PMODE")
+    field(FLNK, "$(DEV):EMI_PMODE")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
 }
@@ -95,7 +95,7 @@ record(bi, "$(DEV):EMI_PMODE")
 {
     field(DESC, "Emi power mode ON/OFF")
     field(INP,  "$(DEV):SYST_STAT_RBV.B1E")
-	field(FLNK, "$(DEV):EMI_DEGAS_MODE")
+    field(FLNK, "$(DEV):EMI_DEGAS_MODE")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
 }
@@ -104,7 +104,7 @@ record(bi, "$(DEV):EMI_DEGAS_MODE")
 {
     field(DESC, "Emi degas mode ON/OFF")
     field(INP,  "$(DEV):SYST_STAT_RBV.B1D")
-	field(FLNK, "$(DEV):EMI_STATUS_CALC")
+    field(FLNK, "$(DEV):EMI_STATUS_CALC")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
 }
@@ -168,7 +168,7 @@ record(bi, "$(DEV):RFGEN_STATUS")
 record(bo, "$(DEV):SHUTDOWN")
 {
     field(DESC, "Shutdown device button")
-	field(FLNK, "$(DEV):SET_SHUTDOWN")
+    field(FLNK, "$(DEV):SET_SHUTDOWN")
 }
 
 record(bo, "$(DEV):SET_SHUTDOWN")
@@ -178,7 +178,7 @@ record(bo, "$(DEV):SET_SHUTDOWN")
     field(OUT,  "@asynMask($(PORT),0,0x1)SHUTDOWN")
     field(ZNAM, "OFF")
     field(ONAM, "OFF")
-	field(VAL,  "1")
+    field(VAL,  "1")
 }
 
 # SET EM Voltage
@@ -187,7 +187,7 @@ record(longout, "$(DEV):EM_V")
     field(DESC, "Set em voltage")
     field(DTYP, "asynUInt32Digital")
     field(OUT,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V")
-#	field(VAL,  "815")
+#    field(VAL,  "815")
 }
 
 # SET MAX AND MIN FOR EM_V
@@ -264,7 +264,7 @@ record(mbbo, "$(DEV):SET_CH3_DWELL")
     field(TTST, "4096")
     field(FTST, "8192")
     field(FFST, "16384")
-	field(VAL,  "16")
+    field(VAL,  "16")
 }
 
 record(mbbo, "$(DEV):SET_CH4_DWELL")
@@ -304,7 +304,7 @@ record(mbbo, "$(DEV):SET_CH4_DWELL")
     field(TTST, "4096")
     field(FTST, "8192")
     field(FFST, "16384")
-	field(VAL,  "16")
+    field(VAL,  "16")
 }
 
 # SET CH PPAMU
@@ -331,7 +331,7 @@ record(mbbo, "$(DEV):SET_CH3_PPAMU")
     field(SXST, "25")
     field(SVST, "50")
     field(EIST, "100")
-	field(VAL,  "10")
+    field(VAL,  "10")
 }
 
 # SET CH START MASS
@@ -363,8 +363,9 @@ record(ao, "$(DEV):SET_CH3_STOP_MASS")
 # SET CH MODE USE THIS COMMAND AFTER DEVICE REBOOT
 record(bo, "$(DEV):CH3_MODE")
 {
+    field(PINI, "YES")
     field(DESC, "CH3 mode button")
-	field(FLNK, "$(DEV):SET_CH3_MODE")
+    field(FLNK, "$(DEV):SET_CH3_MODE")
 }
 
 record(stringout, "$(DEV):SET_CH3_MODE")
@@ -372,13 +373,14 @@ record(stringout, "$(DEV):SET_CH3_MODE")
     field(DESC, "Sets ch mode on the startup")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),3)CH_MODE")
-	field(VAL,  "Sweep")
+    field(VAL,  "Sweep")
 }
 
 record(bo, "$(DEV):CH4_MODE")
 {
+    field(PINI, "YES")
     field(DESC, "CH4 mode button")
-	field(FLNK, "$(DEV):SET_CH4_MODE")
+    field(FLNK, "$(DEV):SET_CH4_MODE")
 }
 
 record(stringout, "$(DEV):SET_CH4_MODE")
@@ -386,7 +388,7 @@ record(stringout, "$(DEV):SET_CH4_MODE")
     field(DESC, "Sets ch mode on the startup")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(PORT),4)CH_MODE")
-	field(VAL,  "Single")
+    field(VAL,  "Single")
 }
 
 # SET FILAMENT SELECTED
@@ -898,7 +900,7 @@ record(longin, "$(DEV):EM_V_MAX_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MAX")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
-	field(FLNK, "$(DEV):SET_EM_V_MAX")
+    field(FLNK, "$(DEV):SET_EM_V_MAX")
 }
 
 record(longin, "$(DEV):EM_V_MIN_RBV")
@@ -908,7 +910,7 @@ record(longin, "$(DEV):EM_V_MIN_RBV")
     field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)EM_V_MIN")
     field(SCAN, "I/O Intr")
     field(EGU,  "V")
-	field(FLNK, "$(DEV):SET_EM_V_MIN")
+    field(FLNK, "$(DEV):SET_EM_V_MIN")
 }
 
 record(ai, "$(DEV):EM_GAIN_RBV")
@@ -937,7 +939,7 @@ record(ai, "$(DEV):MASS_MAX_RBV")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")
-	field(FLNK, "$(DEV):SET_MASS_MAX")
+    field(FLNK, "$(DEV):SET_MASS_MAX")
 }
 
 record(ai, "$(DEV):MASS_MIN_RBV")
@@ -948,7 +950,7 @@ record(ai, "$(DEV):MASS_MIN_RBV")
     field(SCAN, "I/O Intr")
     field(PREC, "2")
     field(EGU,  "AMU")
-	field(FLNK, "$(DEV):SET_MASS_MIN")
+    field(FLNK, "$(DEV):SET_MASS_MIN")
 }
 
 record(longin, "$(DEV):DWELL_MAX_RBV")
@@ -973,7 +975,7 @@ record(mbbi, "$(DEV):ROD_POLARITY_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xF)ROD_POLARITY")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):ROD_POLARITY")
+    field(FLNK, "$(DEV):ROD_POLARITY")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(ZRST, "NORMAL")
@@ -1001,7 +1003,7 @@ record(mbbi, "$(DEV):CH3_DWELL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):CH3_DWELL")
+    field(FLNK, "$(DEV):CH3_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1049,7 +1051,7 @@ record(mbbi, "$(DEV):CH3_PPAMU_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),3,0xFFFFFFFF)CH_PPAMU")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):CH3_PPAMU")
+    field(FLNK, "$(DEV):CH3_PPAMU")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1111,7 +1113,7 @@ record(mbbi, "$(DEV):CH4_DWELL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),4,0xFFFFFFFF)CH_DWELL")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):CH4_DWELL")
+    field(FLNK, "$(DEV):CH4_DWELL")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(TWVL, "4")
@@ -1169,7 +1171,7 @@ record(mbbi, "$(DEV):FIL_SEL_RBV")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0xFF)FIL_SEL")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):FIL_SELECTED")
+    field(FLNK, "$(DEV):FIL_SELECTED")
     field(ZRVL, "1")
     field(ONVL, "2")
     field(ZRST, "1")
@@ -1191,7 +1193,7 @@ record(bi, "$(DEV):EMI_LEVEL_RBV")
     field(ZNAM, "Lo")
     field(ONAM, "Hi")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):EMI_LEVEL")
+    field(FLNK, "$(DEV):EMI_LEVEL")
 }
 
 record(stringin, "$(DEV):EMI_LEVEL")
@@ -1210,7 +1212,7 @@ record(bi, "$(DEV):OPT_TYPE_RBV")
     field(ZNAM, "Linearity")
     field(ONAM, "Sensitivity")
     field(SCAN, "I/O Intr")
-	field(FLNK, "$(DEV):OPT_TYPE")
+    field(FLNK, "$(DEV):OPT_TYPE")
 }
 
 record(stringin, "$(DEV):OPT_TYPE")
