@@ -865,9 +865,17 @@ record(longin, "$(DEV):PPSCAN")
     field(SCAN, "I/O Intr")
 }
 
+record(longin, "$(DEV):POINTS_IN_CURRENT_SCAN")
+{
+    field(DESC, "Points in current scan")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(PORT),0,0xFFFFFFFF)POINTS_IN_SCAN")
+    field(SCAN, "I/O Intr")
+}
+
 record(bi, "$(DEV):SCAN_STAT")
 {
-    field(PINI, "YES")
+#    field(PINI, "YES")
     field(DESC, "Scan running status")
     field(DTYP, "asynUInt32Digital")
     field(INP,  "@asynMask($(PORT),0,0x1)SCAN_STAT")

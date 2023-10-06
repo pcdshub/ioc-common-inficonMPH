@@ -83,6 +83,7 @@
 #define INFICON_CURRENT_SCAN_STRING       "CURRENT_SCAN"
 #define INFICON_PPSCAN_STRING             "PPSCAN"
 #define INFICON_SCAN_STAT_STRING          "SCAN_STAT"
+#define INFICON_POINTS_IN_SCAN_STRING     "POINTS_IN_SCAN"
 //Sensor detector
 #define INFICON_GET_SENS_DETECT_STRING    "GET_SENS_DETECT"
 #define INFICON_EM_VOLTAGE_STRING         "EM_V"
@@ -176,6 +177,7 @@ typedef struct {
     int currScan;
     unsigned int ppScan;
     unsigned int scanStatus;
+    unsigned int pointsInScan;
 } scanInfoStruct;
 
 typedef struct {
@@ -334,6 +336,7 @@ protected:
     int currentScan_;
     int ppscan_;
     int scanStatus_;
+    int pointsInScan_;
     //Sensor detector parameters
     int getSensDetect_;
     int emVMax_;

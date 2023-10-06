@@ -133,6 +133,7 @@ drvInficon::drvInficon(const char *portName, const char* hostInfo)
     createParam(INFICON_CURRENT_SCAN_STRING,       asynParamInt32,          &currentScan_);
     createParam(INFICON_PPSCAN_STRING,             asynParamUInt32Digital,  &ppscan_);
     createParam(INFICON_SCAN_STAT_STRING,          asynParamUInt32Digital,  &scanStatus_);
+    createParam(INFICON_POINTS_IN_SCAN_STRING,     asynParamUInt32Digital,  &pointsInScan_);
     //Sensor detector parameters
     createParam(INFICON_GET_SENS_DETECT_STRING,    asynParamOctet,          &getSensDetect_);
     createParam(INFICON_EM_VOLTAGE_MAX_STRING,     asynParamUInt32Digital,  &emVMax_);
@@ -925,6 +926,7 @@ void drvInficon::pollerThread()
         setIntegerParam(currentScan_, scanInfo_->currScan);
         setUIntDigitalParam(ppscan_, scanInfo_->ppScan, 0xFFFFFFFF);
         setUIntDigitalParam(scanStatus_, scanInfo_->scanStatus, 0x1);
+        setUIntDigitalParam(pointsInScan_, scanInfo_->pointsInScan, 0xFFFFFFFF);
 
         /*Get pressure value*/
         sprintf(request,"GET /mmsp/measurement/totalPressure/get\r\n"
@@ -1393,6 +1395,7 @@ asynStatus drvInficon::parseScanInfo(const char *jsonData, scanInfoStruct *scanI
         scanInfo->ppScan = j["data"]["pointsPerScan"];
         btemp = j["data"]["scanning"];		
         scanInfo->scanStatus = (btemp != false) ? 1 : 0;
+		scanInfo->pointsInScan = j["data"]["pointsInCurrentScan"];
         //printf("%s::%s scanStatus:%d\n", driverName, functionName, btemp);
     }
 	catch (const json::parse_error& e) {
