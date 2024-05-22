@@ -1,0 +1,20 @@
+# EPICS generated folders
+dbd
+lib
+bin
+children/build
+db
+archive
+autosave
+
+# EPICS object files
+**/O.*
+
+# Generated files
+**envPaths
+
+# Python temp files
+__pycache__/
+
+# Dev files
+run.sh

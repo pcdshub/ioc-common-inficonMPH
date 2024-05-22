@@ -1,0 +1,15 @@
+Template variables:
+
+IOCTOP   - The ioc/common directory for this IOC.
+TOP      - The ioc/xxx directory for this IOC, where xxx is the three-letter hutch.
+ENGINEER - The engineer responsible for this IOC.
+LOCATION - The location of this IOC.
+
+Template instances:
+
+INFICON:
+    BASE        - The base PV name.
+    PORT        - The IP address of the INFICON device.
+    ASYNTRACE   - This should be set to turn on asyn tracing.
+    DATASCAN    - The rate at which the IOC scans data fields. Default is every 1 second.
+    CONFSCAN    - The rate at which the IOC scans configuration fields. Default is every 5 seconds.

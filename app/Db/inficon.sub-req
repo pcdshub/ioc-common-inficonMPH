@@ -1,0 +1,14 @@
+# Generate iocAdmin autosave request 
+file autosave_iocAdmin.tpl-req
+{
+	{
+		IOC=$(IOC)
+	}
+}
+
+# Add your custom template expansions here
+file inficon.tpl-req
+{
+        { BASE = $(BASE) }
+}    
+
