@@ -3,14 +3,14 @@
 # We will build some tools/scripts that allow us to
 # change this easily when relocating software.
 # ==============================================================
-BASE_MODULE_VERSION = R7.0.2-2.0
-EPICS_SITE_TOP      = /reg/g/pcds/epics
-EPICS_MODULES       = $(EPICS_SITE_TOP)/$(BASE_MODULE_VERSION)/modules
+BASE_MODULE_VERSION = R7.0.3.1-2.0
+EPICS_SITE_TOP = /cds/group/pcds/epics
+EPICS_MODULES = $(EPICS_SITE_TOP)/$(BASE_MODULE_VERSION)/modules
 
 ifeq ($(origin EPICS_HOST_ARCH), undefined)
 EPICS_HOST_ARCH     := $(shell $(EPICS_SITE_TOP)/base/$(BASE_MODULE_VERSION)/startup/EpicsHostArch)
 endif
-PSPKG_ROOT          = /reg/g/pcds/pkg_mgr
+PSPKG_ROOT = /cds/group/pcds/pkg_mgr
 
 $(info Setting BASE_MODULE_VERSION to $(BASE_MODULE_VERSION) in $(lastword $(MAKEFILE_LIST)))
 
