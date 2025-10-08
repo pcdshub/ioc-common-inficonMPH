@@ -13,5 +13,5 @@ DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard *App))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard *app))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocBoot))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocboot))
-#DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard children))
+DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard children))
 include $(TOP)/configure/RULES_TOP
